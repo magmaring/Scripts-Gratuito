@@ -1,0 +1,118 @@
+//===== Nome do NPC: ======================================
+//= Anti-Bot (Cores)
+//===== Compatível com: ===================================
+//= SQL e TXT
+//===== Criado Por: ===================================
+//= Paul Dauzaker
+//===== Versão Atual: =====================================
+//= 1.0 criação do script
+//= 1.1 add novas funçõense concertado BUGs (Havoc)
+//===== Descrição: ========================================
+//= Anti-Bot com palavras coloridas ou número
+//=========================================================
+-	script	anti_bot	-1,{ 
+
+OnPCLoginEvent:
+ if (getgmlevel() == 99) end;
+ cutin "mets_alpha.bmp",2;
+ atcommand "@battleignore";
+ atcommand "@option 5";
+ pcblockmove getcharid(3),1;
+ show "^0000FF[ Anti-Bot ]^000000";
+ show "Olá ^0000FF"+strcharinfo(0)+"^000000, desculpe o transtorno.";
+ show "Vamos checar se você é um Bot, é para segurança do servidor Xtreme!";
+ next;
+ set $Sistema,rand(1,2);
+ if($Sistema == 1)goto cores;
+ if($Sistema == 2)goto numeros;
+ 
+cores:
+ set $AntiBot,rand(1,4);
+ if($AntiBot == 1){
+ show "^FF0000[Anti-Bot]^FF0000";
+ show "^FF0000O sistema é simples, basta você me dizer qual é a cor desta conversa!^FF0000";
+ menu "^FF0000Esta Cor^000000",Certo,"^EEAD0EEsta Cor^000000",Errado,"^458B00Esta Cor^000000",Errado,"^00008BEsta Cor^000000",Errado;
+ close;
+ }
+ if($AntiBot == 2){
+ show "^008B00[Anti-Bot]^FF0000";
+ show "^008B00O sistema é simples, basta você me dizer qual é a cor desta conversa!^FF0000";
+ menu "^FF0000Esta Cor^000000",Errado,"^EEAD0EEsta Cor^000000",Errado,"^008B00Esta Cor^000000",Certo,"^00008BEsta Cor^000000",Errado;
+ }
+ 
+if($AntiBot == 3){
+ show "^00008B[Anti-Bot]^FF0000";
+ show "^00008BO sistema é simples, basta você me dizer qual é a cor desta conversa!^FF0000";
+ menu "^FF0000Esta Cor^000000",Errado,"^00008BEsta Cor^000000",Certo,"^008B00Esta Cor^000000",Errado,"^CDAD00Esta Cor^000000",Errado;
+ }
+ 
+if($AntiBot == 4){
+ show "^CD1076[Anti-Bot]^FF0000";
+ show "^CD1076O sistema é simples, basta você me dizer qual é a cor desta conversa!^FF0000";
+ menu "^CDAD00Esta Cor^000000",Errado,"^00008BEsta Cor^000000",Errado,"^008B00Esta Cor^000000",Errado,"^CD1076Esta Cor^000000",Certo;
+ }
+ 
+Errado:
+ next;
+ if(#Errou == 1){
+ show "^0000FF[ Anti-Bot ]^000000";
+ show "Você errou novamente terei que te kickar do jogo.";
+ show "Ainda restam-lhe : ^0000FF1 Tentativas.^000000";
+ show "Se errar mais uma vez será encaminhado para Cadeia.";
+ next;
+ set #Errou,2;
+ atcommand "@kick "+strcharinfo(0);
+ close;
+ }
+ 
+if(#Errou == 2){
+ show "^0000FF[ Anti-Bot ]^000000";
+ show "Acabaram suas chances!, você foi considerado um bot!";
+ atcommand "@jailfor 2h "+strcharinfo(0);
+ atcommand "@option 0 0 0 "+strcharinfo(0)+"";
+ announce "O Jogador "+strcharinfo(0)+" foi preso por Suspeita de uso de BOT.",8; 
+ set #Errou,0;
+ close;
+ }
+ 
+show "^0000FF[ Anti-Bot ]^000000";
+ show "Você errou terei que te kickar do jogo.";
+ show "Ainda restam-lhe : ^0000FF2 Tentativas.^000000";
+ show "Se errar 2 vezes será encaminhado para Cadeia.";
+ next;
+ set #Errou,1;
+ atcommand "@kick "+strcharinfo(0);
+ cutin "", 255;
+ close;
+ 
+Certo:
+ next;
+ show "^0000FF[ Anti-Bot ]^000000";
+ show "Ohhh Parabéns você passou no teste!";
+ show "Continue assim, sem bots o servidor irá longe!!!";
+ set #Errou,0;
+ pcblockmove getcharid(3),0;
+ atcommand "@option 0";
+ atcommand "@battleignore"; 
+ cutin "", 255;
+ if(!checkcart() && getskilllv(39))
+ setcart;
+ else
+ if(!checkfalcon() && getskilllv(127))
+ setfalcon;
+ else
+ if(!checkriding() && getskilllv(63))
+ setriding;
+ close;
+ 
+numeros:
+ set $killbot,rand(1158,9584);
+ show "^0000FF[ Anti-Bot ]^000000";
+ show "Vou te dizer um número...";
+ show "Você deve digita-lo corretamente ";
+ show "O Número é : ^0000FF"+$killbot+"^000000";
+ show "Digite o Número Agora!";
+ digit @number;
+ if(@number != $killbot)goto Errado;
+ if(@number == $killbot)goto Certo;
+ } 

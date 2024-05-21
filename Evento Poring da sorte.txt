@@ -1,0 +1,160 @@
+force_1-1,109,106,5	script	Poring da Sorte	72,{
+ 
+ 
+if(getgmlevel() > 80) goto ADM;
+ 
+    mes "[^FF0000Poring da Sorte^000000]";
+    mes "O que deseja fazer?";
+    switch(Select( "- Entra no Evento","- Troca pontos Por ^6495ED"+getitemname($Item1)+"^000000","- Ver meus Pontos","- Nada")){
+case 1:
+ 
+    next;
+    mes "[^FF0000Poring da Sorte^000000]";
+    if($sd_map == 1){ mes .nome$; mes "^FF0000Boa Sorte!^000000"; warp "pvp_y_1-2",0,0;  end; }
+    if($sd_map == 0){ mes .nome$; mes "^FF0000O Evento Poring da Sorte está fechado. Ele abre a cada meia hora.^000000"; close; }
+ 
+    if($open == 0) goto aberto;
+    close;
+ 
+    aberto:
+    next;
+    mes "[^FF0000Poring da Sorte^000000]";
+    mes "Boa Sorte, irá prescisar!";
+    next;
+    warp "pvp_y_1-2",0,0;
+    close;
+ 
+case 2:
+ 
+        next;
+        mes "[^FF0000Poring da Sorte^000000]";
+        mes "Você deseja troca seus pontos por ^6495ED"+getitemname($Item1)+"^000000 Ele Custa "+$Pontos1+" Ponto";
+        next;
+        if(Select("Sim","Não")==2) close;
+        mes "Digite a quantidade de ^6495ED"+getitemname($Item1)+"^000000 que você deseja.";
+        next;
+        digit @Quantia;
+        next;
+        if(Ponto < $Pontos1*@Quantia){
+        mes "Você não tem pontos para retirar essa quantia de ^6495ED"+getitemname($Item1)+"^000000.";
+        close;
+        }
+ 
+        next;
+        mes "[^FF0000Poring da Sorte^000000]";
+        mes "Muito Bem aqui está seu premio!";
+        set Ponto,Ponto-$Pontos1*@Quantia;
+        additem 18362,1;
+        close;
+ 
+case 3:
+    next;
+    mes "[^FF0000Poring da Sorte^000000]";
+    mes "Você possue "+Ponto+" Ponto";
+    close;
+ 
+case 4:
+    next;
+    mes "Até a proxima";
+    close;
+ 
+        ADM:
+        mes "[^FF0000Poring da Sorte^000000]";
+        mes "O que deseja fazer ^FF4500"+strcharinfo(0)+"^000000?";
+        switch(Select( "- Entrar no evento","- Mudar Premio","- Ver Premios")){
+ 
+case 1:
+    next;
+    if($sd_map == 1){ mes .@a$; mes "^FF0000Boa Sorte!^000000"; warp "pvp_y_1-2",0,0;  end; }
+    if($sd_map == 0){ mes .@a$; mes "^FF0000O Evento Poring da Sorte está fechado. Ele abre a cada meia hora.^000000"; close; }
+    mes "[^FF0000Poring da Sorte^000000]";
+    mes "Bom evento";
+    next;
+    warp "pvp_y_1-2",0,0;
+    close;
+case 2:
+    next;
+    mes "[^FF0000Poring da Sorte^000000]";
+    mes "Digite o ID item para ser o Premio";
+    digit $Item1;
+    next;
+    mes .@a$;
+    mes "Digite aqui a quantidade de pontos para troca pelo item..";
+    digit $Pontos1;
+    next;
+    goto ADM;
+case 3:
+    next;
+    mes "[^FF0000Poring da Sorte^000000]";
+    mes "O premio é";
+    mes ""+getitemname($Item1)+" "+$Pontos1+" pontos";
+    next;
+    goto ADM;
+    end;
+case 4:
+close;
+}
+}
+}
+pvp_y_1-2,76,110,5	script	SorteHide	-1,{
+ 
+set Ponto,0;
+ 
+OnMinute53:
+OnMinute25:
+Announce "O Evento Poring da Sorte ja começou, e em 5 minutos ele fechará!",8;
+initnpctimer; set $sd_map,1; set $status,0; end;
+ 
+    OnTimer60000:    Announce "O Evento Poring da Sorte ja começou, e em 4 minutos ele fechará!",8;    end;
+    OnTimer90000:    Announce "O Evento Poring da Sorte ja começou, e em 3 minutos ele fechará!",8;    end;
+    OnTimer120000:    Announce "O Evento Poring da Sorte ja começou, e em 2 minutos ele fechará!",8;    end;
+    OnTimer150000:    Announce "O Evento Poring da Sorte ja começou, e em 1 minuto ele fechará!",8;    end;
+    OnTimer180000:    Announce "O Evento Poring da Sorte Fechou! Tente na próxima vez!",8;
+    set $sd_map,0; set $mob,100;
+    monster "pvp_y_1-2",0,0,"Poring",1002,100,"SorteHide::OnMobMorte"; end;
+ 
+            OnMobMorte: if(status ==1) end; set $mob,$mob-1;
+            set Ponto,Ponto+1;
+            if($mob == 50) MapAnnounce "pvp_y_1-2","Falta 50 poring para começar o 2º round",8;
+            if($mob == 25) MapAnnounce "pvp_y_1-2","Falta 25 poring para começar o 2º round",8;
+            if($mob == 0) MapAnnounce "pvp_y_1-2","Todos os porings de 1 ponto forão mortos, começou o 2º round",8;
+            if($mob == 0) goto OnSorte02; end;
+ 
+                OnSorte02: if(status ==1) end; set $mob,50;
+                monster "pvp_y_1-2",0,0,"Poring da Sorte",1002,50,"SorteHide::OnMobMorte2"; end;
+ 
+                    OnMobMorte2: if(status ==1) end; set $mob,$mob-1;
+                    set Ponto,Ponto+5;
+                    if($mob == 25) MapAnnounce "pvp_y_1-2","Falta 25 poring para começar o 3º round",8;
+                    if($mob == 5) MapAnnounce "pvp_y_1-2","Falta 5 poring para começar o 3º round",8;
+                    if($mob == 0) MapAnnounce "pvp_y_1-2","Todos os poring de 5 pontos forão mortos, começou o 3º round",8;
+                    if($mob == 0) goto OnSorte03; end;
+ 
+                    OnSorte03: if(status ==1) end; set $mob,25;
+                    monster "pvp_y_1-2",0,0,"Poring da Sorte",1002,25,"SorteHide::OnMobMorte3"; end;
+ 
+                        OnMobMorte3: set $mob,$mob-1;
+                        set Ponto,Ponto+15;
+                        if($mob == 10) MapAnnounce "pvp_y_1-2","Falta 10 poring para começar o 4º round",8;
+                        if($mob == 5) MapAnnounce "pvp_y_1-2","Falta 5 poring para começar o 3º round",8;
+                        if($mob == 0) MapAnnounce "pvp_y_1-2","Todos os poring de 15 pontos forão mortos, começou o 3º round",8;
+                        if($mob == 0) goto OnSorte04; end;
+ 
+                            OnSorte04: set $mob,1;
+                            monster "pvp_y_1-2",0,0,"Poring da Sorte",1002,1,"SorteHide::OnMobMorte4"; end;
+ 
+                                OnMobMorte4: set $mob,$mob-1;
+                                set Ponto,Ponto+100;
+                                Announce "pvp_y_1-2","o Play "+strcharinfo(0)+" Acho o Poring de 100 ponto parabens --- O evento Termino  !",8; end;
+ 
+}
+// Map-Flags
+pvp_y_1-2	mapflag	nowarp
+pvp_y_1-2	mapflag	nowarpto
+pvp_y_1-2	mapflag	noteleport
+pvp_y_1-2	mapflag	nogo
+pvp_y_1-2	mapflag	nosave	SavePoint
+pvp_y_1-2	mapflag	nomemo
+pvp_y_1-2	mapflag	nobranch
+pvp_y_1-2	mapflag	nopenalty
+pvp_y_1-2	mapflag	monster_noteleport

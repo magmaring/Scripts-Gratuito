@@ -1,0 +1,105 @@
+new_1-1,49,111,5	script	Presença	911,{
+///
+/// ========== Por Premier ~* =========== ///
+///
+/// == Itens que se pega com os pontos == ///
+/// ========= Ponha em Ordem =========== ///
+setarray .itemprc,607,512,513,14004,13989; // Id dos premios
+setarray .prcv,5,5,5,5,10; // Valor dos itens.
+setarray .prcqnt,50,3,3,1,5; // Quantidade de itens
+/// ======================================///
+//=====================//
+// ~~ Nome do Npcs ~~ //
+//===================//
+set @restante,#presenca-gettimetick(2);
+set .prc$,"^0000FF[Presença]^000000";
+mes .prc$;
+mes "Olá "+strcharinfo(0)+" deseja marcar sua presença?";
+switch(select("Marcar Presença:Comprar Itens:Ver meus Pontos:Sair")){
+
+case 1:
+if(#presenca >=gettimetick(2)){next;mes .prc$;mes "Você ja marcou sua presença espere ^FF0000"+@restante/60+" minutos^000000 para marcar dinovo.";close;end;}
+next;
+mes .prc$;
+mes "Certo irei marcar seu tempo";
+set #presenca,gettimetick(2)+3600;
+set prbonus,prbonus+1;
+next;
+mes .prc$;
+mes "Pronto tempo marcado.";
+close;
+end;
+
+case 2:
+mes "Qual item você deseja?";
+switch(select("- "+.prcqnt+" "+getitemname(.itemprc)+": - "+.prcqnt[1]+" "+getitemname(.itemprc[1])+": - "+.prcqnt[2]+" "+getitemname(.itemprc[2])+": -"+.prcqnt[3]+" "+getitemname(.itemprc[3])+": - "+.prcqnt+" "+getitemname(.itemprc[4])+"")){
+
+case 1:
+next;
+mes .prc$;
+mes "Deseja comprar "+.prcqnt+" "+getitemname(.itemprc)+" por "+.prcv+" pontos?";
+if(select("Sim:Não")==2){close;end;}{
+if(prbonus <.prcv){next;mes .prc$;mes "Você não tem pontos suficientes";close;end;}
+getitem .itemprc,prcqnt;
+set prbonus,prbonus-.prcv;}
+close;
+end;
+
+case 2:
+next;
+mes .prc$;
+mes "Deseja comprar "+.prcqnt[1]+" "+getitemname(.itemprc[1])+" por "+.prcv[1]+" pontos?";
+if(select("Sim:Não")==2){close;end;}{
+if(prbonus <.prcv[1]){next;mes .prc$;mes "Você não tem pontos suficientes";close;end;}
+getitem .itemprc[1],prcqnt[1];
+set prbonus,prbonus-.prcv[1];}
+close;
+end;
+
+case 3:
+next;
+mes .prc$;
+mes "Deseja comprar "+.prcqnt[2]+" "+getitemname(.itemprc[2])+" por "+.prcv[2]+" pontos?";
+if(select("Sim:Não")==2){close;end;}{
+if(prbonus <.prcv[2]){next;mes .prc$;mes "Você não tem pontos suficientes";close;end;}
+getitem .itemprc[2],prcqnt[2];
+set prbonus,prbonus-.prcv[2];}
+close;
+end;
+
+case 4:
+next;
+mes .prc$;
+mes "Deseja comprar "+.prcqnt[3]+" "+getitemname(.itemprc[3])+" por "+.prcv[3]+" pontos?";
+if(select("Sim:Não")==2){close;end;}{
+if(prbonus <.prcv[3]){next;mes .prc$;mes "Você não tem pontos suficientes";close;end;}
+getitem .itemprc[3],prcqnt[3];
+set prbonus,prbonus-.prcv[3];}
+close;
+end;
+
+case 5:
+next;
+mes .prc$;
+mes "Deseja comprar "+.prcqnt[4]+" "+getitemname(.itemprc[4])+" por "+.prcv[4]+" pontos?";
+if(select("Sim:Não")==2){close;end;}{
+if(prbonus <.prcv[4]){next;mes .prc$;mes "Você não tem pontos suficientes";close;end;}
+getitem .itemprc[4],prcqnt[4];
+set prbonus,prbonus-.prcv[4];}
+close;
+end;}
+
+case 3:
+next;
+mes .prc$;
+mes "Você tem "+prbonus+" Pontos de Presença";
+close;
+end;
+
+case 4:
+next;
+mes .prc$;
+mes "Volte se precisar.";
+close;
+end;
+}}

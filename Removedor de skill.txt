@@ -1,0 +1,22 @@
+prontera,142,180,7	script	Removedora de Skills	727,{
+//--
+set .nome$,"[ ^B22222Removedor de Skill^000000 ]"; //Nome do NPC
+//--
+	mes .nome$;
+	mes "Olá "+strcharinfo(0)+", vou verificar quantos pontos de skill você tem.";
+	next;
+	mes .nome$;
+	set @skillPoints, skillPointCount();
+	mes "Você tem "+@skillPoints+" Pontos de Habilidade!";
+	next;
+	mes .nome$;
+	mes "Deseja remover "+@skillPoints+" Pontos de Habilidade?";
+	next;
+	if(select("Sim.:Nao") == 2) close;
+	mes .nome$;
+	mes "Então eu removerei seus pontos!";
+	next;
+	set SkillPoint,0;
+	mes "Seus ^FF0000Pontos de Habilidade^000000 foram removidos com sucesso.";
+	close;
+}

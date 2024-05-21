@@ -1,0 +1,12 @@
+//buffs
+
+sec_in01,175,96,6	script	Healer & Buffer	920,{
+	  percentheal 100,100;;
+skilleffect 33,0; sc_start SC_ANGELUS,360000,10;
+skilleffect 74,0; sc_start SC_MAGNIFICAT,360000,5;
+close;
+}
+
+//=====================
+
+

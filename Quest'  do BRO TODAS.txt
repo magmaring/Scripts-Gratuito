@@ -1,0 +1,2420 @@
+//=============================================
+//== Cronus Tools :: Gerador de Quest's =======
+//== Versão: ==================================
+//== 4.0
+//== Autor: ===================================
+//== Linne
+//=============================================
+sec_in01,88,66,5	script	Quests do BRO	992,{
+
+	mes "[Quests do BRO]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Quests do BRO]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Ragna TEN]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Aquecedor de Orelha:Asas Malígnas:Avareza:Ayam (Chapéu de A-yam) [1]:Bao-Bao:Binóculos:Boina:Boina Alada:Boné Vermelho:Candura:Capacete de Mineiro:Capelo:Cartola:Casca de Noz:Casca de Ovo Colorida:Chapéu Chines:Chapéu com Pluma:Chapéu de Bolo:Chapéu de Cowboy:Chapéu de Deviruchi:Chapéu de Esporo:Chapéu de Festa:Chapéu de Fumacento:Chapéu de Fumacento Dorminhoco:Chapéu de Gatinho Dorminhoco:Chapéu de Inverno:Chapéu de Lontra:Chapéu de Mestre Arcano:Chapéu de Palha:Chapéu de Ursinho:Chapéu de Verão:Chapéu de Detetive Famoso [1]:Chapéu para Modelos:Chifre de Alce:Chupeta de Bebê:Coroa da Abelha Rainha:Coroa de Rainha Antiga:Coroa do Deus Sol:Cruz:Curativo Gigante:Elmo Angelical:Elmo das Valquírias [1]:Espelho de Médico:Faca Falsa:Faixa Azul:Faixa de Censura:Faixa de Caratê:Faixa Indígena:Faixa Listrada:Fivela de Coração:Fivela de Lua:Fone de Ouvido:Gorro:Gorro Chullos [1]:Laço Vermelho:Lâmpada:Máscara de Alarme:Máscara de Jirtas:Máscara de Noiva:Máscara de Ópera:Máscara de Oxigênio:Máscara de Solda:Máscara do Fantasma:Máscara Feliz:Máscara Hahoe:Máscara Ktsune:Máscara Mítica de Leão:Mestre-Cuca:Óculos Fashion:Elmo de Orc Herói:Orelhas de Gato Preto:Orelhas de Anjo:Orelhas de Coelho:Peixe Azul:Placa de PARE:Nenhum"))
+	{
+	case 1:
+		mes "[Aquecedor de Orelha]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2283);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5001);
+		mes "1x "+getitemname(724);
+		mes "200x "+getitemname(949);
+		mes "5000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5001) >= 1 && countitem(724) >= 1 && countitem(949) >= 200 && Zeny >= 5000)
+		{
+			delitem 5001,1;
+			delitem 724,1;
+			delitem 949,200;
+			set Zeny,Zeny-5000;
+			getitem 2283,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Aquecedor de Orelha ] !", bc_self;
+			close;
+		}
+		break;
+	case 2:
+		mes "[Asas Malígnas]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5068);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2255);
+		mes "1x "+getitemname(18507);
+		mes "20000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2255) >= 1 && countitem(18507) >= 1 && Zeny >= 20000)
+		{
+			delitem 2255,1;
+			delitem 18507,1;
+			set Zeny,Zeny-20000;
+			getitem 5068,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Asas Malígnas ] !", bc_self;
+			close;
+		}
+		break;
+	case 3:
+		mes "[Avareza]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5021);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2233);
+		mes "1x "+getitemname(969);
+		mes "20x "+getitemname(999);
+		mes "80x "+getitemname(949);
+		mes "800x "+getitemname(938);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2233) >= 1 && countitem(969) >= 1 && countitem(999) >= 20 && countitem(949) >= 80 && countitem(938) >= 800)
+		{
+			delitem 2233,1;
+			delitem 969,1;
+			delitem 999,20;
+			delitem 949,80;
+			delitem 938,800;
+			getitem 5021,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Avareza ] !", bc_self;
+			close;
+		}
+		break;
+	case 4:
+		mes "[Ayam (Chapéu de A-yam) [1]]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5386);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(975);
+		mes "5x "+getitemname(733);
+		mes "7x "+getitemname(7446);
+		mes "7x "+getitemname(7447);
+		mes "7x "+getitemname(7448);
+		mes "7x "+getitemname(7445);
+		mes "50x "+getitemname(7166);
+		mes "300x "+getitemname(954);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(975) >= 1 && countitem(733) >= 5 && countitem(7446) >= 7 && countitem(7447) >= 7 && countitem(7448) >= 7 && countitem(7445) >= 7 && countitem(7166) >= 50 && countitem(954) >= 300)
+		{
+			delitem 975,1;
+			delitem 733,5;
+			delitem 7446,7;
+			delitem 7447,7;
+			delitem 7448,7;
+			delitem 7445,7;
+			delitem 7166,50;
+			delitem 954,300;
+			getitem 5386,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Ayam (Chapéu de A-yam) [1] ] !", bc_self;
+			close;
+		}
+		break;
+	case 5:
+		mes "[Bao-Bao]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5042);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(10007);
+		mes "50x "+getitemname(968);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(10007) >= 1 && countitem(968) >= 50)
+		{
+			delitem 10007,1;
+			delitem 968,50;
+			getitem 5042,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Bao-Bao ] !", bc_self;
+			close;
+		}
+		break;
+	case 6:
+		mes "[Binóculos]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2296);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2243);
+		mes "100x "+getitemname(999);
+		mes "50000 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2243) >= 1 && countitem(999) >= 100 && Zeny >= 50000)
+		{
+			delitem 2243,1;
+			delitem 999,100;
+			set Zeny,Zeny-50000;
+			getitem 2296,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Binóculos ] !", bc_self;
+			close;
+		}
+		break;
+	case 7:
+		mes "[Boina]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5172);
+		mes " ";
+		mes "Requerimento:";
+		mes "20x "+getitemname(7445);
+		mes "1x "+getitemname(979);
+		mes "50000 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7445) >= 20 && countitem(979) >= 1 && Zeny >= 50000)
+		{
+			delitem 7445,20;
+			delitem 979,1;
+			set Zeny,Zeny-50000;
+			getitem 5172,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Boina ] !", bc_self;
+			close;
+		}
+		break;
+	case 8:
+		mes "[Ragna TEN]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5170);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5172);
+		mes "1x "+getitemname(982);
+		mes "100x "+getitemname(7063);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5172) >= 1 && countitem(982) >= 1 && countitem(7063) >= 100)
+		{
+			delitem 5172,1;
+			delitem 982,1;
+			delitem 7063,100;
+			getitem 5170,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Boina Alada ] !", bc_self;
+			close;
+		}
+		break;
+	case 9:
+		mes "[Ragna TEN]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5109);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5032);
+		mes "1x "+getitemname(10007);
+		mes "1x "+getitemname(10015);
+		mes "1x "+getitemname(975);
+		mes "50000 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5032) >= 1 && countitem(10007) >= 1 && countitem(10015) >= 1 && countitem(975) >= 1 && Zeny >= 50000)
+		{
+			delitem 5032,1;
+			delitem 10007,1;
+			delitem 10015,1;
+			delitem 975,1;
+			set Zeny,Zeny-50000;
+			getitem 5109,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Boné Vermelho ] !", bc_self;
+			close;
+		}
+		break;
+	case 10:
+		mes "[Candura]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5040);
+		mes " ";
+		mes "Requerimento:";
+		mes "50x "+getitemname(7047);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7047) >= 50)
+		{
+			delitem 7047,50;
+			getitem 5040,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Candura ] !", bc_self;
+			close;
+		}
+		break;
+	case 11:
+		mes "[Capacete de Mineiro]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5031);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5028);
+		mes "1x "+getitemname(5009);
+		mes "25x "+getitemname(999);
+		mes "1x "+getitemname(747);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5028) >= 1 && countitem(5009) >= 1 && countitem(999) >= 25 && countitem(747) >= 1)
+		{
+			delitem 5028,1;
+			delitem 5009,1;
+			delitem 999,25;
+			delitem 747,1;
+			getitem 5031,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Capacete de Mineiro ] !", bc_self;
+			close;
+		}
+		break;
+	case 12:
+		mes "[Capelo]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5012);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(710);
+		mes "1x "+getitemname(708);
+		mes "1x "+getitemname(704);
+		mes "1x "+getitemname(703);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(710) >= 1 && countitem(708) >= 1 && countitem(704) >= 1 && countitem(703) >= 1)
+		{
+			delitem 710,1;
+			delitem 708,1;
+			delitem 704,1;
+			delitem 703,1;
+			getitem 5012,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Capelo ] !", bc_self;
+			close;
+		}
+		break;
+	case 13:
+		mes "[Cartola]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5045);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2252);
+		mes "500x "+getitemname(943);
+		mes "200x "+getitemname(1054);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2252) >= 1 && countitem(943) >= 500 && countitem(1054) >= 200)
+		{
+			delitem 2252,1;
+			delitem 943,500;
+			delitem 1054,200;
+			getitem 5045,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Cartola ] !", bc_self;
+			close;
+		}
+		break;
+	case 14:
+		mes "[Casca de Noz]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5050);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5037);
+		mes "250x "+getitemname(7064);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5037) >= 1 && countitem(7064) >= 250)
+		{
+			delitem 5037,1;
+			delitem 7064,250;
+			getitem 5050,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Casca de Noz ] !", bc_self;
+			close;
+		}
+		break;
+	case 15:
+		mes "[Casca de Ovo Colorida]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5039);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(978);
+		mes "1x "+getitemname(5015);
+		mes "50x "+getitemname(7030);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(978) >= 1 && countitem(5015) >= 1 && countitem(7030) >= 50)
+		{
+			delitem 978,1;
+			delitem 5015,1;
+			delitem 7030,50;
+			getitem 5039,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Casca de Ovo Colorida ] !", bc_self;
+			close;
+		}
+		break;
+	case 16:
+		mes "[Chapéu Chines]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2280);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(1019);
+		mes "30000 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1019) >= 1 && Zeny >= 30000)
+		{
+			delitem 1019,1;
+			set Zeny,Zeny-30000;
+			getitem 2280,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Chinês ] !", bc_self;
+			close;
+		}
+		break;
+	case 17:
+		mes "[Chapéu com Pluma]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5018);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2247);
+		mes "300x "+getitemname(916);
+		mes "500 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2247) >= 1 && countitem(916) >= 300 && Zeny >= 500)
+		{
+			delitem 2247,1;
+			delitem 916,300;
+			set Zeny,Zeny-500;
+			getitem 5018,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu com Pluma ] !", bc_self;
+			close;
+		}
+		break;
+	case 18:
+		mes "[Chapéu de Bolo]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(575);
+		mes " ";
+		mes "Requerimento:";
+		mes "10x "+getitemname(529);
+		mes "10x "+getitemname(999);
+		mes "5x "+getitemname(530);
+		mes "15x "+getitemname(538);
+		mes "15x "+getitemname(539);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(529) >= 10 && countitem(999) >= 10 && countitem(530) >= 5 && countitem(538) >= 15 && countitem(539) >= 15)
+		{
+			delitem 529,10;
+			delitem 999,10;
+			delitem 530,5;
+			delitem 538,15;
+			delitem 539,15;
+			getitem 575,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Bolo ] !", bc_self;
+			close;
+		}
+		break;
+	case 19:
+		mes "[Chapéu de Cowboy]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5075);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2248);
+		mes "4x "+getitemname(7120);
+		mes "100x "+getitemname(7030);
+		mes "100x "+getitemname(7194);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2248) >= 1 && countitem(7120) >= 4 && countitem(7030) >= 100 && countitem(7194) >= 100)
+		{
+			delitem 2248,1;
+			delitem 7120,4;
+			delitem 7030,100;
+			delitem 7194,100;
+			getitem 5075,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Cowboy ] !", bc_self;
+			close;
+		}
+		break;
+	case 20:
+		mes "[Chapéu de Deviruchi]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5038);
+		mes " ";
+		mes "Requerimento:";
+		mes "40x "+getitemname(7048);
+		mes "600x "+getitemname(1038);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7048) >= 40 && countitem(1038) >= 600)
+		{
+			delitem 7048,40;
+			delitem 1038,600;
+			getitem 5038,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Deviruchi ] !", bc_self;
+			close;
+		}
+		break;
+	case 21:
+		mes "[Chapéu de Esporo]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5029);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(1015);
+		mes "500x "+getitemname(7033);
+		mes "300x "+getitemname(7068);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1015) >= 1 && countitem(7033) >= 500 && countitem(7068) >= 300)
+		{
+			delitem 1015,1;
+			delitem 7033,500;
+			delitem 7068,300;
+			getitem 5029,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Esporo ] !", bc_self;
+			close;
+		}
+		break;
+	case 22:
+		mes "[Chapéu de Festa]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5060);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5384);
+		mes "100x "+getitemname(7111);
+		mes "100x "+getitemname(7151);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5384) >= 1 && countitem(7111) >= 100 && countitem(7151) >= 100)
+		{
+			delitem 5384,1;
+			delitem 7111,100;
+			delitem 7151,100;
+			getitem 5060,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Festa ] !", bc_self;
+			close;
+		}
+		break;
+	case 23:
+		mes "[Chapéu de Fumacento]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5033);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2213);
+		mes "20x "+getitemname(1036);
+		mes "200x "+getitemname(7012);
+		mes "200x "+getitemname(7065);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2213) >= 1 && countitem(1036) >= 20 && countitem(7012) >= 200 && countitem(7065) >= 200)
+		{
+			delitem 2213,1;
+			delitem 1036,20;
+			delitem 7012,200;
+			delitem 7065,200;
+			getitem 5033,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Fumacento ] !", bc_self;
+			close;
+		}
+		break;
+	case 24:
+		mes "[Chapéu de Fumacento Dorminhoco]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5084);
+		mes " ";
+		mes "Requerimento:";
+		mes "500x "+getitemname(1026);
+		mes "100x "+getitemname(7065);
+		mes "10x "+getitemname(945);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1026) >= 500 && countitem(7065) >= 100 && countitem(945) >= 10)
+		{
+			delitem 1026,500;
+			delitem 7065,100;
+			delitem 945,10;
+			getitem 5084,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Fumacento Dorminhoco ] !", bc_self;
+			close;
+		}
+		break;
+	case 25:
+		mes "[Chapéu de Gatinho Dorminhoco]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5058);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2233);
+		mes "1x "+getitemname(983);
+		mes "300x "+getitemname(7206);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2233) >= 1 && countitem(983) >= 1 && countitem(7206) >= 300)
+		{
+			delitem 2233,1;
+			delitem 983,1;
+			delitem 7206,300;
+			getitem 5058,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Gatinho Dorminhoco ] !", bc_self;
+			close;
+		}
+		break;
+	case 26:
+		mes "[Chapéu de Inverno]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5115);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(749);
+		mes "1x "+getitemname(983);
+		mes "500x "+getitemname(7267);
+		mes "50000 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(749) >= 1 && countitem(983) >= 1 && countitem(7267) >= 500 && Zeny >= 50000)
+		{
+			delitem 749,1;
+			delitem 983,1;
+			delitem 7267,500;
+			set Zeny,Zeny-50000;
+			getitem 5115,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Inverno ] !", bc_self;
+			close;
+		}
+		break;
+	case 27:
+		mes "[Chapéu de Lontra]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5078);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5033);
+		mes "1x "+getitemname(5064);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5033) >= 1 && countitem(5064) >= 1)
+		{
+			delitem 5033,1;
+			delitem 5064,1;
+			getitem 5078,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Lontra ] !", bc_self;
+			close;
+		}
+		break;
+	case 28:
+		mes "[Chapéu de Mestre Arcano]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5027);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2252);
+		mes "1x "+getitemname(4052);
+		mes "400x "+getitemname(1036);
+		mes "50x "+getitemname(7001);
+		next;
+		mes "[Ragna TEN";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2252) >= 1 && countitem(4052) >= 1 && countitem(1036) >= 400 && countitem(7001) >= 50)
+		{
+			delitem 2252,1;
+			delitem 4052,1;
+			delitem 1036,400;
+			delitem 7001,50;
+			getitem 5027,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Mestre Arcano ] !", bc_self;
+			close;
+		}
+		break;
+	case 29:
+		mes "[Chapéu de Palha]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5062);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2280);
+		mes "300x "+getitemname(7197);
+		mes "300x "+getitemname(7150);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2280) >= 1 && countitem(7197) >= 300 && countitem(7150) >= 300)
+		{
+			delitem 2280,1;
+			delitem 7197,300;
+			delitem 7150,300;
+			getitem 5062,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Palha ] !", bc_self;
+			close;
+		}
+		break;
+	case 30:
+		mes "[Chapéu de Ursinho]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5059);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5030);
+		mes "100x "+getitemname(7213);
+		mes "100x "+getitemname(7217);
+		mes "300x "+getitemname(7161);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5030) >= 1 && countitem(7213) >= 100 && countitem(7217) >= 100 && countitem(7161) >= 300)
+		{
+			delitem 5030,1;
+			delitem 7213,100;
+			delitem 7217,100;
+			delitem 7161,300;
+			getitem 5059,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Ursinho ] !", bc_self;
+			close;
+		}
+		break;
+	case 31:
+		mes "[Chapéu de Verão]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5032);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(503);
+		mes "250x "+getitemname(1059);
+		mes "1x "+getitemname(2221);
+		mes "1x "+getitemname(2227);
+		mes "600x "+getitemname(7063);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(503) >= 1 && countitem(1059) >= 250 && countitem(2221) >= 1 && countitem(2227) >= 1 && countitem(7063) >= 600)
+		{
+			delitem 503,1;
+			delitem 1059,250;
+			delitem 2221,1;
+			delitem 2227,1;
+			delitem 7063,600;
+			getitem 5032,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Verão ] !", bc_self;
+			close;
+		}
+		break;
+	case 32:
+		mes "[Chapéu de Detetive Famoso [1]]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5108);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(611);
+		mes "1x "+getitemname(5114);
+		mes "500x "+getitemname(7301);
+		mes "2000 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(611) >= 1 && countitem(5114) >= 1 && countitem(7301) >= 500 && Zeny >= 2000)
+		{
+			delitem 611,1;
+			delitem 5114,1;
+			delitem 7301,500;
+			set Zeny,Zeny-2000;
+			getitem 5108,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu de Detetive Famoso [1] ] !", bc_self;
+			close;
+		}
+		break;
+	case 33:
+		mes "[Chapéu para Modelos]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5073);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2285);
+		mes "1x "+getitemname(1550);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2285) >= 1 && countitem(1550) >= 1)
+		{
+			delitem 2285,1;
+			delitem 1550,1;
+			getitem 5073,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chapéu para Modelos ] !", bc_self;
+			close;
+		}
+		break;
+	case 34:
+		mes "[Chifre de Alce]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2284);
+		mes " ";
+		mes "Requerimento:";
+		mes "20x "+getitemname(923);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(923) >= 20)
+		{
+			delitem 923,20;
+			getitem 2284,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chifre de Alce ] !", bc_self;
+			close;
+		}
+		break;
+	case 35:
+		mes "[Chupeta de Bebê]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5110);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(526);
+		mes "1x "+getitemname(7270);
+		mes "1x "+getitemname(10004);
+		mes "1x "+getitemname(941);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(526) >= 1 && countitem(7270) >= 1 && countitem(10004) >= 1 && countitem(941) >= 1)
+		{
+			delitem 526,1;
+			delitem 7270,1;
+			delitem 10004,1;
+			delitem 941,1;
+			getitem 5110,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Chupeta de Bebê ] !", bc_self;
+			close;
+		}
+		break;
+	case 36:
+		mes "[Coroa da Abelha Rainha]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5081);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2249);
+		mes "1x "+getitemname(714);
+		mes "5x "+getitemname(969);
+		mes "20000 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2249) >= 1 && countitem(714) >= 1 && countitem(969) >= 5 && Zeny >= 20000)
+		{
+			delitem 2249,1;
+			delitem 714,1;
+			delitem 969,5;
+			set Zeny,Zeny-20000;
+			getitem 5081,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Coroa da Abelha Rainha ] !", bc_self;
+			close;
+		}
+		break;
+	case 37:
+		mes "[Coroa de Rainha Antiga]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5080);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2249);
+		mes "1x "+getitemname(714);
+		mes "1x "+getitemname(969);
+		mes "20000 Zenys";
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2249) >= 1 && countitem(714) >= 1 && countitem(969) >= 1 && Zeny >= 20000)
+		{
+			delitem 2249,1;
+			delitem 714,1;
+			delitem 969,1;
+			set Zeny,Zeny-20000;
+			getitem 5080,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Coroa de Rainha Antiga ] !", bc_self;
+			close;
+		}
+		break;
+	case 38:
+		mes "[Coroa do Deus Sol]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5022);
+		mes " ";
+		mes "Requerimento:";
+		mes "40x "+getitemname(999);
+		mes "2x "+getitemname(984);
+		mes "10x "+getitemname(969);
+		mes "50x "+getitemname(1003);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(999) >= 40 && countitem(984) >= 2 && countitem(969) >= 10 && countitem(1003) >= 50)
+		{
+			delitem 999,40;
+			delitem 984,2;
+			delitem 969,10;
+			delitem 1003,50;
+			getitem 5022,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Coroa do Deus Sol ] !", bc_self;
+			close;
+		}
+		break;
+	case 39:
+		mes "[Cruz]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5036);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2608);
+		mes "500x "+getitemname(7069);
+		next;
+		mes "[Ragna TEN]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ragna TEN]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2608) >= 1 && countitem(7069) >= 500)
+		{
+			delitem 2608,1;
+			delitem 7069,500;
+			getitem 5036,1;
+			mes "[Ragna TEN]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Cruz ] !", bc_self;
+			close;
+		}
+		break;
+	case 40:
+		mes "[Curativo Gigante]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5063);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(970);
+		mes "500x "+getitemname(930);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(970) >= 1 && countitem(930) >= 500)
+		{
+			delitem 970,1;
+			delitem 930,500;
+			getitem 5063,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Curativo Gigante ] !", bc_self;
+			close;
+		}
+		break;
+	case 41:
+		mes "[Elmo Angelical]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5025);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2229);
+		mes "1x "+getitemname(2254);
+		mes "5x "+getitemname(7036);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2229) >= 1 && countitem(2254) >= 1 && countitem(7036) >= 5)
+		{
+			delitem 2229,1;
+			delitem 2254,1;
+			delitem 7036,5;
+			getitem 5025,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Elmo Angelical ] !", bc_self;
+			close;
+		}
+		break;
+	case 42:
+		mes "[Elmo das Valquírias [1]]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5171);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(4219);
+		mes "1x "+getitemname(4114);
+		mes "1x "+getitemname(4177);
+		mes "1x "+getitemname(4259);
+		mes "1x "+getitemname(4212);
+		mes "1x "+getitemname(4073);
+		mes "1x "+getitemname(4112);
+		mes "1x "+getitemname(4081);
+		mes "1x "+getitemname(4251);
+		mes "1x "+getitemname(4166);
+		mes "100x "+getitemname(7511);
+		mes "1x "+getitemname(7563);
+		mes "10000000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(4219) >= 1 && countitem(4114) >= 1 && countitem(4177) >= 1 && countitem(4259) >= 1 && countitem(4212) >= 1 && countitem(4073) >= 1 && countitem(4112) >= 1 && countitem(4081) >= 1 && countitem(4251) >= 1 && countitem(4166) >= 1 && countitem(7511) >= 100 && countitem(7563) >= 1 && Zeny >= 10000000)
+		{
+			delitem 4219,1;
+			delitem 4114,1;
+			delitem 4177,1;
+			delitem 4259,1;
+			delitem 4212,1;
+			delitem 4073,1;
+			delitem 4112,1;
+			delitem 4081,1;
+			delitem 4251,1;
+			delitem 4166,1;
+			delitem 7511,100;
+			delitem 7563,1;
+			set Zeny,Zeny-10000000;
+			getitem 5171,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Elmo da Valquíria [1] ] !", bc_self;
+			close;
+		}
+		break;
+	case 43:
+		mes "[Espelho de Médico]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2273);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2275);
+		mes "50x "+getitemname(998);
+		mes "1x "+getitemname(733);
+		mes "3500 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2275) >= 1 && countitem(998) >= 50 && countitem(733) >= 1 && Zeny >= 3500)
+		{
+			delitem 2275,1;
+			delitem 998,50;
+			delitem 733,1;
+			set Zeny,Zeny-3500;
+			getitem 2273,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Espelho de Médico ] !", bc_self;
+			close;
+		}
+		break;
+	case 44:
+		mes "[Faca Falsa]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2293);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(1049);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1049) >= 1)
+		{
+			delitem 1049,1;
+			getitem 2293,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Faca Falsa ] !", bc_self;
+			close;
+		}
+		break;
+	case 45:
+		mes "[Faixa Azul]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5052);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2211);
+		mes "1x "+getitemname(978);
+		mes "1x "+getitemname(7003);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2211) >= 1 && countitem(978) >= 1 && countitem(7003) >= 1)
+		{
+			delitem 2211,1;
+			delitem 978,1;
+			delitem 7003,1;
+			getitem 5052,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Faixa Azul ] !", bc_self;
+			close;
+		}
+		break;
+	case 46:
+		mes "[Faixa de Censura]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5175);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(983);
+		mes "100x "+getitemname(7111);
+		mes "99x "+getitemname(938);
+		mes "100000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(983) >= 1 && countitem(7111) >= 100 && countitem(938) >= 99 && Zeny >= 100000)
+		{
+			delitem 983,1;
+			delitem 7111,100;
+			delitem 938,99;
+			set Zeny,Zeny-100000;
+			getitem 5175,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Faixa de Censura ] !", bc_self;
+			close;
+		}
+		break;
+	case 47:
+		mes "[Faixa de Caratê]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5070);
+		mes " ";
+		mes "Requerimento:";
+		mes "300x "+getitemname(7216);
+		mes "300x "+getitemname(7097);
+		mes "1x "+getitemname(2211);
+		mes "1x "+getitemname(982);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7216) >= 300 && countitem(7097) >= 300 && countitem(2211) >= 1 && countitem(982) >= 1)
+		{
+			delitem 7216,300;
+			delitem 7097,300;
+			delitem 2211,1;
+			delitem 982,1;
+			getitem 5070,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Faixa de Caratê ] !", bc_self;
+			close;
+		}
+		break;
+	case 48:
+		mes "[Faixa Indígena]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5071);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5010);
+		mes "1x "+getitemname(5049);
+		mes "1x "+getitemname(7101);
+		mes "10000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5010) >= 1 && countitem(5049) >= 1 && countitem(7101) >= 1 && Zeny >= 10000)
+		{
+			delitem 5010,1;
+			delitem 5049,1;
+			delitem 7101,1;
+			set Zeny,Zeny-10000;
+			getitem 5071,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Faixa Indígena ] !", bc_self;
+			close;
+		}
+		break;
+	case 49:
+		mes "[Faixa Listrada]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5049);
+		mes " ";
+		mes "Requerimento:";
+		mes "1500x "+getitemname(1099);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1099) >= 1500)
+		{
+			delitem 1099,1500;
+			getitem 5049,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Faixa Listrada ] !", bc_self;
+			close;
+		}
+		break;
+	case 50:
+		mes "[Fivela de Coração]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5041);
+		mes " ";
+		mes "Requerimento:";
+		mes "1200x "+getitemname(7013);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7013) >= 1200)
+		{
+			delitem 7013,1200;
+			getitem 5041,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Fivela de Coração ] !", bc_self;
+			close;
+		}
+		break;
+	case 51:
+		mes "[Fivela de Lua]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5048);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(5041);
+		mes "1x "+getitemname(999);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(5041) >= 1 && countitem(999) >= 1)
+		{
+			delitem 5041,1;
+			delitem 999,1;
+			getitem 5048,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Fivela de Lua ] !", bc_self;
+			close;
+		}
+		break;
+	case 52:
+		mes "[Fone de Ouvido]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5001);
+		mes " ";
+		mes "Requerimento:";
+		mes "40x "+getitemname(999);
+		mes "1x "+getitemname(1003);
+		mes "1x "+getitemname(970);
+		mes "1x "+getitemname(984);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(999) >= 40 && countitem(1003) >= 1 && countitem(970) >= 1 && countitem(984) >= 1)
+		{
+			delitem 999,40;
+			delitem 1003,1;
+			delitem 970,1;
+			delitem 984,1;
+			getitem 5001,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Fone de Ouvido ] !", bc_self;
+			close;
+		}
+		break;
+	case 53:
+		mes "[Gorro]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5076);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2226);
+		mes "500x "+getitemname(7038);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2226) >= 1 && countitem(7038) >= 500)
+		{
+			delitem 2226,1;
+			delitem 7038,500;
+			getitem 5076,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Gorro ] !", bc_self;
+			close;
+		}
+		break;
+	case 54:
+		mes "[Gorro Chullos [1]]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5243);
+		mes " ";
+		mes "Requerimento:";
+		mes "20x "+getitemname(4159);
+		mes "10x "+getitemname(7038);
+		mes "10x "+getitemname(7166);
+		mes "20x "+getitemname(7065);
+		mes "1x "+getitemname(7217);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(4159) >= 20 && countitem(7038) >= 10 && countitem(7166) >= 10 && countitem(7065) >= 20 && countitem(7217) >= 1)
+		{
+			delitem 4159,20;
+			delitem 7038,10;
+			delitem 7166,10;
+			delitem 7065,20;
+			delitem 7217,1;
+			getitem 5243,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Gorro Chullos [1] ] !", bc_self;
+			close;
+		}
+		break;
+	case 55:
+		mes "[Laço Vermelho]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5083);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2244);
+		mes "1x "+getitemname(2208);
+		mes "1x "+getitemname(10007);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2244) >= 1 && countitem(2208) >= 1 && countitem(10007) >= 1)
+		{
+			delitem 2244,1;
+			delitem 2208,1;
+			delitem 10007,1;
+			getitem 5083,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Laço Vermelho ] !", bc_self;
+			close;
+		}
+		break;
+	case 56:
+		mes "[Lâmpada]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5034);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2233);
+		mes "1x "+getitemname(746);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2233) >= 1 && countitem(746) >= 1)
+		{
+			delitem 2233,1;
+			delitem 746,1;
+			getitem 5034,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Lâmpada ] !", bc_self;
+			close;
+		}
+		break;
+	case 57:
+		mes "[Máscara de Alarme]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5086);
+		mes " ";
+		mes "Requerimento:";
+		mes "1000x "+getitemname(1095);
+		mes "1x "+getitemname(2288);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1095) >= 1000 && countitem(2288) >= 1)
+		{
+			delitem 1095,1000;
+			delitem 2288,1;
+			getitem 5086,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara de Alarme ] !", bc_self;
+			close;
+		}
+		break;
+	case 58:
+		mes "[Máscara de Jirtas]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5121);
+		mes " ";
+		mes "Requerimento:";
+		mes "370x "+getitemname(7315);
+		mes "1x "+getitemname(7263);
+		mes "1x "+getitemname(660);
+		mes "30x "+getitemname(7099);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7315) >= 370 && countitem(7263) >= 1 && countitem(660) >= 1 && countitem(7099) >= 30)
+		{
+			delitem 7315,370;
+			delitem 7263,1;
+			delitem 660,1;
+			delitem 7099,30;
+			getitem 5121,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara de Jirtas ] !", bc_self;
+			close;
+		}
+		break;
+	case 59:
+		mes "[Máscara de Noiva]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5169);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(706);
+		mes "500x "+getitemname(7201);
+		mes "1x "+getitemname(7200);
+		mes "20x "+getitemname(1049);
+		mes "500x "+getitemname(1059);
+		mes "2x "+getitemname(1054);
+		mes "100x "+getitemname(1024);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(706) >= 1 && countitem(7201) >= 500 && countitem(7200) >= 1 && countitem(1049) >= 20 && countitem(1059) >= 500 && countitem(1054) >= 2 && countitem(1024) >= 100)
+		{
+			delitem 706,1;
+			delitem 7201,500;
+			delitem 7200,1;
+			delitem 1049,20;
+			delitem 1059,500;
+			delitem 1054,2;
+			delitem 1024,100;
+			getitem 5169,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara de Noiva ] !", bc_self;
+			close;
+		}
+		break;
+	case 60:
+		mes "[Máscara de Ópera]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5043);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2281);
+		mes "20x "+getitemname(1020);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2281) >= 1 && countitem(1020) >= 20)
+		{
+			delitem 2281,1;
+			delitem 1020,20;
+			getitem 5043,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara de Ópera ] !", bc_self;
+			close;
+		}
+		break;
+	case 61:
+		mes "[Máscara de Oxigênio]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5004);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(701);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(701) >= 1)
+		{
+			delitem 701,1;
+			getitem 5004,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara de Oxigênio ] !", bc_self;
+			close;
+		}
+		break;
+	case 62:
+		mes "[Máscara de Solda]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2292);
+		mes " ";
+		mes "Requerimento:";
+		mes "50x "+getitemname(999);
+		mes "2000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(999) >= 50 && Zeny >= 2000)
+		{
+			delitem 999,50;
+			set Zeny,Zeny-2000;
+			getitem 2292,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara de Solda ] !", bc_self;
+			close;
+		}
+		break;
+	case 63:
+		mes "[Máscara do Fantasma]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2281);
+		mes " ";
+		mes "Requerimento:";
+		mes "20x "+getitemname(999);
+		mes "1x "+getitemname(707);
+		mes "5000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(999) >= 20 && countitem(707) >= 1 && Zeny >= 5000)
+		{
+			delitem 999,20;
+			delitem 707,1;
+			set Zeny,Zeny-5000;
+			getitem 2281,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara do Fantasma ] !", bc_self;
+			close;
+		}
+		break;
+	case 64:
+		mes "[Máscara Feliz]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2278);
+		mes " ";
+		mes "Requerimento:";
+		mes "10x "+getitemname(909);
+		mes "10x "+getitemname(914);
+		mes "10x "+getitemname(705);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(909) >= 10 && countitem(914) >= 10 && countitem(705) >= 10)
+		{
+			delitem 909,10;
+			delitem 914,10;
+			delitem 705,10;
+			getitem 2278,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara Feliz ] !", bc_self;
+			close;
+		}
+		break;
+	case 65:
+		mes "[Máscara Hahoe]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5176);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(706);
+		mes "500x "+getitemname(7201);
+		mes "10x "+getitemname(7200);
+		mes "20x "+getitemname(7015);
+		mes "100x "+getitemname(952);
+		mes "100x "+getitemname(1028);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(706) >= 1 && countitem(7201) >= 500 && countitem(7200) >= 10 && countitem(7015) >= 20 && countitem(952) >= 100 && countitem(1028) >= 100)
+		{
+			delitem 706,1;
+			delitem 7201,500;
+			delitem 7200,10;
+			delitem 7015,20;
+			delitem 952,100;
+			delitem 1028,100;
+			getitem 5176,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara Hahoe ] !", bc_self;
+			close;
+		}
+		break;
+	case 66:
+		mes "[Máscara Kitsune]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5069);
+		mes " ";
+		mes "Requerimento:";
+		mes "999x "+getitemname(1022);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1022) >= 999)
+		{
+			delitem 1022,999;
+			getitem 5069,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara Kitsune ] !", bc_self;
+			close;
+		}
+		break;
+	case 67:
+		mes "[Máscara Mítica de Leão]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5177);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(706);
+		mes "500x "+getitemname(7201);
+		mes "10x "+getitemname(7200);
+		mes "250x "+getitemname(1020);
+		mes "2x "+getitemname(1053);
+		mes "1x "+getitemname(980);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(706) >= 1 && countitem(7201) >= 500 && countitem(7200) >= 10 && countitem(1020) >= 250 && countitem(1053) >= 2 && countitem(980) >= 1)
+		{
+			delitem 706,1;
+			delitem 7201,500;
+			delitem 7200,10;
+			delitem 1020,250;
+			delitem 1053,2;
+			delitem 980,1;
+			getitem 5177,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Máscara Mítica de Leão ] !", bc_self;
+			close;
+		}
+		break;
+	case 68:
+		mes "[Mestre-Cuca]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5026);
+		mes " ";
+		mes "Requerimento:";
+		mes "450x "+getitemname(1036);
+		mes "300x "+getitemname(949);
+		mes "120x "+getitemname(539);
+		mes "1x "+getitemname(982);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1036) >= 450 && countitem(949) >= 300 && countitem(539) >= 120 && countitem(982) >= 1)
+		{
+			delitem 1036,450;
+			delitem 949,300;
+			delitem 539,120;
+			delitem 982,1;
+			getitem 5026,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Mestre-Cuca ] !", bc_self;
+			close;
+		}
+		break;
+	case 69:
+		mes "[Óculos Fashion]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5047);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2271);
+		mes "1x "+getitemname(975);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2271) >= 1 && countitem(975) >= 1)
+		{
+			delitem 2271,1;
+			delitem 975,1;
+			getitem 5047,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Óculos Fashion ] !", bc_self;
+			close;
+		}
+		break;
+	case 70:
+		mes "[Elmo de Orc Herói]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5094);
+		mes " ";
+		mes "Requerimento:";
+		mes "1000x "+getitemname(909);
+		mes "1000x "+getitemname(609);
+		mes "100x "+getitemname(968);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(909) >= 1000 && countitem(609) >= 1000 && countitem(968) >= 100)
+		{
+			delitem 909,1000;
+			delitem 609,1000;
+			delitem 968,100;
+			getitem 5094,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Elmo de Orc Héroi ] !", bc_self;
+			close;
+		}
+		break;
+	case 71:
+		mes "[Orelhas de Gato Preto]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5057);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2213);
+		mes "200x "+getitemname(914);
+		mes "1x "+getitemname(983);
+		mes "10000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2213) >= 1 && countitem(914) >= 200 && countitem(983) >= 1 && Zeny >= 10000)
+		{
+			delitem 2213,1;
+			delitem 914,200;
+			delitem 983,1;
+			set Zeny,Zeny-10000;
+			getitem 5057,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Orelhas de Gato Preto ] !", bc_self;
+			close;
+		}
+		break;
+	case 72:
+		mes "[Orelhas de Anjo]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5074);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(2254);
+		mes "1x "+getitemname(2286);
+		mes "20000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(2254) >= 1 && countitem(2286) >= 1 && Zeny >= 20000)
+		{
+			delitem 2254,1;
+			delitem 2286,1;
+			set Zeny,Zeny-20000;
+			getitem 5074,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Orelhas de Anjo ] !", bc_self;
+			close;
+		}
+		break;
+	case 73:
+		mes "[Orelhas de Coelho]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5213);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(949);
+		mes "1x "+getitemname(706);
+		mes "1x "+getitemname(722);
+		mes "1x "+getitemname(2213);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(949) >= 100 && countitem(706) >= 1 && countitem(722) >= 1 && countitem(2213) >= 1)
+		{
+			delitem 949,100;
+			delitem 706,1;
+			delitem 722,1;
+			delitem 2213,1;
+			getitem 5213,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Orelhas de Coelho ] !", bc_self;
+			close;
+		}
+		break;
+	case 74:
+		mes "[Peixe Azul]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5065);
+		mes " ";
+		mes "Requerimento:";
+		mes "1x "+getitemname(624);
+		mes "300x "+getitemname(959);
+		mes "50x "+getitemname(544);
+		mes "100x "+getitemname(938);
+		mes "1x "+getitemname(978);
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(624) >= 1 && countitem(959) >= 300 && countitem(544) >= 50 && countitem(938) >= 100 && countitem(978) >= 1)
+		{
+			delitem 624,1;
+			delitem 959,300;
+			delitem 544,50;
+			delitem 938,100;
+			delitem 978,1;
+			getitem 5065,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Peixe Azul ] !", bc_self;
+			close;
+		}
+		break;
+	case 75:
+		mes "[Placa de PARE]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(2272);
+		mes " ";
+		mes "Requerimento:";
+		mes "50x "+getitemname(1019);
+		mes "1x "+getitemname(983);
+		mes "91000 Zenys";
+		next;
+		mes "[Quests do BRO]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Quests do BRO]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(1019) >= 50 && countitem(983) >= 1 && Zeny >= 91000)
+		{
+			delitem 1019,50;
+			delitem 983,1;
+			set Zeny,Zeny-91000;
+			getitem 2272,1;
+			mes "[Quests do BRO]";
+			mes "Parabéns! Aqui está!";
+			announce "O player "+strcharinfo(0)+" acabou de fazer a quest [ Placa de PARE ] !", bc_self;
+			close;
+		}
+		break;
+	case 76:
+		mes "[Quests do BRO]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Quests do BRO]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}

@@ -1,0 +1,105 @@
+//|==========================================================================================|
+//|   __________     __________       __________   _____          _____   _____        _____ |
+//|  |::::::::::|   |::::::::: |     |::::::::::|  \::::\        /::::/   \::::\      /::::/ |
+//|  |:: ____ ::|   |:: ____ ::|     |:: ____ ::|   \::::\      /::::/     \::::\    /::::/  |
+//|  |::|    |::|   |::|    |::|     |::|    |::|    \::::\    /::::/       \::::\  /::::/   |
+//|  |::|    |::|   |::|    |::|     |::|    |::|     \::::\  /::::/         \::::\/::::/    |
+//|  |::|____|::|   |::|____|::|     |::|    |::|      \::::\/::::/           \::::::::/     |
+//|  |::::::::::|   |::::::::::\     |::|    |::|       \::::::::/             \::::::/      |
+//|  |::________|   |:: ____ :::\    |::|    |::|        \::::::/               \::::/       |
+//|  |::|           |::|     \:::|   |::|____|::|        /::::::\               |::::|       |
+//|  |::|           |::|      |::|   |::      ::|       /::::::::\              |::::|       |
+//|  |::|           |::|      |::|   |::::::::::|      /::::/\::::\             |::::|       |
+//|  |__|           |__|      |__|   |__________|     /____/  \____\            |____|       |
+//|                                                                                          |
+//|==========================================================================================|
+//|   Script Criando por ragnaproxy | Cronus | Por Favor, Não Retire Os Créditos.            |
+//|   Português corrigido e moderado por Pozinho | Cronus |
+//|==========================================================================================|
+//|  Hora do Fight versão 2.0                                                                |
+//|==========================================================================================|
+
+prontera,148,179,5	script	Hora do Fight	415,{
+
+
+
+set .npcn$, "[^0000FFHora do Fight^000000]";
+setarray $map_p$[0],"job_sage","45","104";
+
+
+if($crio1 == 1 ){  mes .npcn$; mes "Olá ^FF0000"+strcharinfo(0)+"^000000 Já existe uma sala criada, deseja entrar nela?";
+
+                if(Select("Sim:Não")==2) close;
+                next;
+                mes .npcn$;
+                mes "Sala criada por [^FF0000"+$NOME_SALA$+"^000000]";
+                mes "Limite de jogadores: ^FF0000["+$MAX+"]^000000";
+                mes "^993366Comentário:^000000"; mes ""+$COME$+"";
+                switch(select("^FF00001- "+$SALA$+"^0000FF["+getmapusers("job_sage")+"]^000000")){
+                if(getmapusers("job_sage") == $MAX){ mes .npcn$; mes "^ff6600A sala está lotada^000000"; close; }
+                case 1: warp $map_p$[0],$map_p$[1],$map_p$[2];
+
+                announce "Hora do Fight: "+strcharinfo(0)+" Entrou na sala criada por "+$NOME_SALA$+" ",8; initnpctimer;
+
+OnTimer1000:
+                announce "Hora do Fight: Os jogadores tem 5 minutos de combate.",8; end;
+OnTimer100000:
+                areawarp "job_sage",33,111,60,85,"prontera",150,150; set $crio1,0; end;
+        }
+}
+        mes .npcn$; mes "Olá ^FF0000"+strcharinfo(0)+"^000000! Seja Bem Vindo(a).";
+        mes "Deseja iniciar uma batalha ?"; next;
+        if(Select("Sim:Não")==2) close;
+
+        next;
+        mes .npcn$; mes "Digite o nome da sala";
+        digit $SALA$; next;
+        mes .npcn$; mes " Digite o limite de jogadores para entrar na sala, caso você queira apenas 1 oponente, coloque 2.";
+        digit $MAX; next;
+        mes .npcn$; mes " Escreva um comentário para os visitantes de sua sala."; next;
+        digit $COME$; next;
+        set $NOME_SALA$,""+strcharinfo(0)+"";
+        mes .npcn$; mes "Sua sala foi criada, irei teletransportar você até lá.";
+        mes "^0000FFEspere um oponente.^000000"; close2;
+        announce "Hora do Fight: ["+strcharinfo(0)+"] criou uma sala, quem vai honradamente desafiá-lo ? ",8;
+        warp $map_p$[0],$map_p$[1],$map_p$[2];
+        set $crio1,1; pvpon "job_sage"; end;
+}
+-	script	OnPCDieEvent	-1,{
+
+OnPCDieEvent:
+getmapxy @map2$,@x,@y,0;
+for( set @il,0; @il < getarraysize($map_p$); set @il,@il+1){
+if ( @map2$ == ""+$map_p$[@il]+"" ) goto MORREU; }
+end;
+MORREU:
+set $Morto$, strcharinfo(0);
+warp "prontera",150,150; end;
+}
+
+-	script	OnPCKillEvent	-1,{
+
+OnPCKillEvent:
+getmapxy @map$,@x,@y,0;
+for( set @ni,0; @ni < getarraysize($map_p$); set @ni,@ni+1){
+if ( @map$ == ""+$map_p$[@ni]+"" ) goto MATO; }
+end;
+
+MATO:
+        announce "Hora do Fight: ["+strcharinfo(0)+"] matou o jogador ["+$Morto$+"]  ",8;
+
+if(getmapusers("job_sage") == 1){ announce "Hora do Fight: O vencedor foi ["+strcharinfo(0)+"]. Parabéns ",8;
+
+areawarp "job_sage",33,111,60,85,"prontera",150,150; set $crio1,0;end; }
+
+
+}
+
+job_sage	mapflag	nowarp
+job_sage	mapflag	nowarpto
+job_sage	mapflag	noteleport
+job_sage	mapflag	nogo
+job_sage	mapflag	nosave	SavePoint
+job_sage	mapflag	nomemo
+job_sage	mapflag	nobranch
+job_sage	mapflag	nopenalty

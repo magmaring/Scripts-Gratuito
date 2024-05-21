@@ -1,0 +1,84 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////||
+//    DIREITOS DO SCRIPT RESERVADO A HaKaZoOr            ||       [ Descriçao do npc ]                                      ||
+//                                                       ||        Nome do npc:Buffer & Healer vip                          ||
+//                                                       ||        Função:Buff Vip                                          ||
+//              PESSO Q Ñ RETIRE OS CREDITOS             ||        Leitura Do NPC:é um npcs Feito para os vips              ||
+//                                                       ||        [Para Qual Tipo De Server]: Todos High,LOW e MID         ||
+//                                                       ||        Compatibilidade:Cronus Emulador                          ||
+//          POIS ASSIM TEREI PRAZER EM FAZER NPCS        ||        Função do npc:Buffs Vips                                 ||
+//                                                       ||        Qual mapa ele fica:Fica a Seu Criterio                   ||
+//            PARA TODOS VOCÊS                           ||                                                                 ||
+//                                                       ||                                                                 ||
+prontera,161,188,3	script	Buffer VIP	446,{
+
+OnTouch:
+if (getgmlevel()<1) goto naovip;
+skilleffect 8,0; sc_start SC_ENDURE,360000,10;
+skilleffect 33,0; sc_start SC_ANGELUS,360000,10;
+skilleffect 74,0; sc_start SC_MAGNIFICAT,360000,5;
+skilleffect 75,0; sc_start SC_GLORIA,360000,5;
+skilleffect 66,0; sc_start SC_IMPOSITIO,360000,5;
+skilleffect 34,0; sc_start SC_BLESSING,360000,10;
+skilleffect 29,0; sc_start SC_INCREASEAGI,360000,10;
+specialeffect2 338;
+specialeffect2 14;
+specialeffect2 236;
+percentheal 100,100;
+close;
+}
+
+payon,162,214,4	duplicate(Buffer VIP)	Buffer VIP	446
+
+que_god01,209,127,5	duplicate(Buffer VIP)	Buffer VIP	988
+
+jawaii,197,293,5	duplicate(Buffer VIP)	Buffer VIP	446
+
+morocc,160,99,4	duplicate(Buffer VIP)	Buffer VIP	446
+
+izlude,134,94,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+aldebaran,135,119,5	duplicate(Buffer VIP)	Buffer VIP	446
+
+xmas,145,136,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+comodo,191,162,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+yuno,162,190,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+amatsu,203,86,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+gonryun,157,126,5	duplicate(Buffer VIP)	Buffer VIP	446
+
+umbala,90,158,4	duplicate(Buffer VIP)	Buffer VIP	446
+
+niflheim,27,159,4	duplicate(Buffer VIP)	Buffer VIP	446
+
+louyang,217,103,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+jawaii,247,129,4	duplicate(Buffer VIP)	Buffer VIP	446
+
+ayothaya,155,121,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+lighthalzen,163,103,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+einbech,67,98,5	duplicate(Buffer VIP)	Buffer VIP	446
+
+hugel,94,152,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+rachel,129,117,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+veins,221,126,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+moscovia,216,192,6	duplicate(Buffer VIP)	Buffer VIP	446
+
+brasilis,191,219,5	duplicate(Buffer VIP)	Buffer VIP	446
+
+manuk,296,192,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+geffen,127,63,3	duplicate(Buffer VIP)	Buffer VIP	446
+
+alberta,183,145,5	duplicate(Buffer VIP)	Buffer VIP	446
+
+splendide,202,154,4	duplicate(Buffer VIP)	Buffer VIP	446
+
+bat_room,156,144,4	duplicate(Buffer VIP)	Buffer VIP	446

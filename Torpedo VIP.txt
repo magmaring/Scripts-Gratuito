@@ -1,0 +1,152 @@
+//|==========================================================================================|
+//|   __________     __________       __________   _____          _____   _____        _____ |
+//|  |::::::::::|   |::::::::: |     |::::::::::|  \::::\        /::::/	  \::::\      /::::/ |
+//|  |:: ____ ::|   |:: ____ ::|     |:: ____ ::|   \::::\      /::::/	   \::::\    /::::/  |
+//|  |::|    |::|   |::|    |::|     |::|    |::|    \::::\    /::::/       \::::\  /::::/   |
+//|  |::|    |::|   |::|    |::|     |::|    |::|     \::::\  /::::/         \::::\/::::/    |
+//|  |::|____|::|   |::|____|::|     |::|    |::|      \::::\/::::/           \::::::::/     |
+//|  |::::::::::|   |::::::::::\     |::|    |::| 	\::::::::/             \::::::/	     |
+//|  |::________|   |:: ____ :::\    |::|    |::|	 \::::::/	       	\::::/	     |
+//|  |::|	    |::|     \:::|   |::|____|::|	 /::::::\               |::::|	     |
+//|  |::|           |::|      |::|   |::      ::|       /::::::::\              |::::|       |
+//|  |::|           |::|      |::|   |::::::::::|      /::::/\::::\             |::::|       |
+//|  |__|	    |__|      |__|   |__________|     /____/  \____\	        |____|	     |
+//|        									   	     |
+//|==========================================================================================|
+//|   Script Criando por ragnaproxy | Cronus | Por Favor, Não Retire Os Créditos.            |
+//|==========================================================================================|
+//|         *************************Toperdo Vip****************************                 |
+//|==========================================================================================|
+
+
+
+sec_in01,85,174,4	script	torpedo	726,{
+
+set $nome$,"[^FF0000 Torpedo ^000000]";       //Nome do npc
+
+if (getgmlevel()<1) goto novip;
+
+mes $nome$;
+mes "Olá ^871F78"+ strcharinfo(0) +"^000000 Gostaria de manda uma torpedo para todo servidor ?";
+next;
+if(Select("Sim","Não")==2) close;
+
+mes $nome$;
+mes "Escolha a cor do Torpedo";
+next;
+switch(select(	"^FF0000Vermelho^000000","^008B00Verde^000000","^000000Preto^000000","^FFFF00Amarelo^000000","^0000FFAzul^000000","^778899Cinza^000000","^A020F0Roxo^000000")){
+
+
+case 1:
+
+	mes $nome$;
+	mes "Digite sua mensagem";
+	next;
+	digit @mensagem$;
+	mes @mensagem$;
+	if(Select("Está Certo","Está Errado quero Para")==2) close;
+	next;
+	announce ""+strcharinfo(0)+": "+@mensagem$+" ",bc,0xD20000;
+	mes $nome$;
+	mes "Sua menssagem foi enviada";
+	close;
+
+
+
+case 2:
+
+	mes $nome$;
+	mes "Digite sua mensagem";
+	next;
+	digit @mensagem$;
+	mes @mensagem$;
+	if(Select("Está Certo","Está Errado quero Para")==2) close;
+	next;
+	announce ""+strcharinfo(0)+": "+@mensagem$+" ",bc,0x99CC00;
+	mes $nome$;
+	mes "Sua menssagem foi enviada";
+	close;
+
+
+case 3:
+
+	mes $nome$;
+	mes "Digite sua mensagem";
+	next;
+	digit @mensagem$;
+	mes @mensagem$;
+	if(Select("Está Certo","Está Errado quero Para")==2) close;
+	next;
+	announce ""+strcharinfo(0)+": "+@mensagem$+" ",bc,0x000000;
+	mes $nome$;
+	mes "Sua menssagem foi enviada";
+	close;
+
+case 4:
+
+	mes $nome$;
+	mes "Digite sua mensagem";
+	next;
+	digit @mensagem$;
+	mes @mensagem$;
+	if(Select("Está Certo","Está Errado quero Para")==2) close;
+	next;
+	announce ""+strcharinfo(0)+": "+@mensagem$+" ",bc_yellow;
+	mes $nome$;
+	mes "Sua menssagem foi enviada";
+	close;
+
+case 5:
+
+	mes $nome$;
+	mes "Digite sua mensagem";
+	next;
+	digit @mensagem$;
+	mes @mensagem$;
+	if(Select("Está Certo","Está Errado quero Para")==2) close;
+	next;
+	announce ""+strcharinfo(0)+": "+@mensagem$+" ",bc_blue;
+	mes $nome$;
+	mes "Sua menssagem foi enviada";
+	close;
+
+case 6:
+
+	mes $nome$;
+	mes "Digite sua mensagem";
+	next;
+	digit @mensagem$;
+	mes @mensagem$;
+	if(Select("Está Certo","Está Errado quero Para")==2) close;
+	next;
+	announce ""+strcharinfo(0)+": "+@mensagem$+" ",bc,0xBAB9B9;
+	mes $nome$;
+	mes "Sua menssagem foi enviada";
+	close;
+
+case 7:
+
+	mes $nome$;
+	mes "Digite sua mensagem";
+	next;
+	digit @mensagem$;
+	mes @mensagem$;
+	if(Select("Está Certo","Está Errado quero Para")==2) close;
+	next;
+	announce ""+strcharinfo(0)+": "+@mensagem$+" ",bc,0xCC00FF;
+	mes $nome$;
+	mes "Sua menssagem foi enviada";
+	close;
+
+
+
+
+
+novip:
+mes "Lamento, mas você não é vip";
+mes "Acesse o site e veja como se torna vip.";
+close;
+
+}
+end;
+}

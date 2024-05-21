@@ -1,0 +1,89 @@
+new_1-1,40,109,4	script	Ajudante#	727,{
+mes "[^1E90FF Ajudante ^000000]";
+
+mes "Seja bem vindo ao Ragna TEN!";
+
+next;
+
+mes "[^1E90FF Ajudante ^000000]";
+
+mes "Estou aqui para lhe ajudar...";
+
+mes "E claro que eu poderei lhe dar alguma arma e alguns equipamentos!";
+
+next;
+
+mes "[^1E90FF Você receberá ^000000]";
+mes "# ^1E90FF1x^000000 Adaga do Aprendiz.";
+
+mes "# ^1E90FF1x^000000 Vembrassa do Aprendiz.";
+mes "# ^1E90FF1x^000000 Traje do Aprendiz.";
+
+mes "# ^1E90FF1x^000000 Sandálias do Aprendiz.";
+mes "# ^1E90FF1x^000000 Capuz do Aprendiz.";
+mes "# ^1E90FF1x^000000 Chapéu de Ovo do Aprendiz.";
+mes "# ^1E90FF400x^000000 Pocões de Aprendiz.";
+mes "# ^1E90FF50.000^000000 Zenys.";
+next;
+mes "[^1E90FF Ajudante ^000000]";
+
+mes "Prontinho! Faça bom proveito de todo esse privilégio !";
+
+mes " ";
+
+mes "Até a próxima nobre aventureiro !";
+next;
+getitem 1243,1;
+
+getitem 2112,1;
+
+getitem 2352,1;
+
+getitem 2414,1;
+
+getitem 2510,1;
+
+getitem 5055,1;
+
+equip 1243;
+
+equip 2112;
+
+equip 2352;
+
+equip 2414;
+
+equip 2510;
+
+equip 5055;
+
+set zeny,zeny+1000000;
+
+getitem 569,400;
+//set BaseLevel, BaseLevel + 9;
+//set JobLevel, JobLevel + 9;
+//resetstatus;
+//resetskill;
+//atcommand "@allskill";
+warp "prontera",	156,	175;
+
+savepoint "prontera",156,175;
+
+percentheal 100,100;
+
+close;
+
+
+}
+
+new_1-1	mapflag	pvp	off
+
+new_1-1	mapflag	nomemo
+
+new_1-1	mapflag	nobranch
+
+new_1-1	mapflag	nowarpto
+
+new_1-1	mapflag	nowarp
+
+new_1-1	mapflag	noteleport 

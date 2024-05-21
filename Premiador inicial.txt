@@ -1,0 +1,21 @@
+-	script	GiveItem#01	-1,{
+	OnPcLoginEvent:
+	if (taken == 1) end;
+
+	setarray .@it_give[0], 12208;
+	setarray .@q_give[0], 1;
+
+	for (set .@i, 0; .@i < getarraysize(.@it_give); set .@i, @i + 1)
+	{
+      		//Dá o item
+      		additem .@it_give[.@i], .@q_give[.@i];
+	}
+
+	mes "[RagnaTen]";
+	mes "Obrigado por jogar no RagnaTen!";
+	close2;
+
+	set taken,1;
+
+	end;
+}

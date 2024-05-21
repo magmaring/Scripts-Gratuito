@@ -1,0 +1,41 @@
+prontera,160,189,4	script	Ajudante VIP#01::cVip	446,{
+
+skilleffect 33,0; sc_start SC_ANGELUS,360000,10;
+skilleffect 34,0; sc_start SC_BLESSING,360000,10;
+skilleffect 29,0; sc_start SC_INCREASEAGI,360000,10;
+skilleffect 74,0; sc_start SC_MAGNIFICAT,360000,5;
+skilleffect 75,0; sc_start SC_GLORIA,360000,5;
+skilleffect 412,0; sc_start SC_ITEMBOOST,1800000,100;
+specialeffect2 53;
+percentheal 100,100;
+emotion 51;
+close;
+}
+//==========================================================
+//Cidades 
+alberta,187,143,4	duplicate(cVip)	Ajudante VIP#02	446
+aldebaran,145,121,4	duplicate(cVip)	Ajudante VIP#03	446
+amatsu,207,84,1	duplicate(cVip)	Ajudante VIP#04	446
+ayothaya,144,120,6	duplicate(cVip)	Ajudante VIP#05	446
+comodo,200,148,4	duplicate(cVip)	Ajudante VIP#06	446
+einbroch,72,204,4	duplicate(cVip)	Ajudante VIP#07	446
+einbroch,243,191,2	duplicate(cVip)	Ajudante VIP#08	446
+einbech,133,249,4	duplicate(cVip)	Ajudante VIP#09	446
+geffen,126,64,6	duplicate(cVip)	Ajudante VIP#10	446
+gonryun,162,122,4	duplicate(cVip)	Ajudante VIP#11	446
+izlude,135,117,4	duplicate(cVip)	Ajudante VIP#12	446
+hugel,92,154,5	duplicate(cVip)	Ajudante VIP#13	446
+lighthalzen,162,81,6	duplicate(cVip)	Ajudante VIP#14	446
+louyang,204,106,4	duplicate(cVip)	Ajudante VIP#15	446
+morocc,158,97,4	duplicate(cVip)	Ajudante VIP#16	446
+payon,150,233,4	duplicate(cVip)	Ajudante VIP#18	446
+umbala,132,133,4	duplicate(cVip)	Ajudante VIP#19	446
+xmas,147,136,4	duplicate(cVip)	Ajudante VIP#20	446
+yuno,166,190,4	duplicate(cVip)	Ajudante VIP#21	446
+rachel,130,117,5	duplicate(cVip)	Ajudante VIP#22	446
+veins,211,125,5	duplicate(cVip)	Ajudante VIP#23	446
+nameless_i,175,257,5	duplicate(cVip)	Ajudante VIP#24	446
+moscovia,220,192,4	duplicate(cVip)	Ajudante VIP#25	446
+brasilis,192,218,4	duplicate(cVip)	Ajudante VIP#26	446
+manuk,290,192,5	duplicate(cVip)	Ajudante VIP#27	446
+splendide,203,152,5	duplicate(cVip)	Ajudante VIP#28	446

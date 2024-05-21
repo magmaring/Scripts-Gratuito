@@ -1,0 +1,281 @@
+	___       ___       ___       ___       ___       ___       ___       ___       ___       ___       ___   
+       /\  \     /\  \     /\  \     /\__\     /\  \     /\  \     /\  \     /\  \     /\__\     /\__\     /\  \  
+       \:\  \   /::\  \   /::\  \   /:| _|_   /::\  \   /::\  \   /::\  \   /::\  \   /:| _|_   /:/ _/_   /::\  \ 
+       /::\__\ /::\:\__\ /:/\:\__\ /::|/\__\ /:/\:\__\ /:/\:\__\ /::\:\__\ /:/\:\__\ /::|/\__\ /:/_/\__\ /\:\:\__\
+      /:/\/__/ \:\:\/  / \:\ \/__/ \/|::/  / \:\/:/  / \:\ \/__/ \;:::/  / \:\/:/  / \/|::/  / \:\/:/  / \:\:\/__/
+      \/__/     \:\/  /   \:\__\     |:/  /   \::/  /   \:\__\    |:\/__/   \::/  /    |:/  /   \::/  /   \::/  / 
+        	 \/__/     \/__/     \/__/     \/__/     \/__/     \|__|     \/__/     \/__/     \/__/     \/__/ 
+			         T e c n o C r o n u s  N e t W o r k  P r e s e n t s
+	*------------------------------------------ eAthena Script --------------------------------------------*
+	*- Sistema de Rops										       *
+	*----------------------------------------------- By: --------------------------------------------------*
+	*- TecnoCronus                                                                                         *
+	*------------------------------------------ Current Version: ------------------------------------------*
+	*- 2.0												       *
+	*------------------------------------------ Compatible With: ------------------------------------------*
+	*- eAthena		             								       *
+	*------------------------------------------- Description: ---------------------------------------------*
+	*- 1.0 												       *
+	*---------------------------------------- Additional Comments: ----------------------------------------*
+	*- 1.0 Trabalha em eAthena TXT e SQL								       *
+	*- 1.1 Em eAthena TXT, o Player tem que estar Online na Hora de adicionar Créditos		       *
+	*- 1.2 Auto detecção, se é TXT ou SQL								       *
+	*- 2.0 VERSÃO 2.0 Adiconado o Sistema Rápido							       *
+	*- 2.1 "Sistema Rápido" funciona assim, você manda uma mensagem em privado para ROP com o Nome do Joga *
+	*-      dor que vai receber os Rops, depois manda outra menssagem com o Número de Rops que ele vai     *
+	*-      receber.										       *
+	*- 2.2 O LvL Mínimo para Adicionar Rops é Conforme a Variável "$@Rop_MinGMLvl" na Linha "243"	       *
+	*------------------------------------------ Bug Report Link:  -----------------------------------------*
+	*- http://www.eathena.ws/board/index.php?showtopic=203654&st=0				               *
+	*------------------------------------------------------------------------------------------------------*/
+prontera,174,215,4	script	Loja de Rops	718,{
+			if($@UseMySQL == 0) {
+			if(getgmlevel()>=$@Rop_MinGMLvl) {
+			set @adm$, strcharinfo(0);
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Olá Administrador, diga o nome do jogador que você deseja adicionar Rops";
+			input @name$;
+			set @getcharID, getcharid(0,@name$);
+			set @getcharid2, getcharid(3,@name$);
+			set @Online, isloggedin(@getcharID,@getcharid2);
+			if (!getarraysize(@getcharID)){
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Essa conta não existe";
+			close;
+			} else if (@Online!=1) {
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes " ^3cbd32 "+@name+" ^000000 não está Online";
+			close;
+			}
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Quantos Rops você deseja que ^3cbd32 "+@name$+" ^000000 ganhe?";
+			mes "Lembrando: Ele deve estar Online";
+			input @Credit;
+			mes "Ok, Adicionando ^FF0000 "+@Credit+" ^000000 Rops em ^3cbd32 "+@name+" ^000000 ";
+			next;
+			callfunc "AddCred";
+			end;
+			}
+			callfunc "Sell";
+			end;
+			}
+			if(getgmlevel()>=$@Rop_MinGMLvl) {
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Olá Administrador, diga o nome do jogador que você deseja adicionar Rops";
+			input @name2$;
+			set @name3$, @name2$;
+			set @name2$, getcharid(3,@name2$);
+			query_sql "SELECT `userid` FROM `login` WHERE `userid` = `"+ @name2$ +"`", @SQLname$;
+			if (!getarraysize(@SQLname$)){
+			mes "Essa Conta não existe senhor.";
+			close;
+			}
+			query_sql "SELECT `rops` FROM `login` WHERE `userid` = `"+ @name2$ +"`", @rops;
+			mes "Essa pessoa tem "+@rops+" Rops";
+			mes "Deseja Prosseguir?";
+			if(select ("Sim","Não") == 2) close;
+			mes "Quanto Créditos "+@SQLname$+" deve receber?";
+			input @Cred$;
+			mes "Confirmando: "+@name3$+" receberá "+@Cred$+" Rops, Deseja Continuar?";
+			if(select ("Sim","Não") == 2) close;
+			query_sql "UPDATE `login` SET `rops` = `rops` + `"+ @Cred$ +"` WHERE `userid` = `"+ @SQLname$ +"`";
+			mes "Créditos adicionado com Sucesso";
+			close;
+			}
+			callfunc "Sell";
+			end;
+			
+OnInit:
+			set $@Rop_MinGMLvl, 60;
+			set @AutoD, query_sql("select version()");
+			if(@AutoD < 0) { set $@UseMySQL,0; debugmes "Sistema Rops trabalhando em TXT"; } else { set $@UseMySQL,1; debugmes "Sistema Rops trabalhando em SQL"; }
+			end;
+			}
+			
+
+
+function	script	Addcred	{
+			attachrid(getcharid(3,@name$));
+			set #RopPoint, #RopPoint+@Credit;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Você recebeu "+@credit+" Rops";
+			close;
+			attachrid(getcharid(3,@adm$));
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Crédito Adicionado Com Sucesso";
+			close;
+			}
+
+function	script	Sell	{
+			set @Login$, getcharid(3);
+			if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			if($@UseMySQL != 1) { mes "Você tem "+#RopPoint+" Rop(s)"; } else { mes "Você tem "+@rops+" Rop(s)"; }
+			mes "Deseja trocar seus Rops por?";
+			mes "Lembre-se: R significa Rops";
+			switch(select("Alice Doll 12.000R","Flying Angel 9.000R","Hunter Cap[1] 8.000R","Little Angel Doll 8.000R","Sunglasses[1] 7.000R","Close Helmet 7.000R","Angeling Hat 7.000R","Deviling Hat 7.000R","Coppola 5.000R","Sair")) {
+
+		case 1:
+			set @price$, 12000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Uma Alice Doll?";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 12k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 5137,1;
+			mes "Troca feita";
+			close;
+		case 2:
+			set @price$, 9000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Flying Angel?";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 9k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 5210,1;
+			mes "Feito!";
+			close;
+		case 3:
+			set @price$, 8000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Hunter Cap[1]?";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 8k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 5383,1;
+			mes "Troca Concluída";
+			close;
+		case 4:
+			set @price$, 8000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Little Angel Doll?";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 8k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 5324,1;
+			mes "Troca Feita!";
+			close;
+		case 5:
+			set @price$, 7000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Sunglasses[1]?";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 7k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 2202,1;
+			mes "Ok, Troca feita";
+			close;
+		case 6:
+			set @price$, 7000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Close Helmet??";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 7k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 5131,1;
+			mes "Troca feita com sucesso";
+			close;
+		case 7:
+			set @price$, 7000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Angeling Hat!?";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 7k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 5132,1;
+			mes "Troca Concluída";
+			close;
+		case 8:
+			set @price$, 7000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Deviling Hat?";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 7k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 5254,1;
+			mes "Feito";
+			close;
+		case 9:
+			set @price$, 5000;
+			`if($@UseMySQL == 1) query_sql "SELECT `rops` FROM `login` WHERE `account_id` = `"+ @Login$ +"`", @rops;
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Coppola?";
+			mes "Ok, Vamos Trocar";
+			mes "Vou checar se você tem 5k de R";
+			mes "Se não tiver não falo mais com você";
+			if(#RopPoint<@price$ || @rops<@price$) close;
+			if($@UseMySQL == 1) query_sql "UPDATE `login` SET `rops` = `rops` - `"+ @price$ +"` WHERE `account_id` = `"+ @Login$ +"`";
+			set #RopPoint,RopPoint-@price$;
+			getitem 5200,1;
+			mes "Troca Concluída";
+			close;
+		case 10:
+			mes "[^9f13f8 Vendedor ^000000]";
+			mes "Volte quando precisar";
+			close;
+			}
+				
+					
+}
+
+-	script	ROP	-1,{
+end;
+		OnWhisperGlobal:
+				if (getgmlevel() < $@Rop_MinGMLvl) {
+				dispbottom "Tsc, Tsc, Você não é GM, então me deixe em paz"; }
+				set @NameRop$, @whispervar0$;
+				if (getstrlen(@whispervar1$) > 0) set @NameRop$, @whispervar1$;
+				if (getstrlen(@F_Add$)<=0) {
+				set @F_Add$, getcharid(3,@NameRop);
+				if (!getarraysize(@F_Add$)){
+				dispbottom "Essa Acc não existe";
+					}
+				}
+				dispbottom "Digite Quandos Créditos "+ @NameRop$ +" Recebera";
+				callfunc "AddRop";
+				end;
+}
+
+function        script        AddRop        {
+				set @F_Rop$, query_sql " UPDATE `login` SET `rops` = `rops` + `"+ @RopName"` WHERE `account_id` = `"+ @F_Add$ +"`";
+				if (!getarraysize(@F_Rop$)) {
+				dispbottom "Ocorreu um Erro, Reporte isso ao ADM"; }
+				dispbottom "Rops Adicionados com sucesso";
+				end;
+			}
+OnInit:
+			if($@UseMySQL==0) disablenpc "ROP";
+			end;
+}

@@ -1,0 +1,539 @@
+// ===========================================================
+//===== Cronus Script ========================================
+//= Arena do Caos 1.0
+//===== Por: =================================================
+//= Adriano Barbosa
+//===== Versão Atual: ========================================
+//= 1.0
+//===== Compatibilidade: =====================================
+//= Cronus Emulador
+//===== Descrição: ===========================================
+// Uma arena aberta a cada 5 horas Apartir do meio Dia (OBS: Totalmente configuravel )
+// Uma quantidade de Jogadores ( Configurado pelo ADM ) são teleportados para a Arena.
+// 5 Levas de monstros são invovados e so é possivel proseguir matando todos eles.
+// Depois de matar as  Levas de Monstros um Boss (Monstro Chef) e invocado e o ultimo Player a Infrigir Dano a Ele Recebe o Premio e um Ponto de Vitoria.
+// O Mapa do Evento e Facilmente trocado, o NPC pode adptar facilmente a outros Mapas.(OBS: Você deve alterar o summon 
+// Os Demais jogadores não recebem premio mas recebem 1 ponto de participação e 1 ponto do caos que pode ser trocado por Itens no NPC.
+// Todos os Jogadores que permanecerem ate o Final do Evento Receberam 1 Ponto do Caos e 1 Ponto de participação.
+// O Jogador Vencedor( Que matou o Boss(monstro Chef)) recebe 1 ponto de participação, 10 pontos do Caos e 1 de Vitoria.
+// A Loja de Itens do Caos e Totalmente Configuravel a gosto do ADM.
+// Monstros Invocados Foram Editados por mim, caso não agrade e possivel alteralos ou substituilos.
+// Jogadores que não acessam o NPC Saida apos a Morte do Boss(Monstro Chef) não recebe seu ponto do Caos e participação.
+// O NPC contem um Ranking totalmente configuravel pelo ADM que mostra os que mais venceram e etc.
+// Ranking, Mostra Player em posição incorreta no Ranking ? O Ranking tem um pequeno problema de Adicionar ao Ranking a ultima pessoa a Receber Pontos de Caos e participação.
+//============================================================
+
+ra_temin,170,163,5	script	Arena do Caos#1	468,{
+
+	mes .NN$;
+	mes "-^FF0000"+Strcharinfo(0)+"^000000 você gosta de perigo e adrenalina ?";
+	mes "Esse é o lugar certo.";
+	next;
+	mes .NN$;
+	mes "Vamos direto ao assunto selecione seu objetivo.";
+	next;
+	switch(select("Entrar na Arena do Caos - ["+getmapusers("5@tower")+"/"+$QNTCAOS+"]:Ranking do Caos:Minhas Informações:Recompenças do Caos:Fechar"))
+	{
+		case 1:
+		if($liberado >= 1)
+		{
+			if (getmapusers("5@tower") < $QNTCAOS)
+			{
+				mes .NN$;
+				mes "Você sera Teleportado para a Arena do Caos.";
+				close2;
+				mapannounce "5@tower","O Jogador "+StrCharInfo(0)+" acaba de entrar na Arena do Caos.",bc_map;
+				warp "5@tower",79,82;
+				end;
+			}
+			else
+			{
+				mes .NN$;
+				mes "A Arena do Caos esta Lotada.";
+				close;
+			}
+		}
+		else
+		{
+			mes .NN$;
+			mes "Você deve esperar a Arena do Caos ser Aberta.";
+			close;
+		}
+		
+		case 2:
+		
+		mes .NN$;
+		mes "Qual Ranking gostaria de ver ?";
+		next;
+		query_sql "SELECT `acc_id`, `char_id`, `nome`, `venceu`, `participou`, `pontosdocaos` FROM `rankingcaos` ORDER BY (`venceu` - `participou` - `pontosdocaos`) DESC", @acc_id, @char_id, @nome$, @venceu, @participou, @pontosdocaos;
+		switch(select("Todos:Dos Vencedores:Dos Participantes:Pontos de Caos:Nenhum"))
+		{
+			case 1:
+			mes .NN$;
+			mes "-----------------------------------";
+			for(set @i, 0; @i < 10; set @i, @i + 1){ mes ""+(@i + 1)+"º - [^0000FF"+@nome$[@i]+"^000000] ^FF0000Venceu^000000:"+@venceu[@i]+" , ^0000FFParticipou^000000:"+@participou[@i]+" , ^FF0000Pontos de Caos^000000:"+@pontosdocaos[@i]+" .";}
+			close;
+			
+			case 2:
+			mes .NN$;
+			mes "-----------------------------------";
+			for(set @i, 0; @i < 10; set @i, @i + 1){ mes ""+(@i + 1)+"º - [^0000FF"+@nome$[@i]+"^000000] , ^FF0000Venceu^000000:"+@venceu[@i]+" ."; }
+			close;
+			
+			case 3:
+			mes .NN$;
+			mes "-----------------------------------";
+			for(set @i, 0; @i < 10; set @i, @i + 1){ mes ""+(@i + 1)+"º - [^0000FF"+@nome$[@i]+"^000000] , ^0000FFParticipou^000000:"+@participou[@i]+" ."; }
+			close;
+			
+			case 4:
+			mes .NN$;
+			mes "-----------------------------------";
+			for(set @i, 0; @i < 10; set @i, @i + 1){ mes ""+(@i + 1)+"º - [^0000FF"+@nome$[@i]+"^000000] , ^FF0000Pontos do Caos^000000:"+@pontosdocaos[@i]+" .";}
+			close;
+			
+			case 5:
+			mes .NN$;
+			mes "Tudo Bem.";
+			mes "Quando quizer ver o Ranking me procure.";
+			close;
+		}
+		
+		case 3:
+		query_sql "SELECT `char_id`, `nome`, `venceu`, `participou`, `pontosdocaos` FROM `rankingcaos` WHERE `acc_id` = '"+getcharid(3)+"'", @char_id, @nome$, @venceu, @participou, @pontosdocaos;
+		mes .NN$;
+		mes "-----------------------------------";
+		mes "           Informações             ";
+		mes "-----------------------------------";
+		mes "^0000FFChar:^000000 "+@nome$+"";
+		mes "^008B00Vitorias:^000000 "+@venceu+"";
+		mes "^002B00Pontos do Caos:^000000 "+@pontosdocaos+"";
+		mes "^FF0000Participação:^000000 "+@venceu+"";
+		close;
+		
+		
+		case 4:
+		mes .NN$;
+		mes "Eu vendo Itens que so podem ser Obtidos para aqueles que conheceram o medo de perto.";
+		next;
+		mes $NN$;
+		mes "Qual item gostaria de Comprar ?";
+		next;
+		switch(select(""+getitemname($iLoja[0])+":"+getitemname($iLoja[1])+":"+getitemname($iLoja[2])+":"+getitemname($iLoja[3])+":"+getitemname($iLoja[4])+":Nenhum"))
+		{
+			case 1:
+			mes $NN$;
+			mes "O Item "+getitemname($iLoja[0])+": custa "+$pLoja[0]+" Pontos do Caos.";
+			mes "Deseja Compralo ?";
+			next;
+			if(select("Sim:Não")==2)close;
+			{
+				query_sql "SELECT `char_id`, `nome`, `venceu`, `participou`, `pontosdocaos` FROM `rankingcaos` WHERE `acc_id` = '"+getcharid(3)+"'", @char_id, @nome$, @venceu, @participou, @pontosdocaos;
+				if (@nome$ == "")
+				{
+					mes $NN$;
+					mes "Você não tem nenhum Ponto do Caos então não pode Comprar este Item.";
+					close;
+				}
+				else 
+				{
+					if(@pontosdocaos >= $pLoja[0])
+					{
+						mes $NN$;
+						mes "O Item "+getitemname($iLoja[0])+" foi Obtido com Sucesso.";
+						close2;
+						getitem $iLoja[0],1;
+						dispbottom ""+getitemname($iLoja[0])+" Adquirido.";
+						query_sql "UPDATE `rankingcaos` SET `pontosdocaos` = `pontosdocaos` - "+$pLoja[0]+" WHERE `acc_id` = " + getcharid(3),@resultado$;
+						end;
+					}
+					else
+					{
+						mes $NN$;
+						mes "Você não tem Pontos do Caos Suficiente.";
+						close;
+					}
+				}
+			}
+			
+			case 2:
+			mes $NN$;
+			mes "O Item "+getitemname($iLoja[1])+": custa "+$pLoja[1]+" Pontos do Caos.";
+			mes "Deseja Compralo ?";
+			next;
+			if(select("Sim:Não")==2)close;
+			{
+				query_sql "SELECT `char_id`, `nome`, `venceu`, `participou`, `pontosdocaos` FROM `rankingcaos` WHERE `acc_id` = '"+getcharid(3)+"'", @char_id, @nome$, @venceu, @participou, @pontosdocaos;
+				if (@nome$ == "")
+				{
+					mes $NN$;
+					mes "Você não tem nenhum Ponto do Caos então não Comprar este Item.";
+					close;
+				}
+				else
+				{
+					if(@pontosdocaos >= $pLoja[1])
+					{
+						mes $NN$;
+						mes "O Item "+getitemname($iLoja[1])+" foi Obtido com Sucesso.";
+						close2;
+						getitem $iLoja[1],1;
+						dispbottom ""+getitemname($iLoja[1])+" Adquirido.";
+						query_sql "UPDATE `rankingcaos` SET `pontosdocaos` = `pontosdocaos` - "+$pLoja[1]+" WHERE `acc_id` = " + getcharid(3),@resultado$;
+						end;
+					}
+					else
+					{
+						mes $NN$;
+						mes "Você não tem Pontos do Caos Suficiente.";
+						close;
+					}
+				}
+			}
+			
+			case 3:
+			mes $NN$;
+			mes "O Item "+getitemname($iLoja[2])+": custa "+$pLoja[2]+" Pontos do Caos.";
+			mes "Deseja Compralo ?";
+			next;
+			if(select("Sim:Não")==2)close;
+			{
+				query_sql "SELECT `char_id`, `nome`, `venceu`, `participou`, `pontosdocaos` FROM `rankingcaos` WHERE `acc_id` = '"+getcharid(3)+"'", @char_id, @nome$, @venceu, @participou, @pontosdocaos;
+				if (@nome$ == "")
+				{
+					mes $NN$;
+					mes "Você não tem nenhum Ponto do Caos então não pode Comprar este Item.";
+					close;
+				}
+				else
+				{
+					if(@pontosdocaos >= $pLoja[2])
+					{
+						mes $NN$;
+						mes "O Item "+getitemname($iLoja[2])+" foi Obtido com Sucesso.";
+						close2;
+						getitem $iLoja[0],1;
+						dispbottom ""+getitemname($iLoja[2])+" Adquirido.";
+						query_sql "UPDATE `rankingcaos` SET `pontosdocaos` = `pontosdocaos` - "+$pLoja[2]+" WHERE `acc_id` = " + getcharid(3),@resultado$;
+						end;
+					}
+					else
+					{
+						mes $NN$;
+						mes "Você não tem Pontos do Caos Suficiente.";
+						close;
+					}
+				}
+			}
+			
+			case 4:
+			mes $NN$;
+			mes "O Item "+getitemname($iLoja[3])+": custa "+$pLoja[3]+" Pontos do Caos.";
+			mes "Deseja Compralo ?";
+			next;
+			if(select("Sim:Não")==2)close;
+			{
+				query_sql "SELECT `char_id`, `nome`, `venceu`, `participou`, `pontosdocaos` FROM `rankingcaos` WHERE `acc_id` = '"+getcharid(3)+"'", @char_id, @nome$, @venceu, @participou, @pontosdocaos;
+				if (@nome$ == "")
+				{
+					mes $NN$;
+					mes "Você não tem nenhum Ponto do Caos então não pode Comprar este Item.";
+					close;
+				}
+				else
+				{
+					if(@pontosdocaos >= $pLoja[3])
+					{
+						mes $NN$;
+						mes "O Item "+getitemname($iLoja[3])+" foi Obtido com Sucesso.";
+						close2;
+						getitem $iLoja[0],1;
+						dispbottom ""+getitemname($iLoja[3])+" Adquirido.";
+						query_sql "UPDATE `rankingcaos` SET `pontosdocaos` = `pontosdocaos` - "+$pLoja[3]+" WHERE `acc_id` = " + getcharid(3),@resultado$;
+						end;
+					}
+					else
+					{
+						mes $NN$;
+						mes "Você não tem Pontos do Caos Suficiente.";
+						close;
+					}
+				}
+			}
+			
+			case 5:
+			mes $NN$;
+			mes "O Item "+getitemname($iLoja[4])+": custa "+$pLoja[4]+" Pontos do Caos.";
+			mes "Deseja Compralo ?";
+			next;
+			if(select("Sim:Não")==2)close;
+			{
+				query_sql "SELECT `char_id`, `nome`, `venceu`, `participou`, `pontosdocaos` FROM `rankingcaos` WHERE `acc_id` = '"+getcharid(3)+"'", @char_id, @nome$, @venceu, @participou, @pontosdocaos;
+				if (@nome$ == "")
+				{
+					mes $NN$;
+					mes "Você não tem nenhum Ponto do Caos então não pode Comprar este Item.";
+					close;
+				}
+				else 
+				{
+					if(@pontosdocaos >= $pLoja[4])
+					{
+						mes $NN$;
+						mes "O Item "+getitemname($iLoja[4])+" foi Obtido com Sucesso.";
+						close2;
+						getitem $iLoja[0],1;
+						dispbottom ""+getitemname($iLoja[4])+" Adquirido.";
+						query_sql "UPDATE `rankingcaos` SET `pontosdocaos` = `pontosdocaos` - "+$pLoja[4]+" WHERE `acc_id` = " + getcharid(3),@resultado$;
+						end;
+					}
+					else
+					{
+						mes $NN$;
+						mes "Você não tem Pontos do Caos Suficiente.";
+						close;
+					}
+				}
+			}
+			
+			case 6:
+			mes $NN$;
+			mes "Volte quando quizer comprar algo.";
+			close;	
+		}
+		
+		case 5:
+		mes $NN$;
+		mes "Você sabe onde me encontrar.";
+		close;			
+		
+	}
+	
+OnInit:
+//====================================== Cnfigurações ===================================================
+	set .NN$, "[^FF0000Arena do Caos^000000]";           // Nome do npc
+	setarray $PREMIO[0], 1000,1001,1002;                 // ID dos Premios que o Vencedor podera Ganhar (OBS: ele apena ganha um dos Premios)
+	set $QNTCAOS, 5;                                     // Quantidade de Players que podem entrar na Arena
+	set $QNTMOBS, 60;                                    // Quantidade de Monstros que seram invocados por fase(OBS: Tanbem devem ser alterados dados no NPC comeca#1.)
+	set $FASE, 1;                                        // Não mecha
+	setarray $iLoja[0], 1000,1001,1002,1003, 1004, 1005; // ID dos itens vendidos na Loja do Caos
+	setarray $pLoja[0], 10,10,10,10,10;                  // Preço dos Itens de acordo com a array acima (OBS: Preço dos itens em pontos do Caos)
+	set $liberado, 0;
+end;
+//========================================================================================================
+	
+}
+
+-	script	ChamadaEvento#1	-1,{
+
+OnMinute24:
+OnHour12:
+OnHour17:
+OnHour22:
+	
+		initnpctimer;
+		announce "A Arena do Caos esta Aberta",bc_blue|bc_all;
+		set $liberado, 1;
+		killmonsterall "5@tower",0;
+		disablenpc "Saida#1";
+		end;
+	OnTimer60000: announce "A Arena do Caos ira se Fechar em 4 Minutos.",bc_blue|bc_all; end;
+	OnTimer120000: announce "A Arena do Caos ira se Fechar em 3 Minutos.",bc_blue|bc_all; end;
+	OnTimer180000: announce "A Arena do Caos ira se Fechar em 2 Minutos.",bc_blue|bc_all;end;
+	OnTimer240000: announce "A Arena do Caos ira se Fechar em 1 Minuto.",bc_blue|bc_all; end;
+	OnTimer300000: announce "A Arena do Caos se Fechou.",bc_blue|bc_all;
+		set $liberado, 0;
+		end;
+		mapannounce "5@tower","Agoras vocês estão na Arena do Caos.",bc_map;
+		end;
+	OnTimer305000: mapannounce "5@tower","Preparem se.",bc_map; end;
+	OnTimer309000: mapannounce "5@tower","A 1º Fase da Arena do Caos Começu.",bc_map;
+	set $FASE, 1;
+		set $QNTMOBS, 60;
+		donpcevent "comeca#1::OnComeca";
+}
+
+-	script	comeca#1	-1,{
+
+OnComeca:
+	
+		if($FASE == 1)
+		{
+			set $FASE, 1;
+			areamonster "5@tower",66,68,97,99,"Cria do Caos",2245,10,"Amorte#1::OnCaosMorte";
+			areamonster "5@tower",66,68,97,99,"Cria do Caos",2245,10,"Amorte#1::OnCaosMorte";
+			areamonster "5@tower",66,68,97,99,"Cria do Caos",2245,10,"Amorte#1::OnCaosMorte";
+			areamonster "5@tower",66,68,97,99,"Cria do Caos",2245,10,"Amorte#1::OnCaosMorte";
+			areamonster "5@tower",66,68,97,99,"Cria do Caos",2245,10,"Amorte#1::OnCaosMorte";
+			areamonster "5@tower",66,68,97,99,"Cria do Caos",2245,10,"Amorte#1::OnCaosMorte";
+		}
+		else if($FASE == 2)
+		{
+				mapannounce "5@tower","[Arena do Caos 1.0] Vocês acharam facil ?",bc_map;
+			sleep 10000;
+				mapannounce "5@tower","[Arena do Caos 1.0] Isso é só o começo !",bc_map;
+			sleep 5000;
+				set $QNTMOBS, 60;
+				areamonster "5@tower",66,68,97,99,"Subordinado do Caos",2246,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Subordinado do Caos",2246,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Subordinado do Caos",2246,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Subordinado do Caos",2246,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Subordinado do Caos",2246,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Subordinado do Caos",2246,10,"Amorte#1::OnCaosMorte";
+				mapannounce "5@tower","A "+$FASE+"º Fase da Arena do Caos Começu.",bc_map;
+		}
+		else if($FASE == 3)
+		{
+				mapannounce "5@tower","[Arena do Caos 1.0] Parabens, vocês ainda continuam vivos !",bc_map;
+			sleep 10000;
+				mapannounce "5@tower","[Arena do Caos 1.0] Por Enquanto !",bc_map;
+			sleep 500;
+				set $QNTMOBS, 60;
+				areamonster "5@tower",66,68,97,99,"Comandante do Caos",2247,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Comandante do Caos",2247,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Comandante do Caos",2247,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Comandante do Caos",2247,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Comandante do Caos",2247,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Comandante do Caos",2247,10,"Amorte#1::OnCaosMorte";
+				mapannounce "5@tower","A "+$FASE+"º Fase da Arena do Caos Começu.",bc_map;
+		}
+		else if($FASE == 4)
+		{
+				mapannounce "5@tower","[Arena do Caos 1.0] Vocês são Bravos Guerreiros e merecem a Gloria.",bc_map;
+				sleep 10000;
+				set $QNTMOBS, 60;
+				areamonster "5@tower",66,68,97,99,"General do Caos",2248,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"General do Caos",2248,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"General do Caos",2248,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"General do Caos",2248,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"General do Caos",2248,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"General do Caos",2248,10,"Amorte#1::OnCaosMorte";
+				mapannounce "5@tower","A "+$FASE+"º Fase da Arena do Caos Começu.",bc_map;
+
+		}
+		else if($FASE == 5)
+		{
+				mapannounce "5@tower","[Arena do Caos 1.0] Muitos sairam vitoriosos.",bc_map;
+				sleep 10000;
+				mapannounce "5@tower","[Arena do Caos 1.0] Mas só um ficara com a Glória.",bc_map;
+				sleep 5000;
+				set $QNTMOBS, 60;
+				areamonster "5@tower",66,68,97,99,"Pesadelo",2249,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Pesadelo",2249,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Pesadelo",2249,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Pesadelo",2249,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Pesadelo",2249,10,"Amorte#1::OnCaosMorte";
+				areamonster "5@tower",66,68,97,99,"Pesadelo",2249,10,"Amorte#1::OnCaosMorte";
+				mapannounce "5@tower","A "+$FASE+"º Fase da Arena do Caos Começu.",bc_map;
+		}
+		else
+		{
+			donpcevent "Amorte#1::OnBoss";
+		}
+}
+
+-	script	Amorte#1	-1,{
+
+OnCaosMorte:
+
+	set $QNTMOBS,$QNTMOBS - 1;
+	if($QNTMOBS > 0 )
+	{
+		mapannounce "5@tower","Ainda Faltam "+$QNTMOBS+" Monstros para o Terminio da "+$FASE+"º Fase.",bc_map;
+	}
+	else
+	{
+		set $FASE,$FASE + 1;
+		donpcevent "comeca#1::OnComeca";
+	}
+	end;
+	
+OnBoss:
+		mapannounce "5@tower","A parte Facil acabou, agora enfrentem o Medo.",bc_map;
+		sleep 10000;
+		monster "5@tower",79,82,"Dono do Medo",2250,1,"Amorte#1::OnDyeBoss";
+		end;
+OnDyeBoss:
+		mapannounce "5@tower","O Jogador "+StrCharInfo(0)+" venceu o Medo i é Merecedor da Recompença.",bc_map;
+		getitem $PREMIO[Rand(3)],1;
+		dispbottom "Você sera teleportado para a Cidade.";
+		sleep2 10000;
+		mapannounce "5@tower","Os que não venceram o Medo, dirijam se a Saida.",bc_map;
+		query_sql "SELECT `char_id`, `nome`, `venceu`, `participou`, `pontosdocaos` FROM `rankingcaos` WHERE `acc_id` = '"+getcharid(3)+"'", @char_id, @nome$, @venceu, @participou, @pontosdocaos;
+		if (@nome$ == "")
+		{
+			query_sql "INSERT INTO `rankingcaos` (`acc_id`,`char_id`,`nome`,`participou`,`pontosdocaos`,`venceu`) VALUES ("+getcharid(3)+", "+getcharid(0)+", '"+StrCharInfo(0)+"', 1, 10, 1)",@resultado$;
+			enablenpc "Saida#1";
+			dispbottom "Você receber 1 Ponto de Participação, 1 Ponto de Vitoria e 10 Pontos do Caos.";
+			warp "prontera",150,170;
+			enablenpc "Saida#1";
+			end;
+		}
+		query_sql "UPDATE `rankingcaos` SET `venceu` = `venceu` + 1 WHERE `acc_id` = " + getcharid(3),@resultado$;
+		query_sql "UPDATE `rankingcaos` SET `pontosdocaos` = `pontosdocaos` + 10 WHERE `acc_id` = " + getcharid(3),@resultado$;
+		dispbottom "Você receber 1 Ponto de Participação, 1 Ponto de Vitoria e 10 Pontos do Caos.";
+		warp "prontera",150,175;
+		enablenpc "Saida#1";
+	end;
+}
+5@tower,97,99,5	script	Saida#1	405,{
+
+	set @NN$, "[^FF0000Saida^000000]";
+		
+		mes @NN$;
+		mes "Você deve se sentir privilegiado de Sair daqui vivo, muitos não tiveram essa sorte.";
+		next;
+		mes @NN$;
+		mes "Você recebera uma Recompença Tanbem, até mais.";
+		close2;
+		query_sql "SELECT `char_id`, `nome`, `participou`, `pontosdocaos` FROM `rankingcaos` WHERE `acc_id` = '"+getcharid(3)+"'", @char_id, @nome$, @participou, @pontosdocaos;
+		if (@nome$ == "")
+		{
+			query_sql "INSERT INTO `rankingcaos` (`acc_id`,`char_id`,`nome`,`participou`,`pontosdocaos`) VALUES ("+getcharid(3)+", "+getcharid(0)+", '"+StrCharInfo(0)+"', 1, 1)",@resultado$;
+			warp "prontera",150,155;
+			dispbottom "Você receber 1 Ponto de Participação e 1 Pontos do Caos.";
+			end;
+		}
+		query_sql "UPDATE `rankingcaos` SET `participou` = `participou` + 1 WHERE `acc_id` = " + getcharid(3),@resultado$;
+		query_sql "UPDATE `rankingcaos` SET `pontosdocaos` = `pontosdocaos` + 1 WHERE `acc_id` = " + getcharid(3),@resultado$;
+		warp "prontera",150,155;
+		dispbottom "Você receber 1 Ponto de Participação e 1 Pontos do Caos.";
+		end;
+}
+
+//================================ Configurações MOB ==============================================
+// Adicione os Seguintes MOB's na sua mob_db2.txt
+//=================================================================================================
+//
+//2245,1,Criado do Caos,Criado do Caos,98,2000000,0,4068000,2268000,2,4200,6500,190,45,140,152,5,85,200,95,10,12,2,6,67,0x37B5,100,768,768,576,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+//2246,1,Subordinado do Caos,Subordinado do Caos,98,3000000,0,4068000,2268000,2,4200,6500,190,45,140,152,5,85,200,95,10,12,2,6,67,0x37B5,100,768,768,576,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+//2247,1,Comandante do Caos,Comandante do Caos,98,4000000,0,4068000,2268000,2,4200,6500,190,45,140,152,5,85,200,95,10,12,2,6,67,0x37B5,100,768,768,576,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+//2248,1,General do Caos,General do Caos,98,5000000,0,4068000,2268000,2,4200,6500,190,45,140,152,5,85,200,95,10,12,2,6,67,0x37B5,100,768,768,576,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+//2249,1,Pesadelo,Pesadelo,98,6000000,0,4068000,2268000,2,4200,6500,190,45,140,152,5,85,200,95,10,12,2,6,67,0x37B5,100,768,768,576,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+//2250,1,Dono do Medo,Dono do Medo,98,50000000,0,4068000,2268000,2,10200,15500,190,45,140,152,5,85,200,95,10,12,2,6,67,0x37B5,100,768,768,576,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+//
+//=================================================================================================
+// Adicione as seguintes Linhas no seu MOB_Avail.txt
+//=================================================================================================
+//
+//2245,1262,0
+//2246,1605,0
+//2247,2022,0
+//2248,1736,0
+//2249,2018,0
+//2250,1956,0
+//
+//===================================================================================================
+// Map Flag's
+//===================================================================================================
+5@tower	mapflag	nosave
+5@tower	mapflag	noteleport
+5@tower	mapflag	nowarpto
+5@tower	mapflag	nowarp
+5@tower	mapflag	nomemo
+5@tower	mapflag	gvg	off
+5@tower	mapflag	pvp	off
+5@tower	mapflag	nopenalty
+5@tower	mapflag	nobranch
+5@tower	mapflag	pvp_noguild
+//====================================================================================================

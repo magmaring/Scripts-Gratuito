@@ -1,0 +1,188 @@
+//By x Twilight
+//Version 1.0
+
+alberta,62,127,5	script	Evento Sobrevivente	734,{
+
+//= Configurações ====================
+set @npc$,"[^ff0000 Sobrevivente ^000000]";
+set @lvlgm,80;
+//====================================
+
+	mes @npc$;
+	mes ""+strcharinfo(0)+", bem-vind"+(Sex?"o":"a")+" ao evento sobrevivente.";
+	mes "O que deseja fazer hoje?";
+	next;
+	if(getgmlevel() >= @lvlgm) set .@a$,"Manipular o evento";
+	switch(select("Entrar no evento","Informações",.@a$,"Sair"))
+	{
+		next;
+		mes @npc$;
+
+		case 1:
+		if(!$event_sobre)
+		{
+			mes "Desculpe, mas você não pode entrar no evento enquanto ele estiver fechado.";
+			close;
+		}
+		mes "Boa sorte!";
+		warp "guild_vs2",0,0;
+		close;
+		
+		case 2:
+		mes "Sobre o que você deseja se informar?";
+		switch(select("Como funciona:Horários:Prêmiações:Nada"))
+		{
+			next;
+			mes @npc$;
+
+			case 1:
+			mes "Quando o evento abrir, você deverá falar comigo para ser levado para um mapa especial.";
+			next;
+			mes @npc$;
+			mes "Dentro desse mapa, você deverá aguardar 3 minutos para o início do evento.";
+			next;
+			mes @npc$;			
+			mes "Quando ele se iniciar, os jogadores dentro do mapa deverão se enfrentar.";
+			next;
+			mes @npc$;
+			mes "O último jogador que sobreviver, ganha o evento e leva os prêmios.";
+			mes "Boa sorte!";
+			close;
+
+			case 2:
+			mes "O evento acontece todos os dias às 19 horas.";
+			close;
+
+			case 3:
+			mes "Os prêmios são os seguintes:";
+			for(set @i, 0; @i < getarraysize($id_premios); set @i, @i + 1)
+			mes ""+$quantity_premios[@i]+" - "+getitemname($id_premios[@i])+"";
+			close;
+
+			case 4:
+			mes "Volte quando quiser.";
+			close;
+		}
+
+		case 3:
+		mes "O que o senhor deseja fazer?";
+		switch(select("Iniciar o evento:Mudar prêmiação:Sair"))
+		{
+			next;
+			mes @npc$;
+
+			case 1:
+			if(!$event_sobre)
+			{
+				mes "O evento foi iniciado com sucesso.";
+				close2;
+				callsub start_event;
+				end;
+			}
+			mes "O evento já foi iniciado.";
+			close;
+
+			case 2:
+			mes "Você deseja mudar as prêmiações?";
+			if(select("Não:Sim") == 1 ) close;
+			next;
+			mes @npc$;
+			mes "Digite o ID do 1º item."; input @id_one;
+			next;
+			mes @npc$;
+			mes "Digite a quantidade do 1º item."; input @quantity_one;
+			next;
+			mes @npc$;
+			mes "Digite o ID do 2º item."; input @id_two;
+			next;
+			mes @npc$;
+			mes "Digite a quantidade do 2º item."; input @quantity_two;
+			next;
+			mes @npc$;
+			mes "Digite o ID do 3º item."; input @id_three;
+			next;
+			mes @npc$;
+			mes "Digite a quantidade do 3º item."; input @quantity_three;
+			next;
+			mes @npc$;
+			mes "1º prêmio: ^777777"+@quantity_one+" - "+getitemname(@id_one)+"^000000";
+			mes "2º prêmio: ^777777"+@quantity_two+" - "+getitemname(@id_two)+"^000000";
+			mes "3º prêmio: ^777777"+@quantity_three+" - "+getitemname(@id_three)+"^000000";
+			next;
+			if(select("Confirmar:Cancelar") == 2 ) close;
+			next;
+			mes @npc$;
+			mes "Prêmiações editadas com sucesso.";
+			close2;
+			setarray $id_premios[0],@id_one,@id_two,@id_three;
+			setarray $quantity_premios[0],@quantity_one,@quantity_two,@quantity_three;
+			end;
+
+			case 3:
+			mes "Volte quando quiser.";
+			close;
+		}
+
+		case 4:
+		mes "Volte quando quiser.";
+		close;
+	}
+//= Evento ===========================
+OnClock1900:
+start_event:
+	set $event_sobre,1;
+	pvpoff "guild_vs2";
+	announce "Evento Sobrevivente : O evento está aberto! Dentro de 3 minutos ele irá se iniciar.",bc_blue;
+	sleep 60000;
+	announce "Evento Sobrevivente : O evento irá se iniciar dentro de 2 minutos!",bc_blue;
+	sleep 60000;
+	announce "Evento Sobrevivente : O evento irá se iniciar dentro de 1 minuto! Corram!",bc_blue;
+	sleep 60000;
+	set $event_sobre,0;
+	if(getmapusers("guild_vs2") <= 1)
+	{
+		announce "Evento Sobrevivente : O evento foi cancelado por falta de jogadores.",bc_blue;
+		end;
+	}
+	pvpon "guild_vs2";
+	announce "Evento Sobrevivente : O evento começou!",bc_blue;
+	end;
+
+OnPCDieEvent:
+	if(strcharinfo(3) == "guild_vs2")
+	{
+		atcommand "@alive "+strcharinfo(0);
+		warp "prontera",150,150;
+		dispbottom "Você perdeu.";
+	}
+	sleep 1000;
+	if(getmapusers("guild_vs2") == 1)
+	{
+		mapannounce "guild_vs2","Evento Sobrevivente : Você é "+(Sex?"o vencedor":"a vencedora")+"! Vá ao centro do mapa e retire seu prêmio.",bc_blue;
+		enablenpc "Premiador";
+		end;
+	}
+	end;
+OnInit:
+set $event_sobre,0;
+disablenpc "Premiador";
+end;
+}
+//= Premiador =========================
+guild_vs2,49,49,4	script	Premiador	416,{
+	announce "Evento Sobrevivente : "+(Sex?"O vencedor":"A vencedora")+" do evento sobrevivente foi [ "+strcharinfo(0)+" ]",bc_blue;
+	for(set @i, 0; @i < getarraysize($id_premios); set @i, @i + 1)
+	getitem $id_premios[@i],$quantity_premios[@i];
+	disablenpc "Premiador";
+	warp "prontera",150,150;
+	end;
+}
+//= Mapflag ==========================
+guild_vs2	mapflag	gvg	off
+guild_vs2	mapflag	pvp	off
+guild_vs2	mapflag	nowarp
+guild_vs2	mapflag	nowarpto
+guild_vs2	mapflag	nobranch
+guild_vs2	mapflag	novending
+guild_vs2	mapflag	nomemo
+guild_vs2	mapflag	noteleport

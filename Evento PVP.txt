@@ -1,0 +1,144 @@
+//===============[Linne~*]=================
+//============NPC de Evento PvP=============
+//================TXT & SQL=================
+//===============Versão 1.0=================
+//===============Changelog:=================
+//============1.0 = NPC Iniciado============
+//=====1.1 = NPC Corrigido [BerChampz]======
+//===============[Linne~*]=================
+//MAPFLAGS
+sec_in01	mapflag	nowarp
+sec_in01	mapflag	nowarpto
+sec_in01	mapflag	nopenalty
+sec_in01	mapflag	nosave	SavePoint
+sec_in01	mapflag	nobranch
+sec_in01	mapflag	restricted	16
+//Inicio do NPC
+force_1-1,109,110,5	script	Evento PvP	843,{
+show "[Kleber]";
+show "Olá, o que deseja?";
+menu "Participar",sim,"Me Informar",inf,"Nada",-;
+close;
+
+sim:
+if($time == 0) goto fechado;
+next;
+show "[Kleber]";
+show "Ok, vou te levar até lá. Boa sorte!";
+next;
+announce "O jogador "+strcharinfo(0)+" acabou de entrar no Evento de PVP.",bc_yellow;
+warp "sec_in01",19,96;
+close;
+
+fechado:
+next;
+show "[Kleber]";
+show "O evento está fechado. Ele abre de 4 em 4 horas. Mais informações entre em ^D20000Me Informar.^000000";
+close;
+
+inf:
+next;
+show "[Kleber]";
+show "Este evento abre de 4 em 4 Horas.Neste evento, o pvp é ligado, e quem for o sobrevivente, ganha ^ff0000100^000000 CashPoints!";
+next;
+show "[Kleber]";
+show "Porém neste evento não se pode usar os seguintes itens:";
+show "^D20000Fruto de Yggdrasil^000000";
+show "^D20000Semente de Yggdrasil^000000";
+show "^D20000Poção Branca^000000";
+show "^D20000Mastela^000000";
+close;
+
+}
+
+-	script	Timer pvp	-1,{
+OnClock0400:
+OnClock0800:
+OnClock1200:
+OnClock1600:
+OnClock2000:
+OnClock0000:
+announce "O Evento de PvP está aberto e irá começar em 5 minutos!",bc_yellow|bc_all;
+set $time,1;
+pvpoff "sec_in01,19,96";
+disablenpc "Recompensa";
+end;
+
+OnClock0401:
+OnClock0801:
+OnClock1201:
+OnClock1601:
+OnClock2001:
+OnClock0001:
+announce "Faltam 4 minutos para o inicio do evento de PvP, se apressem!",bc_yellow|bc_all;
+end;
+
+OnClock0402:
+OnClock0802:
+OnClock1202:
+OnClock1602:
+OnClock2002:
+OnClock0002:
+announce "Faltam 3 minutos para o inicio do evento de PvP, se apressem!",bc_yellow|bc_all;
+end;
+
+OnClock0403:
+OnClock0803:
+OnClock1203:
+OnClock1603:
+OnClock2003:
+OnClock0003:
+announce "Faltam 2 minutos para o inicio do evento de PvP, se apressem!",bc_yellow|bc_all;
+end;
+
+OnClock0404:
+OnClock0804:
+OnClock1204:
+OnClock1604:
+OnClock2004:
+OnClock0004:
+announce "Faltam 1 minutos para o inicio do evento de PvP, se apressem!",bc_yellow|bc_all;
+end;
+
+OnClock0405:
+OnClock0805:
+OnClock1205:
+OnClock1605:
+OnClock2005:
+OnClock0005:
+if(getmapusers("rwc01") < 3) goto noplayers;
+announce "O evento de PvP começou ! Boa sorte a todos.",bc_yellow|bc_all;
+set $time,0;
+pvpon "sec_in01,19,96";
+end;
+
+noplayers:
+announce "O evento PVP foi cancelado pela falta de jogadores!",bc_yellow|bc_all;
+set $time,0;
+end;
+
+}
+
+sec_in01,20,95,5	script	Recompensa	789,{
+
+if(getmapusers("sec_in01,19,96") == 1) goto Acabou;
+end;
+
+Acabou:
+enablenpc "Recompensa";
+show "[Recompensador]";
+show "Só fale comigo se voc...Espere Ai!";
+show "você GANHOU???";
+next;
+show "[Recompensador]";
+show "Gostaria de parabeniza-lo pela sua conquista, aqui está o seu prêmio!";
+announce "O Evento de PvP acabou, e o "+strcharinfo(0)+" ganhou!",bc_yellow;
+atcommand "@item,7037,5" + strcharinfo( 0 );
+pvpoff "sec_in01,19,96";
+next;
+warp "prontera",150,150;
+set $time,0;
+close;
+end;
+
+}

@@ -1,0 +1,409 @@
+//=========================
+//Evento Corrida maluca
+// 1.0 Por Thor
+// 2.0 Por mcsxD acorrigido algums bugs*
+//=========================
+ra_temin,172,163,6	script	Corrida Maluca	861,{
+
+mes "[Corrida Maluca]";
+mes "Olá ^0000CD"+strcharinfo(0)+"^000000";
+mes "Deseja ir até a ^FF0000Corrida Maluca^000000?";
+if(getgmlevel()>98) menu "Ir até arena",GotoArena,"Configurar Prêmios",Configure;
+menu "Sim, irei vencer!",SimVence,"Ver Prêmios!",premio,"Não, prefiro não.",NopsNoob;
+
+GotoArena:
+warp "turbo_n_1",54,364;
+close;
+
+
+premio:
+mes "[Corrida Maluca]";
+mes "^0000CDOs Itens São^000000";
+mes "Primeiro Lugar ^0000CD1 Bandeira Nacional^000000";
+mes "Segundo Lugar ^0000CD1 Bandeira Nacional^000000";
+mes "Terceiro Lugar ^0000CD1 Bandeira Nacional^000000";
+close;
+
+Configure:
+next;
+mes "[Configuração]";
+mes "Coloque a ID do prêmio do primeiro lugar";
+input @ID;
+next;
+mes "[Configuração]";
+mes "Coloque agora a ID do prêmio do segundo lugar";
+input @ID2;
+next;
+mes "[Configuração]";
+mes "Coloque agora a ID do prêmio do terceiro lugar";
+input @ID3;
+next;
+mes "[Configuração]";
+mes "Deseja modificar algum item?";
+mes "^FF0000Primeiro lugar^000000 ^0000FF"+getitemname(@ID)+"^000000";
+mes "^FF0000Segundo lugar^000000 ^0000FF"+getitemname(@ID2)+"^000000";
+mes "^FF0000Terceiro lugar^000000 ^0000FF"+getitemname(@ID3)+"^000000";
+menu "Não, está bem assim",Correto,"Quero Mudar",Configure;
+
+Correto:
+next;
+mes "[Configuração]";
+mes "Obrigado por utilizar a ^0000FFCorrida Maluca^000000";
+set $Prize1,@ID;
+set $Prize2,@ID2;
+set $Prize3,@ID3;
+close;
+
+NopsNoob:
+next;
+mes "[Corrida Maluca]";
+mes "Volte quando quiser então!";
+close;
+
+SimVence:
+next;
+mes "[Corrida Maluca]";
+if($Evento == 0){
+if(countitem(12016)>0){
+mes "Você não pode entrar aqui com Poções do vento";
+close;
+}
+if(countitem(662)>0){
+mes "Você não pode entrar aqui com Emblemas Oficiais";
+close;
+}
+if(countitem(12028)>0){
+mes "Você não pode entrar aqui com Caixas do Trovão";
+close;
+}
+if(checkriding()){
+mes "Por favor, retire seu PecoPeco, quer bagunçar é?";
+close;
+}
+mes "Desculpe você não pode entrar ainda!";
+close;
+}
+
+mes "Boa Sorte!";
+for(set @i,0; @i<=225; set @i,@i+1){sc_end @i;}
+set $Campeao,0;
+warp "turbo_n_1",54,364;
+close;
+
+OnHour00:
+set $Evento,1; initnpctimer;
+Announce "A Corrida Maluca está prestes à começar, deseja vencer? então apresse-se!",0;
+end;
+
+OnHour04:
+set $Evento,1; initnpctimer;
+Announce "A Corrida Maluca está prestes à começar, deseja vencer? então apresse-se!",0;
+end;
+
+OnHour10:
+set $Evento,1; initnpctimer;
+Announce "A Corrida Maluca está prestes à começar, deseja vencer? então apresse-se!",0;
+end;
+
+OnHour14:
+set $Evento,1; initnpctimer;
+Announce "A Corrida Maluca está prestes à começar, deseja vencer? então apresse-se!",0;
+end;
+
+OnHour20:
+set $Evento,1; initnpctimer;
+Announce "A Corrida Maluca está prestes à começar, deseja vencer? então apresse-se!",0;
+end;
+
+OnClock0005:
+set $Evento,0;
+Announce "A Corrida Maluca Começou!",0;
+end;
+
+OnClock0405:
+set $Evento,0;
+Announce "A Corrida Maluca Começou!",0;
+end;
+
+OnClock1005:
+set $Evento,0;
+Announce "A Corrida Maluca Começou!",0;
+end;
+
+OnClock1405:
+set $Evento,0;
+Announce "A Corrida Maluca Começou!",0;
+end;
+
+OnClock2005:
+set $Evento,0;
+Announce "A Corrida Maluca Começou!",0;
+end;
+
+OnTimer60000:
+Announce "A Corrida Maluca começa em 4 minutos!",8;
+end;
+
+OnTimer120000:
+Announce "A Corrida Maluca começa em 3 minutos!",8;
+end;
+
+OnTimer180000:
+Announce "A Corrida Maluca começa em 2 minutos!",8;
+end;
+
+OnTimer240000:
+Announce "A Corrida Maluca começa em 1 minuto!",8;
+end;
+
+}
+
+turbo_n_1,63,350,5	script	Checagem	-1,1,30,{
+
+OnInit:
+atcommand "@skilloff";
+end;
+
+OnHour11:
+set $Check,0;
+end;
+
+OnHour15:
+set $Check,0;
+end;
+
+OnHour17:
+set $Check,0;
+end;
+
+OnHour21:
+set $Check,0;
+end;
+
+OnClock1105:
+set $Check,1;
+end;
+
+OnClock1505:
+set $Check,1;
+end;
+
+OnClock1705:
+set $Check,1;
+end;
+
+OnClock2105:
+set $Check,1;
+end;
+
+OnTouch:
+if($Check == 0){
+mes "[Corrida Maluca]";
+mes "Ta querendo queimar largada? tenha calma!";
+next;
+addtimer 1000, "Checagem::OnVolta";
+goto OnVolta;
+
+OnVolta:
+warp "turbo_n_1",54,364;
+close;
+}
+
+}
+
+turbo_n_1,370,57,0	script	Checagem2	-1,0,30,{
+end;
+OnTouch:
+//if(getgmlevel()>99) end;
+if($Campeao >2) warp "prontera",150,171;
+if($Campeao == 0){
+announce "|Corrida Maluca| "+strcharinfo(0)+" Acaba de vencer a Corrida Maluca",0;
+set $Campeao,1;
+set @Ganhou,1;
+warp "turbo_n_1",383,161;
+end;
+}
+if($Campeao == 1){
+announce "|Corrida Maluca| "+strcharinfo(0)+" Ficou com o segundo lugar na Corrida Maluca!",0;
+set $Campeao,2;
+set @Ganhou,2;
+warp "turbo_n_1",383,161;
+end;
+}
+if($Campeao == 2){
+announce "|Corrida Maluca| "+strcharinfo(0)+" Ficou com o terceiro lugar na Corrida Maluca!",0;
+set $Campeao,3;
+set @Ganhou,3;
+set $check,0;
+warp "turbo_n_1",383,161;
+}
+}
+
+turbo_n_1,384,168,5	script	Premiador	866,{
+
+mes "[Premiador]";
+if(@Ganhou == 1){
+mes "Parabéns pelo primeiro lugar!";
+mes "Aqui está seu prêmio!";
+getitem $Prize1,1;
+warp "prontera",150,171;
+set @Ganhou,0;
+close;
+}
+if(@Ganhou == 2){
+mes "Parabéns pelo segundo lugar!";
+mes "Aqui está seu item!";
+getitem $Prize2,2;
+warp "prontera",150,171;
+set @Ganhou,0;
+close;
+}
+if(@Ganhou == 3){
+mes "Parabéns pelo terceiro lugar!";
+mes "Aqui está seu item!";
+getitem $Prize3,2;
+warp "prontera",150,171;
+set @Ganhou,0;
+close;
+}
+mes "O que está fazendo aqui?";
+warp "prontera",150,171;
+close;
+}
+
+turbo_n_1,56,376,5	script	Maluquinho	715,{
+mes "Você quer voltar para Prontera?";
+menu "Sim",-,"Não",cancel;
+mes "Ok, boa viagem";
+warp "prontera", 155, 177; end;
+
+cancel:
+mes "Ok, volte quando quiser voltar para a cidade!";
+close;
+}
+
+//Portais
+turbo_n_1,169,364,0	script	Corrida1	45,1,1,{
+set .@wrpuser,rand(1,4);
+if (.@wrpuser == 1)
+warp "turbo_n_1",210,368;
+else if (.@wrpuser == 2)
+warp "turbo_n_1",211,355;
+else if (.@wapuser == 3)
+warp "turbo_n_1",247,386;
+else
+warp "turbo_n_1",251,353;
+end;
+}
+turbo_n_1,233,367,0	warp	Corrida2	1,1,turbo_n_1,316,365
+turbo_n_1,385,366,0	warp	Corrida3	1,1,turbo_n_1,11,267
+turbo_n_1,114,191,0	warp	Corrida4	1,1,turbo_n_1,251,200
+turbo_n_1,217,212,0	warp	Corrida5	1,1,turbo_n_1,268,275
+turbo_n_1,389,275,0	warp	Corrida6	1,1,turbo_n_1,4,91
+turbo_n_1,96,19,0	warp	Corrida7	1,1,turbo_n_1,176,10
+turbo_n_1,223,65,0	warp	Corrida8	1,1,turbo_n_1,306,46
+
+//Mapflags
+turbo_n_1	mapflag	nosave
+turbo_n_1	mapflag	nomemo
+turbo_n_1	mapflag	nopenalty
+turbo_n_1	mapflag	nobranch
+turbo_n_1	mapflag	nowarp
+turbo_n_1	mapflag	nowarpto
+turbo_n_1	mapflag	noteleport
+turbo_n_1	mapflag	noicewall
+turbo_n_1	mapflag	noreturn
+turbo_n_1	mapflag	noskill
+
+/* Armadilhas
+turbo_n_1,118,377,0	script	trap_a#n_1-1::TurboLogRace -1,44,1,{
+OnTouch:
+set .@dropuser,rand(1,3);
+if (.@dropuser == 1)
+warp "turbo_n_1",72,372;
+else if (.@dropuser == 2)
+warp "turbo_n_1",72,365;
+else
+warp "turbo_n_1",72,357;
+end;
+}
+turbo_n_1,77,375,0	duplicate(TurboLogRace)	trap_a#n_1-14 -1,3,1
+turbo_n_1,82,375,0	duplicate(TurboLogRace)	trap_a#n_1-15 -1,1,1
+turbo_n_1,82,372,0	duplicate(TurboLogRace)	trap_a#n_1-16 -1,0,2
+turbo_n_1,83,372,0	duplicate(TurboLogRace)	trap_a#n_1-17 -1,0,2
+turbo_n_1,97,374,0	duplicate(TurboLogRace)	trap_a#n_1-18 -1,1,2
+turbo_n_1,98,374,0	duplicate(TurboLogRace)	trap_a#n_1-19 -1,1,2
+turbo_n_1,122,372,0	duplicate(TurboLogRace)	trap_a#n_1-20 -1,2,4
+turbo_n_1,125,374,0	duplicate(TurboLogRace)	trap_a#n_1-21 -1,0,4
+turbo_n_1,132,374,0	duplicate(TurboLogRace)	trap_a#n_1-22 -1,7,2
+turbo_n_1,156,374,0	duplicate(TurboLogRace)	trap_a#n_1-23 -1,6,2
+turbo_n_1,163,375,0	duplicate(TurboLogRace)	trap_a#n_1-24 -1,0,3
+turbo_n_1,164,377,0	duplicate(TurboLogRace)	trap_a#n_1-25 -1,1,1
+// second line
+turbo_n_1,76,369,0	duplicate(TurboLogRace)	trap_b#n_1-23 -1,2,2
+turbo_n_1,79,369,0	duplicate(TurboLogRace)	trap_b#n_1-24 -1,0,2
+turbo_n_1,77,366,0	duplicate(TurboLogRace)	trap_b#n_1-25 -1,3,0
+turbo_n_1,85,366,0	duplicate(TurboLogRace)	trap_b#n_1-26 -1,5,1
+turbo_n_1,87,363,0	duplicate(TurboLogRace)	trap_b#n_1-27 -1,2,1
+turbo_n_1,88,368,0	duplicate(TurboLogRace)	trap_b#n_1-28 -1,2,5
+turbo_n_1,92,370,0	duplicate(TurboLogRace)	trap_b#n_1-29 -1,1,3
+turbo_n_1,98,368,0	duplicate(TurboLogRace)	trap_b#n_1-30 -1,4,1
+turbo_n_1,109,371,0	duplicate(TurboLogRace)	trap_b#n_1-31 -1,7,2
+turbo_n_1,110,368,0	duplicate(TurboLogRace)	trap_b#n_1-32 -1,7,0
+turbo_n_1,113,366,0	duplicate(TurboLogRace)	trap_b#n_1-33 -1,3,2
+turbo_n_1,117,368,0	duplicate(TurboLogRace)	trap_b#n_1-34 -1,0,5
+turbo_n_1,123,364,0	duplicate(TurboLogRace)	trap_b#n_1-35 -1,6,1
+turbo_n_1,136,368,0	duplicate(TurboLogRace)	trap_b#n_1-36 -1,8,1
+turbo_n_1,136,366,0	duplicate(TurboLogRace)	trap_b#n_1-37 -1,8,0
+turbo_n_1,144,370,0	duplicate(TurboLogRace)	trap_b#n_1-38 -1,2,3
+turbo_n_1,147,370,0	duplicate(TurboLogRace)	trap_b#n_1-39 -1,0,3
+turbo_n_1,155,369,0	duplicate(TurboLogRace)	trap_b#n_1-40 -1,7,0
+turbo_n_1,155,368,0	duplicate(TurboLogRace)	trap_b#n_1-41 -1,7,0
+turbo_n_1,151,367,0	duplicate(TurboLogRace)	trap_b#n_1-42 -1,3,0
+turbo_n_1,153,366,0	duplicate(TurboLogRace)	trap_b#n_1-43 -1,1,0
+turbo_n_1,155,367,0	duplicate(TurboLogRace)	trap_b#n_1-44 -1,0,1
+//third line
+turbo_n_1,78,362,0	duplicate(TurboLogRace)	trap_c#n_1-29 -1,4,1
+turbo_n_1,78,359,0	duplicate(TurboLogRace)	trap_c#n_1-30 -1,4,1
+turbo_n_1,83,362,0	duplicate(TurboLogRace)	trap_c#n_1-31 -1,0,1
+turbo_n_1,88,359,0	duplicate(TurboLogRace)	trap_c#n_1-32 -1,5,1
+turbo_n_1,89,357,0	duplicate(TurboLogRace)	trap_c#n_1-33 -1,1,1
+turbo_n_1,92,390,0	duplicate(TurboLogRace)	trap_c#n_1-34 -1,1,1
+turbo_n_1,92,357,0	duplicate(TurboLogRace)	trap_c#n_1-35 -1,1,1
+turbo_n_1,98,364,0	duplicate(TurboLogRace)	trap_c#n_1-36 -1,6,1
+turbo_n_1,98,362,0	duplicate(TurboLogRace)	trap_c#n_1-37 -1,6,0
+turbo_n_1,106,364,0	duplicate(TurboLogRace)	trap_c#n_1-38 -1,2,2
+turbo_n_1,107,360,0	duplicate(TurboLogRace)	trap_c#n_1-39 -1,1,2
+turbo_n_1,109,360,0	duplicate(TurboLogRace)	trap_c#n_1-40 -1,0,2
+turbo_n_1,112,361,0	duplicate(TurboLogRace)	trap_c#n_1-41 -1,3,1
+turbo_n_1,116,359,0	duplicate(TurboLogRace)	trap_c#n_1-42 -1,0,2
+turbo_n_1,117,359,0	duplicate(TurboLogRace)	trap_c#n_1-43 -1,0,2
+turbo_n_1,116,356,0	duplicate(TurboLogRace)	trap_c#n_1-44 -1,0,2
+turbo_n_1,117,356,0	duplicate(TurboLogRace)	trap_c#n_1-45 -1,0,2
+turbo_n_1,129,360,0	duplicate(TurboLogRace)	trap_c#n_1-46 -1,12,1
+turbo_n_1,129,358,0	duplicate(TurboLogRace)	trap_c#n_1-47 -1,12,0
+turbo_n_1,132,357,0	duplicate(TurboLogRace)	trap_c#n_1-48 -1,2,1
+turbo_n_1,137,357,0	duplicate(TurboLogRace)	trap_c#n_1-49 -1,2,1
+turbo_n_1,147,363,0	duplicate(TurboLogRace)	trap_c#n_1-50 -1,16,1
+turbo_n_1,149,365,0	duplicate(TurboLogRace)	trap_c#n_1-51 -1,1,0
+turbo_n_1,158,362,0	duplicate(TurboLogRace)	trap_c#n_1-52 -1,1,4
+turbo_n_1,154,360,0	duplicate(TurboLogRace)	trap_c#n_1-53 -1,2,2
+turbo_n_1,161,360,0	duplicate(TurboLogRace)	trap_c#n_1-54 -1,1,2
+turbo_n_1,161,365,0	duplicate(TurboLogRace)	trap_c#n_1-55 -1,1,0
+turbo_n_1,160,366,0	duplicate(TurboLogRace)	trap_c#n_1-56 -1
+//fourth line
+turbo_n_1,79,353,0	duplicate(TurboLogRace)	trap_d#n_1-16 -1,5,2
+turbo_n_1,85,354,0	duplicate(TurboLogRace)	trap_d#n_1-17 -1,0,1
+turbo_n_1,99,353,0	duplicate(TurboLogRace)	trap_d#n_1-18 -1,14,0
+turbo_n_1,99,352,0	duplicate(TurboLogRace)	trap_d#n_1-19 -1,14,0
+turbo_n_1,99,356,0	duplicate(TurboLogRace)	trap_d#n_1-20 -1,3,3
+turbo_n_1,103,356,0	duplicate(TurboLogRace)	trap_d#n_1-21 -1,0,3
+turbo_n_1,108,354,0	duplicate(TurboLogRace)	trap_d#n_1-22 -1,5,1
+turbo_n_1,112,356,0	duplicate(TurboLogRace)	trap_d#n_1-23 -1,0,1
+turbo_n_1,113,356,0	duplicate(TurboLogRace)	trap_d#n_1-24 -1,0,1
+turbo_n_1,123,353,0	duplicate(TurboLogRace)	trap_d#n_1-25 -1,3,2
+turbo_n_1,127,353,0	duplicate(TurboLogRace)	trap_d#n_1-26 -1,0,2
+turbo_n_1,145,352,0	duplicate(TurboLogRace)	trap_d#n_1-27 -1,17,1
+turbo_n_1,152,354,0	duplicate(TurboLogRace)	trap_d#n_1-28 -1,10,1
+turbo_n_1,145,357,0	duplicate(TurboLogRace)	trap_d#n_1-29 -1,1,2
+turbo_n_1,148,357,0	duplicate(TurboLogRace)	trap_d#n_1-30 -1,1,2

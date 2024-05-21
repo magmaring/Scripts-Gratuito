@@ -1,0 +1,109 @@
+//  ________________________________________________________
+// /                                                        \
+// |           ______ _                _                    |
+// |           |  ___| |              (_)                   |
+// |           | |_  | | ___   ___ _____  ___               |
+// |           |  _| | |/ _ \ / _ \_  / |/ _ \              |
+// |           | |   | | (_) | (_) / /| |  __/              |
+// |           \_|   |_|\___/ \___/___|_|\___|              |
+// |                                                        |
+// |                    Floozie Script                      |
+// |--------------------------------------------------------|
+// | Nome do Script: Sistema de Presença                    |
+// |--------------------------------------------------------|
+// | Criado por: Floozie & ZaweOwnedz                       |
+// |--------------------------------------------------------|
+// | Versões Cr/eA/brA: 1.1                                 |
+// |--------------------------------------------------------|
+// | Descrição: Um NPC que marca sua presença e em troca de |
+// | suas horas online, recebe pontos de cash.              |
+// |--------------------------------------------------------|
+// | Changelog:               	                            |
+// | 1.0 Script Iniciado [Floozie & Zawe]                   |
+// | 1.1 Sistema anti-vending [Floozie]                     |
+// | - Anotações                                            |
+// \________________________________________________________/
+prontera,161,178,3	script	Presença	405,{
+
+set .@n$, "[ ^cc0000Presença^000000 ]";
+set @TempoHora, 3600;
+
+mes .@n$;
+mes "Olá, "+strcharinfo(0)+" !";
+mes "O que você gostaria de fazer ?";
+next;
+switch(select("Marcar Presença:Ver Meus Pontos:Trocar Meus Pontos:Sair")){
+
+	case 1:
+		if(#presenca != 1){
+		set #TimeOn, gettimetick(2) + @TempoHora;
+		set #presenca,1;
+		mes .@n$;
+		mes "Seu tempo foi marcado !";
+		close;
+		}
+		if(#TimeOn >= gettimetick(2)){
+		mes .@n$;
+		mes "Você ainda não pode pegar os seus Pontos.";
+		mes "Espere ^FF0000"+((#TimeOn-gettimetick(2))/60)+"^000000 minutos.";
+		close;
+		}
+		mes .@n$;
+		mes "Receba agora os seus 5 pontos.";
+		set #pontos,#pontos+5;
+		set #presenca,0;
+		next;
+		mes .@n$;
+		mes "Pontos Entreges.";
+		close;
+	case 2:
+		mes .@n$;
+		mes "Você tem: ^FF0000"+#pontos+"^000000 Pontos de Presença!";
+		close;
+	case 3:
+		mes .@n$;
+		mes "Você tem: ^FF0000"+#pontos+"^000000 Pontos de Presença!";
+		mes "Deseja trocar 30 Pontos por 200 Cash?";
+		if(select("Sim:Não") == 2) close;
+		next;
+		mes .@n$;
+		if(#pontos < 30){
+		mes "Você não tem 30 Pontos de Presença.";
+		close;
+		}
+		set #pontos,#pontos-30;
+		set #CASHPOINTS,#CASHPOINTS+200;
+		mes "Pontos trocados com sucesso.";
+		close;
+	case 4:
+		mes .@n$;
+		mes "Volte quando quiser marcar seu tempo !";
+		close;
+
+}
+
+OnWhisperGlobal:
+if(#presenca == 0){
+dispbottom "Você ainda não marcou presença !";
+end;
+}
+dispbottom "Faltam apenas "+((#TimeOn-gettimetick(2))/60)+" minutos.";
+end;
+
+OnPCLogoutEvent:
+if(#presenca == 1){
+if(checkvending(strcharinfo(0))){
+set #presenca,0;
+end;
+}
+set #TimeOff,#TimeOn - gettimetick(2);
+end;
+}
+
+OnPCLoginEvent:
+if(#presenca == 1){
+set #TimeOn, gettimetick(2) + #TimeOff;
+end;
+}
+
+}

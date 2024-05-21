@@ -1,0 +1,21 @@
+sec_in01,83,174,4	script	MuDaNçA De TaMaNhO	899,{
+show "Olá eu sou o mestre do mundo, mais conhecido como ^FF0000Sizer^000000";
+next;
+show "Tenho o poder de deixar um vip com tamanho...";
+show "Grande,Pequeno,Normal";
+next;
+show "Sr.Vip qual você escolhe?";
+menu "Grande",grande,"Pequeno",pequeno,"Normal",normal;
+
+normal:
+atcommand "@size 3";
+close;
+
+grande:
+atcommand "@size 2";
+close;
+
+pequeno:
+atcommand "@size 1";
+close;
+}

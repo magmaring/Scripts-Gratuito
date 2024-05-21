@@ -1,0 +1,285 @@
+// .----------------------------------------------------------.
+// .  		    SoulBlaker Scripts Apresenta:             .
+// .		    ___________________ 		      .
+// .		   /   _____/\______   \                      .
+// .		   \_____  \  |    |  _/		      .
+// .		   /        \ |    |   \		      .
+// .		  /_______  / |______  /		      .
+// .			  \/         \/		              .
+// .           	[ eAthena Advanced Scripts ]                  .
+// .							v1.0  .
+// .----------------------------------------------------------.
+// ;   http://www.eathena.ws/board/SoulBlaker-m271867.html    ;
+// .----------------------------------------------------------.
+// . Script:                                                  .
+// .  Master of Quest                                         .
+// .----------------------------------------------------------.
+// . Por: SoulBlaker   Compátivel: eAthena SVN	 versão: 1.3  .
+// .----------------------------------------------------------.
+// . Descrição:                                               .
+// .  Este npc cria/deleta quest em game, você apenas vai     .
+// .  digitar ids e quantias e ele irá fazer o resto.         .
+// .----------------------------------------------------------.
+// . Changelog da Versão:                                     .
+// .   - 1.0 Iniciado o NPC. [SoulBlaker]                     .
+// .   - 1.1 Otimizado Menus Dinamicos. [SoulBlaker]          .
+// .   - 1.2 Corrigido bug da remoção de Zeny. [SoulBlaker]   .
+// .   - 1.3 Corrigido alguns bugs do script. [SoulBlaker]    .
+// *----------------------------------------------------------*
+prontera,147,173,5	script	Senhor das Quest#mofq_01	795,{
+
+	if( getgmlevel() == 99 )
+	{
+		mes "^00BFFF[Master of Quests]^000000";
+		mes "Olá Senhor(a) Administrador(a),";
+		mes "O que deseja dos meus serviços?";
+		next;
+		switch ( select ("Checar Quests.","Adicionar uma Nova Quest.","Remover uma Quest.","Limpar Todas a Quests.","Cancelar.") )
+		{
+			case 1:
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Muito bem administrador, escolha a quest que deseja checar:";
+				next;
+				callsub OnPlayerMenu;
+				break;
+			case 2:
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Você escolheu 'Adicionar uma Nova Quests'.";
+				mes "Por favor, digite o ID do Item que o jogador vai ganhar ao terminar a quest.";
+				next;
+				input .@getitem[0];
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Por favor, digite a quantidade de ^FF0000" + GetItemName(.@getitem[0]);
+				mes "^000000que o jogador vai ganhar quando terminar a quest.";
+				next;
+				input .@amount[0];
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Por favor, didite o id do";
+				mes "1° Item requerido para";
+				mes "fazer a quest.";
+				next;
+				input .@getitem[1];
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Muito bem, agora digite a quantia de ^FF0000" + GetItemName(.@getitem[1]) + "^000000 que precisa para fazer a quest.";
+				next;
+				input .@amount[1];
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Muito bem, o jogador deve trazer ^FF0000" + .@amount[1] + " " + GetItemName(.@getitem[1]) + "^000000.";
+				next;
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Deseja adicionar mais algum item?";
+				next;
+				if( select( "Sim.", "Não" ) == 1)
+				{
+					set .@loop,1;
+					set .@num,2;
+				}
+				else
+					set .@loop,0;
+				while( .@loop )
+				{
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "Por favor, didite o id do";
+					mes .@num+"° Item requerido para";
+					mes "fazer a quest.";
+					next;
+					input .@getitem[.@num];
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "Por favor, digite a qunatidade de ^FF0000" + GetItemName(.@getitem[.@num]);
+					mes "^000000que o jogador vai ganhar quando terminar a quest.";
+					next;
+					input .@amount[.@num];
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "Muito bem, o jogador deve trazer ^FF0000" + .@amount[.@num] + " " + GetItemName(.@getitem[.@num]) + "^000000.";
+					next;
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "O Senhor(a) deseja adicionar mais algum item?";
+					next;
+					if( select( "Sim.", "Não" ) == 1 )
+						set .@num, .@num + 1;
+
+					else
+						set .@loop,0;
+				}
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Por favor, digite o Custo de Zeny que vai ser cobrado para fazer a Quest.";
+				mes "Se você digitar '0', o Custo de Zeny será ignorado na hora de fazer a Quest.";
+				next;
+				input .@ZenyCost;
+				set .@Size,getarraysize(.@getitem);
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Muito bem, veja se está tudo correto.";
+				mes "O jogador ganha ^FF0000"+.@amount[0]+" " + getitemname(.@getitem[0]) + "^000000 se trouxer:";
+				for( set .@num, 1; .@num < .@Size; set .@num, .@num + 1 )
+					mes .@amount[.@num]+"x " + getitemname(.@getitem[.@num]);
+				if( .@ZenyCost )
+					mes "E " + .@ZenyCost +"zenys";
+				next;
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Está tudo correto?";
+				next;
+				if( select( "Está tudo correto.", "Cancelar a Operação" ) == 1 )
+				{
+					set .@QuestId,0;
+					set .@Size,getarraysize($questmaster_id);
+					set .@loop,1;
+					set .@num,0;
+					while(.@loop)
+					{
+						if( $questmaster_id[.@num] == 0 || .@num == .@Size )
+							set .@loop,0;
+						else
+							set .@num, .@num + 1;
+					}
+					set .@QuestId, .@num;
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "A Quest foi adicionada com sucesso!";
+					mes "Obrigado por utilizar meus serviços.";
+					set $questmaster_id[.@QuestId],.@getitem[0];
+					setd "$questmasteramount_"+.@QuestId+"[0]",.@amount[0];
+					set .@Size,getarraysize(.@getitem);
+					for ( set .@num, 1; .@num <= .@Size; set .@num, .@num + 1) {
+						setd "$questmasterq_"+.@QuestId+"["+.@num+"]",.@getitem[.@num];
+						setd "$questmasteramount_"+.@QuestId+"["+.@num+"]",.@amount[.@num];
+					}
+					setd "$questmasterzeny_"+.@QuestId, .@ZenyCost;
+				}
+				else {
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "Por favor tente novamente, mais tenha um pouco mais de atenção.";
+				}
+				close;
+			case 3:
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Qual a Quest que o Senhor(a) deseja remover?";
+				next;
+				callsub OnQuestRemaker;
+				set .@Choose, $@Choose;
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "O Senhor(a) deseja remover a Quest da ^FF0000" + GetItemName($questmaster_id[.@Choose]) + "^000000?";
+				next;
+				if( Select (" Sim.", "Não" ) == 1 )
+				{
+					set .@Size,getarraysize(getd("$questmasterq_"+.@Choose));
+					for( set .@num,1; .@num < .@Size; set .@num, .@num + 1 )
+					{
+						setd "$questmasterq_"+.@Choose+"["+.@num+"]",0;
+						setd "$questmasteramount_"+.@Choose+"["+.@num+"]",0;
+					}
+					set $questmaster_id[.@Choose],0;
+					setd "$questmasteramount_"+.@Choose+"[0]",0;
+					setd "$questmasterzeny_"+.@Choose,0;
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "A Quest foi deletada com sucesso";
+					mes "Obrigado por utilizar meus serviços";
+				}
+				else {
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "Estarei aqui se precisar...";
+				}
+				break;
+			case 4:
+				set .@Size,getarraysize($questmaster_id);
+				for( set .@num,0; .@num < .@Size; set .@num, .@num + 1 )
+				{
+					set .@Size2,getarraysize(getd("$questmasterq_"+.@num));
+					for( set .@num2,1; .@num2 < .@Size2; set .@num2, .@num2 + 1 )
+					{
+						setd "$questmasterq_"+.@num+"["+.@num2+"]",0;
+						setd "$questmasteramount_"+.@num+"["+.@num2+"]",0;
+					}
+					set $questmaster_id[.@num],0;
+					setd "$questmasteramount_"+.@num+"[0]",0;
+					setd "$questmasterzeny_"+.@num,0;
+				}
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Todas as quests foram deletada!";
+				break;
+			case 5:
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Estarei aqui se precisar...";
+				break;
+		}
+	}
+	else {
+		mes "^00BFFF[Master of Quests]^000000";
+		mes "Olá ^FF0000"+ strcharinfo(0) + "^000000, gostária de fazer alguma quest?";
+		next;
+		callsub OnPlayerMenu;
+	}
+	close;
+
+OnPlayerMenu:
+	callsub OnQuestRemaker;
+	set .@Choose,$@Choose;
+	set .@ZenyCost, getd("$questmasterzeny_"+.@Choose);
+	mes "^00BFFF[Master of Quests]^000000";
+	mes "Muito bem, você gostária de fazer a quest da ^FF0000" + GetItemName($questmaster_id[.@Choose]) + "^000000 certo?";
+	next;
+	set .@Size,getarraysize(getd("$questmasterq_"+.@Choose));
+	mes "^00BFFF[Master of Quests]^000000";
+	mes "Para fazer a quest da ^FF0000" + GetItemName($questmaster_id[.@Choose]) + "^000000 você precisa me trazer:";
+	for( set .@num,1; .@num < .@Size; set .@num, .@num + 1 )
+		mes getd("$questmasteramount_"+.@Choose+"["+.@num+"]")+"x " + GetItemName(getd("$questmasterq_"+.@Choose+"["+.@num+"]")) + ".";
+	if( .@ZenyCost )
+		mes "E ^FF0000" + .@ZenyCost + "^000000 zenys.";
+	next;
+	switch(select("Fazer a quest agora!","Vou pensar mais um pouco...") )
+	{
+		case 1:
+			if( checkweight($questmaster_id[.@Choose],getd("$questmasteramount_"+.@Choose+"[0]")) == 0 )
+			{
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Você está carregando muitos itens com você.";
+				mes "Por favor, volte depois que usar o Serviço de Armazém Kafra para armazenar alguuns de seus itens.";
+				close;
+			}
+
+			for( set .@num,1; .@num < .@Size; set .@num, .@num + 1 )
+			{
+				set .@id[.@num],getd("$questmasterq_"+.@Choose+"["+.@num+"]");
+				set .@amount[.@num],getd("$questmasteramount_"+.@Choose+"["+.@num+"]");
+				if( countitem(.@id[.@num]) < .@amount[.@num] )
+				{
+					mes "^00BFFF[Master of Quests]^000000";
+					mes "Me desculpe, mais você não tem "+.@amount[.@num]+"x "+getitemname(.@id[.@num])+"!";
+					close;
+				}
+			}
+			if( .@ZenyCost && Zeny < .@ZenyCost)
+			{
+				mes "^00BFFF[Master of Quests]^000000";
+				mes "Me desculpe, mais você não tem " + .@ZenyCost + " suficiente.";
+				close;
+			}
+			for( set .@num,1; .@num < .@Size; set .@num, .@num + 1 )
+				delitem .@id[.@num],.@amount[.@num];
+
+			mes "^00BFFF[Master of Quests]^000000";
+			mes "Muito bem, aqui está sua recompensa...";
+			getitem $questmaster_id[.@Choose],getd("$questmasteramount_"+.@Choose+"[0]");
+			if( .@ZenyCost )
+				set Zeny, Zeny - .@ZenyCost;
+			break;
+		case 2:
+			mes "^00BFFF[Master of Quests]^000000";
+			mes "Estarei aqui se precisar.";
+			break;
+	}
+	return;			
+	
+OnQuestRemaker:
+	set .@Size,getarraysize($questmaster_id);
+	for( set .@num, 0; .@num < .@Size; set .@num, .@num + 1 )
+		set .@ChooseMenu$, .@ChooseMenu$+GetItemName(getd("$questmaster_id"+"["+.@num+"]"))+":";
+
+	set .@ChooseMenu$,.@ChooseMenu$+"^FF0000Cancelar^000000";
+	set $@Choose,select(.@ChooseMenu$)-1;
+	if( ($@Choose+1) > .@num )
+	{
+		mes "^00BFFF[Master of Quests]^000000";
+		mes "Estarei aqui caso precisar.";
+		close;
+	}
+	return;
+}

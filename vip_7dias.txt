@@ -1,0 +1,24 @@
+prontera,147,167,4	script	 Vip BG		794,{
+
+set @npc$,"[Vip]";
+set @lvvip, 1; // Level da conta vip
+set @qdvip, 7; // Quantidade de dias vip
+set @table$,"diasvip"; // Tabela dos dias vip
+set @id,30002; // Id do item
+set @qt,1; // Quantidade do item
+
+
+if (countitem(@id)<@qt) { mes @npc$; mes "Desculpe mas você precisa de "+@qt+" "+getitemname(@id)+" Para falar comigo."; close; }
+
+mes @npc$;
+mes "Olá ^FF7F24"+strcharinfo(0)+"^000000 !";
+mes "Deseja receber "+@qdvip+" dias de vip ?";
+if (select("- Sim:- Não") == 2) close;
+
+mes @npc$;
+query_sql "UPDATE `login` SET `level`='"+@lvvip+"',`"+@table$+"`='"+@qdvip+"' WHERE `account_id` = '"+ getcharid(3) +"'";
+delitem @id,@qt;
+mes "Você acaba de ganhar "+@qdvip+" Dias de vip.";
+mes "Relogue para ativa-lo.";
+close;
+}

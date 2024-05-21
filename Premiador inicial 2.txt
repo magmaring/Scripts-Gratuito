@@ -1,0 +1,25 @@
+new_1-1,53,109,4	script	Boas-Vindas	51,{
+	if(#_iten != 0)
+	{
+		mes "[ Boas vindas ]";
+		mes "Olá "+strcharinfo(0)+", eu ja te dei os itens,";
+		mes " Você não pode pega-los novamente.";
+		close;
+	}
+else
+	{
+		mes "[ Boas Vindas ]";
+		mes "Seja bem-vindo ao servidor, aqui estão seus itens!";
+		getitem 1243,1;
+		getitem 2112,1;
+		getitem 2352,1;
+		getitem 2414,1;
+		getitem 2510,1;
+		getitem 5055,1;
+		set #_iten,1;
+		close;
+	}
+OnInit:
+waitingroom "[ Bem-Vindo ]",0;
+end;
+}

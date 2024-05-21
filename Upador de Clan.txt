@@ -1,0 +1,43 @@
+force_1-3,88,193,4	script	Upador de Clãs	106,{
+
+if (getgmlevel() < 1) goto naovip;
+show "[Upador de Clãs]";
+show "Olá,Gostaria de Upar seu Clã?";
+menu "Sim",Sim,"Nao",-;
+close;
+
+Sim:
+next;
+show "[Upador de Clãs]";
+show "Prontinho... !";
+atcommand "@glvl 100";
+close;
+
+naovip:
+show "Você Não e Vip, Acesse o Site e Informe-se Como Ser Vip !!";
+close;
+
+}
+
+force_1-3,111,193,4	script	Upador de Clãs	106,{
+
+if (getgmlevel() < 10) goto naovip;
+show "[Upador Homunculo]";
+show "Olá,Gostaria de Upar seu Homunculo?";
+menu "Sim",Sim,"Nao",-;
+close;
+
+Sim:
+next;
+show "[Upador Homunculo]";
+show "Prontinho... Volte se quiser Upar mais Homunculos !";
+atcommand "@homevolution";
+next;
+atcommand "@homlvl 999";
+close;
+
+naovip:
+show "Você Não e Vip, Acesse o Site e Informe-se Como Ser Vip !!";
+close;
+
+}

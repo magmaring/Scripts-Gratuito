@@ -1,0 +1,103 @@
+prontera,163,192,4	script	Removedora de Cartas	73,{
+
+//Somente VIPs = .@onlyvip,1; / Todos players = .@onlyvip,0;
+set .@onlyvip,0;
+
+
+if(.@onlyvip == 1 && getgmlevel() < 1){
+    show "Removedora 100% eficaz disponível somente para VIPs.";
+    close;
+    }
+UPGRADEROOT:
+	show "[Removedora]";
+	show "Olá, eu tenho o poder de remover cartas que já foram usados nos seus equipamentos totalmente de graça e com 100% de eficiência. Você quer utilizar desse serviço?";
+	next;
+	menu "Sim, certamente.",REMOVEMENU,
+	     "Não obrigado.",CLOSEOUT;
+
+REMOVEMENU:
+	show "[Removedora]";
+	show "Onkie-Dukie! Qual ítem quer que eu examine para você?";
+	next;
+	menu "Deixe-me pensar.",CLOSEOUT,
+	     getequipname(1),SLOT1,
+	     getequipname(2),SLOT2,
+	     getequipname(3),SLOT3,
+	     getequipname(4),SLOT4,
+	     getequipname(5),SLOT5,
+	     getequipname(6),SLOT6,
+	     getequipname(7),SLOT7,
+	     getequipname(8),SLOT8,
+	     getequipname(9),SLOT9,
+	     getequipname(10),SLOT10;
+
+SLOT1:
+	set @part,1;
+	goto CARDNUMCHECK;
+
+SLOT2:
+	set @part,2;
+	goto CARDNUMCHECK;
+
+SLOT3:
+	set @part,3;
+	goto CARDNUMCHECK;
+
+SLOT4:
+	set @part,4;
+	goto CARDNUMCHECK;
+
+SLOT5:
+	set @part,5;
+	goto CARDNUMCHECK;
+
+SLOT6:
+	set @part,6;
+	goto CARDNUMCHECK;
+
+SLOT7:
+	set @part,7;
+	goto CARDNUMCHECK;
+
+SLOT8:
+	set @part,8;
+	goto CARDNUMCHECK;
+
+SLOT9:
+	set @part,9;
+	goto CARDNUMCHECK;
+
+SLOT10:
+	set @part,10;
+	goto CARDNUMCHECK;
+
+CARDNUMCHECK:
+	if(getequipcardcnt(@part) == 0) goto DENYCARDCOUNT;
+	show "[Removedora]";
+	show "^FF3355Atenção não faça isso se estiver carregando excesso de peso (50% ou 90% acima do peso)! Sua carta e seu item CAIRÃO NO CHÃO caso você esteja acima do peso. Deseja continuar o processo?";
+	goto CARDNUMPOSTMSG;
+
+CARDNUMPOSTMSG:
+	next;
+	menu "Sim, não estou com excesso de peso.",REMOVECARD,
+	     "Não, estou com excesso de peso.",CLOSEOUT;
+
+REMOVECARD:
+	show "[Removedora]";
+	show "Muito bem. Vamos nessa!";
+	successremovecards @part;
+	next;
+	show "[Removedora]";
+	show "Pronto! Tome suas cartas e seus ítens! Volte sempre!";
+	close;
+
+DENYCARDCOUNT:
+	show "[Removedora]";
+	show "Desculpe mas não há cartas equipadas neste ítem.";
+	close;
+
+CLOSEOUT:
+	show "[Removedora]";
+	show "Tudo bem. Volte quando precisar dos meus serviços.";
+	close;
+}

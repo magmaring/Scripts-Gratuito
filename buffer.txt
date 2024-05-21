@@ -1,0 +1,51 @@
+prontera,161,188,5	script	Curandeira	91,{
+
+set @lv,1; //- Level VIP
+
+if (getgmlevel() < @lv){
+skilleffect 29,0; sc_start SC_INCREASEAGI,240000,10;
+skilleffect 34,0; sc_start SC_BLESSING,240000,10;
+percentheal 100,100;
+end;}
+
+sc_end SC_Poison;
+sc_end SC_Silence;
+sc_end SC_Blind;
+sc_end SC_Confusion;
+sc_end SC_Curse;
+sc_end SC_Hallucination;
+skilleffect 29,0; sc_start SC_INCREASEAGI,480000,10;
+skilleffect 66,0; sc_start SC_IMPOSITIO,480000,5;
+skilleffect 74,0; sc_start SC_MAGNIFICAT,480000,5;
+skilleffect 75,0; sc_start SC_GLORIA,480000,5;
+skilleffect 34,0; sc_start SC_BLESSING,480000,10;
+skilleffect 73,0; sc_start SC_KYRIE,480000,10;
+percentheal 100,100;
+end;}
+
+que_temsky,45,127,5	script	Curandeira	91,{
+
+set @lv,1; //- Level VIP
+
+if (getgmlevel() < @lv){
+skilleffect 29,0; sc_start SC_INCREASEAGI,240000,10;
+skilleffect 34,0; sc_start SC_BLESSING,240000,10;
+percentheal 100,100;
+end;}
+
+sc_end SC_Poison;
+sc_end SC_Silence;
+sc_end SC_Blind;
+sc_end SC_Confusion;
+sc_end SC_Curse;
+sc_end SC_Hallucination;
+skilleffect 29,0; sc_start SC_INCREASEAGI,480000,10;
+skilleffect 66,0; sc_start SC_IMPOSITIO,480000,5;
+skilleffect 74,0; sc_start SC_MAGNIFICAT,480000,5;
+skilleffect 75,0; sc_start SC_GLORIA,480000,5;
+skilleffect 34,0; sc_start SC_BLESSING,480000,10;
+skilleffect 73,0; sc_start SC_KYRIE,480000,10;
+percentheal 100,100;
+end;}
+
+que_temsky,45,127,5	duplicate(Healer)	Curandeira#1	793

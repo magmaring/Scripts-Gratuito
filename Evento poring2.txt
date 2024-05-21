@@ -1,0 +1,141 @@
+-	script	Evento Poring#var	-1,{
+end;
+	OnInit:
+		//- ID do item do prêmio.
+		set $ipe, 12103;
+
+		//- Quantidade do item do prêmio.
+		set $qpe, 1;
+
+		//- Tirar 50% de HP quando matar
+		//- um poring falso?
+		//- [0=NÃO|1=SIM]
+		set $hpe, 1;
+	end;
+
+}
+//===== Script: ==============================================
+prontera,142,173,3	script	Evento Poring	763,{
+
+	if(getgmlevel() < 90)
+	{
+		if(!.poringcatch)
+		{
+		
+			semgm:
+			mes "[Evento Poring]";
+	show "O Evento Poring está fechado agora.";
+	show "^FF0000Dias:^000000 Segunda, Terça, Quarta, Quinta, Sexta, Sabado, Domingo";
+	show "^FF0000Horas:^000000 06:00, 12:00, 18:00, 00:00";
+			close;
+		}
+		mes "[Evento Poring]";
+		mes "Olá "+strcharinfo(0)+" o que posso fazer por você?";
+		next;
+		switch(select("Entrar no evento.:Informação."))
+		{
+			case 1:
+				mes "[Evento Poring]";
+				mes "Divirta-se!";
+				next;
+				warp "poring_c01", 100, 100;
+				end;
+
+			case 2:
+				mes "[Evento Poring]";
+				mes "São invocados 100 Porings.";
+				mes "Só UM é verdadeiro e você tem que acha-lo.";
+				mes "Caso consiga, ganhará um item.";
+                mes "Se você errar, perderá 50% do HP.";
+				mes "Boa Sorte.";
+				close;
+		}
+	}
+	mes "[Evento Poring]";
+	mes "Olá "+strcharinfo(0)+" o que posso fazer por você?";
+	next;
+	if(select("Ligar evento.:Entrar no evento.") == 1) callsub OnEventStart; close;
+	
+	mes "[Evento Poring]";
+	mes "Divirta-se!";
+	next;
+	warp "poring_c01", 100, 100;
+	end;
+
+		Onclock0600: callsub OnEventStart;
+		Onclock1200: callsub OnEventStart;
+		Onclock1800: callsub OnEventStart;
+		Onclock0000: callsub OnEventStart;
+
+		OnEventStart:
+			DisableNpc "sair2";
+			announce "[Evento Poring]: Gente, é hora do evento. Falem comigo para entrar.",0;
+			initnpctimer;
+			monster "poring_c01",0,0,"Poring",1002,1,strnpcinfo(0)+"::OnMobKilled";
+			monster "poring_c01",0,0,"Pouring",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Proing",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Poirng",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Poing",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Porimg",1002,5,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Porinq",1002,1,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Poring",1113,1,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Poring",1062,1,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Por|ng",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Por1ng",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Porong",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"P0ring",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"P@ring",1002,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "poring_c01",0,0,"Porng",1002,1,strnpcinfo(0)+"::OnWrongKilled";
+			set .poringcatch,1;
+			end;
+			return;
+
+		OnTimer300000:
+			stopnpctimer;
+			announce "[Evento Poring]: O tempo acabou, tente na próxima vez.",0;
+			set .poringcatch,0;
+			EnableNpc "sair2";
+			killmonsterall "poring_c01";
+			end;
+
+		OnMobKilled:
+			stopnpctimer;
+			announce "[Evento Poring]: "+strcharinfo(0)+" encontrou o Poring. Tente denovo na próxima vez.",0;
+			dispbottom "Parabéns, você me achou.";
+			getitem 7549,rand(3,1);
+			killmonsterall "poring_c01";
+			EnableNpc "sair2";
+			set .poringcatch,0;
+			end;
+
+		OnWrongKilled:
+			dispbottom "Whaa, você errou feio.";
+			if($hpe) percentheal -50,0;
+			warp "prontera",157,175;
+			end;
+}
+poring_c01,92,92,5	script	Sair do Evento::sair2	715,{
+	show "[Evento Poring]";
+	show "Então, o que dejesa fazer?";
+	next;
+	if( select("Ir Embora:Não Ir Embora") == 2 )
+	{
+	show "[Evento Poring]";
+		show "Eu estarei aqui quando você precisar dos meus serviços.";
+		close;
+	}
+
+	set .@spoint$, getsavepoint(0);
+	set .@x, getsavepoint(1);
+	set .@y, getsavepoint(2);
+	show "[Evento Poring]";
+	show "Você será levado de volta à ^ff0000" + .@spoint$ + "^000000.";
+	show "Tem ^ff0000"+getmapusers(""+.@spoint$+"")+"^000000 jogador(es) em " + .@spoint$ + "!";
+	close2;
+	warp .@spoint$, .@x, .@y;
+	end;
+}
+poring_c01	mapflag	nowarpto
+poring_c01	mapflag	nowarp
+poring_c01	mapflag	nosave
+poring_c01	mapflag	noskill

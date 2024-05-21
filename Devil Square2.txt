@@ -1,0 +1,329 @@
+//============== Cronus Script ================================
+//= Devil Square                                                
+//============== Por ==========================================
+//= Nepster e Rafael (Re-avaliada por Atum)
+//============== Versão =======================================
+//= 4.4
+//============== Descrição ====================================
+//= Evento de Mob's (Parecido com o DS do MU Online)
+//============== Comentários Adicionais========================
+//= 4.3 Personalizado o script [Asus]
+//= 4.4 Testado e Corrigido [ToTTi]
+//= 4.5 Mudado configurações de monstros [ToTTi]
+//= 4.6 Corrigido bug que não passava do 6º Round e não apareçiam os Tesouros [ToTTi]
+//============== .:: tbRO ::.=============================
+//= Evento para o Servidor 4EVER!!
+//============================================================
+prontera,137,166,4	script	Devil Square	733,{
+
+show "[Guarda Devil Square]";
+show "Bem-Vindo para a porta do ^FF0000Ragna TEN Square^000000";
+show "Deseja entrar? ";
+next;
+menu "Sim, quero entrar",-,"Informações",Info,"Não, obrigado",Cancel;
+
+if(Baselevel < 80) goto LReq;
+if($inf == 1) goto L_go;
+goto L_eror;
+
+LReq:
+show "[Guarda Devil Square]";
+show "O nível mínimo é 80";
+close;
+
+L_go:
+if (getmapusers("ordeal_1-1.gat")==30) goto toomany;
+announce ""+strcharinfo(0)+" entrou no Devil Square",8;
+percentheal 100,100;
+dispbottom "Para sair da Devil Square é só relogar ou procurar a NPC de Saida!";
+warp "ordeal_1-1",150,149;
+end;
+
+L_eror:
+show "[Guarda Devil Square]";
+show "O Devil Square está fechado agora.";
+show "^FF0000Dias:^000000 Segunda, Terça, Quarta, Quinta, Sexta, Sabado, Domingo";
+show "^FF0000Horas:^000000 08:00, 14:00, 20:00, 02:00";
+close;
+
+Info:
+show "[Guarda Devil Square]";
+show "No ^FF0000Devil Square^000000 há 6 níveis de dificuldade.";
+show "Cada nível ultrapassado, a dificuldade fica maior!!";
+next;
+show "[Guarda Devil Square]";
+show "Lembrando que, não é fácil. Por isso, prepare-se com itens de cura, itens e cartas.";
+show "Caso você termine a ^FF0000Devil Square^000000, será possível abrir ^FF8C0010 Caixas do Tesouro.^000000";
+show "Podendo assim, ganhar alguns itens!!!";
+close;
+end;
+
+toomany:
+show "[Guarda Devil Square]";
+show "Desculpe a ^FF0000Devil Square^000000 chegou a sua lotação máxima!";
+show "^FF0000Dias:^000000 Segunda, Quarta, Sexta, Domingo";
+show "^FF0000Horas:^000000 10:00, 15:00, 19:00, 21:00";
+set $inf,1;
+close;
+end;
+
+Cancel:
+show "[Guarda Devil Square]";
+show "Até logo";
+close;
+end;
+
+}
+
+//Final do Devil Square
+
+ordeal_1-1,182,183,5	script	Cek	-1,{
+
+OnTimer30000:
+if($status == 1) end;
+if (getmapusers("ordeal_1-1.gat") == 0) Announce "Todos os players foram mortos no Devil Square!!",8;
+if (getmapusers("ordeal_1-1.gat") == 0) set $status,1;
+if (getmapusers("ordeal_1-1.gat") == 0) killmonsterall "ordeal_1-1.gat";
+if (getmapusers("ordeal_1-1.gat") == 0) end;
+Announce getmapusers("ordeal_1-1.gat") + " jogador(es) está(ão) sobrevivendo no Devil Square!",8;
+initnpctimer;
+end;
+
+}
+
+ordeal_1-1,182,183,5	script	HiddenNpc	-1,{
+//Dias da Semana:
+//= 1= Segunda, 2=Terça, 3=Quarta, 4=Quinta, 5=Sexta, 6=Sábado e 0=Domingo
+
+	//A configuração está nessa parte:
+OnClock0800:
+OnClock1400:
+OnClock2000:
+OnClock0200:
+	//O Evento inicia nesses horários somente na Segunda, Quarta, Sexta e Sábado. Os demais não tem evento.
+if((gettime(4)==1)) goto ds_ONE;
+if((gettime(4)==2)) goto ds_ONE;
+if((gettime(4)==3)) goto ds_ONE;
+if((gettime(4)==4)) goto ds_ONE;
+if((gettime(4)==5)) goto ds_ONE;
+if((gettime(4)==6)) goto ds_ONE;
+if((gettime(4)==0)) goto ds_ONE;
+end;
+
+ds_ONE:
+Announce "O portal para o Devil Square está aberto, e em 5 minutos ele começará!",8;
+disablenpc "Saída";
+initnpctimer;
+set $inf,1;
+set $status,0;
+killmonsterall "ordeal_1-1";
+pvpon "ordeal_1-1";
+end;
+
+OnTimer60000:
+Announce "O portal para Devil Square está aberto, e em 4 minutos ele irá começar!",8;
+end;
+
+OnTimer120000:
+Announce "O portal para Devil Square está aberto, e em 3 minutos ele irá começar!",8;
+end;
+
+OnTimer180000:
+Announce "O portal para Devil Square está aberto, e em 2 minutos ele irá começar!",8;
+end;
+
+OnTimer240000:
+Announce "O portal para Devil Square está aberto, e em 1 minuto ele irá começar!",8;
+end;
+
+OnTimer300000:
+Announce "A Devil Square Começou!",8;
+initnpctimer "Cek";
+set $inf,0;
+set $mob,120;
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Orc Zumbi",1153,6,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",149,197,149,274,"[DS] Orc Zumbi",1153,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",117,181,53,245,"[DS] Orc Esqueleto",1152,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Orc Esqueleto",1152,6,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",149,197,149,274,"[DS] Familiar",1005,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",117,181,53,245,"[DS] Familiar",1005,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Drainliar",1111,6,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",149,197,149,274,"[DS] Drainliar",1111,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",117,181,53,245,"[DS] Chon Chon de Aço",1042,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Zenorc",1177,6,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",149,197,149,274,"[DS] Zenorc",1177,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",117,181,53,245,"[DS] Orc Arqueiro",1189,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Orc Arqueiro",1189,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",149,197,149,274,"[DS] Sorrateiro",1037,6,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",117,181,53,245,"[DS] Sorrateiro",1037,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Lobo",1013,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",149,197,149,274,"[DS] Lobo",1013,7,"HiddenNpc::Ondevildead";
+areamonster "ordeal_1-1",117,181,53,245,"[DS] Lobo",1013,6,"HiddenNpc::Ondevildead";
+end;
+
+Ondevildead:
+if ($status == 1) end;
+set $mob,$mob-1;
+if($mob == 25) Announce "Devil Square: 25 monstros para começar o 2º round",8;
+if($mob == 5) Announce "Devil Square: 5 monstros para começar o 2º round",8;
+if($mob == 0) Announce "Começou o 2º Round da Devil Square!",8;
+if($mob == 0) goto Ondevil2;
+end;
+
+Ondevil2:
+set $mob,120;
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Esqueleto Soldado",1028,6,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Esqueleto Soldado",1028,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",149,101,150,25,"[DS] Esqueleto Soldado",1028,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Orc Arqueiro",1189,6,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Orc Arqueiro",1189,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",149,101,150,25,"[DS] Orc Arqueiro",1189,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Arenoso",1165,6,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Arenoso",1165,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",149,101,150,25,"[DS] Arenoso",1165,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Esqueleto Arqueiro",1016,6,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Esqueleto Arqueiro",1016,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",149,101,150,25,"[DS] Esqueleto Arqueiro",1016,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Minorus",1149,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Minorus",1149,6,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",149,101,150,25,"[DS] Minorus",1149,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Réquiem",1164,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Réquiem",1164,7,"HiddenNpc::Ondevildead2";
+areamonster "ordeal_1-1",149,101,150,25,"[DS] Réquiem",1164,6,"HiddenNpc::Ondevildead2";
+end;
+
+Ondevildead2:
+if ($status == 1) end;
+set $mob,$mob-1;
+if($mob == 25) Announce "Devil Square: 25 monstros para começar o 3º round",8;
+if($mob == 5) Announce "Devil Square: 5 monstros para começar o 3º round",8;
+if($mob == 0) Announce "Começou o 3º Round da Devil Square!",8;
+if($mob == 0) goto Ondevil3;
+end;
+
+Ondevil3:
+set $mob,100;
+areamonster "ordeal_1-1",182,118,246,52,"[DS] Diabinho",1292,8,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",197,150,273,250,"[DS] Diabinho",1292,8,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",150,128,149,173,"[DS] Leib Olmai",1306,7,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",182,118,246,52,"[DS] Leib Olmai",1306,6,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",197,150,273,250,"[DS] Gullinbursti",1311,8,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",150,128,149,173,"[DS] Gullinbursti",1311,8,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",182,118,246,52,"[DS] Gullinbursti",1311,6,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",197,150,273,250,"[DS] Verme Ancião",1567,7,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",150,128,149,173,"[DS] Verme Ancião",1567,6,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",182,118,246,52,"[DS] Verme Ancião",1567,6,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",197,150,273,250,"[DS] Esqueleto General",1290,6,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",150,128,149,173,"[DS] Esqueleto General",1290,6,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Gato de Nove Caudas",1307,6,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Gato de Nove Caudas",1307,6,"HiddenNpc::Ondevildead3";
+areamonster "ordeal_1-1",183,182,246,244,"[DS] Gato de Nove Caudas",1307,6,"HiddenNpc::Ondevildead3";
+end;
+
+Ondevildead3:
+if ($status == 1) end;
+set $mob,$mob-1;
+if($mob == 25) Announce "Devil Square: 25 monstros para começar o 4º round",8;
+if($mob == 5) Announce "Devil Square: 5 monstros para começar o 4º round",8;
+if($mob == 0) Announce "Começou o 4º Round da Devil Square!",8;
+if($mob == 0) goto Ondevil4;
+end;
+
+Ondevil4:
+set $mob,25;
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Seyren Windsor",1634,5,"HiddenNpc::Ondevildead4";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Eremes Guile",1635,5,"HiddenNpc::Ondevildead4";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Howard Alt-Eisen",1636,5,"HiddenNpc::Ondevildead4";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Margaretha Sorin",1637,5,"HiddenNpc::Ondevildead4";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Kathryne Keyron",1639,5,"HiddenNpc::Ondevildead4";
+end;
+
+Ondevildead4:
+if ($status == 1) end;
+set $mob,$mob-1;
+if($mob == 25) Announce "Devil Square: 25 monstros para começar o 5º round",8;
+if($mob == 5) Announce "Devil Square: 5 monstros para começar o 5º round",8;
+if($mob == 0) Announce "Começou o 5º Round da Devil Square!",8;
+if($mob == 0) goto Ondevil5;
+end;
+
+Ondevil5:
+set $mob,30;
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Salamandra",1831,5,"HiddenNpc::Ondevildead5";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Guardião Espadachim",1829,5,"HiddenNpc::Ondevildead5";
+areamonster "ordeal_1-1",102,149,25,149,"[DS] Kasa",1833,5,"HiddenNpc::Ondevildead5";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Kasa",1833,5,"HiddenNpc::Ondevildead5";
+areamonster "ordeal_1-1",149,101,150,25,"[DS] Byorgue",1839,5,"HiddenNpc::Ondevildead5";
+areamonster "ordeal_1-1",117,117,53,53,"[DS] Guardião Arqueiro",1830,5,"HiddenNpc::Ondevildead5";
+end;
+
+Ondevildead5:
+if ($status == 1) end;
+set $mob,$mob-1;
+if($mob == 15) Announce "Devil Square: 15 monstros para começar o 6º round",8;
+if($mob == 5) Announce "Devil Square: 5 monstros para começar o 6º round",8;
+if($mob == 0) Announce "Começou o 6º Round da Devil Square!",8;
+if($mob == 0) goto Ondevil6;
+end;
+
+Ondevil6:
+set $mob,1;
+areamonster "ordeal_1-1",149,149,0,0,"[DS] Amon-Rá",1511,1,"HiddenNpc::Ondevildead6";
+end;
+
+Ondevildead6:
+if ($status == 1) end;
+set $mob,$mob-1;
+if($mob == 1) Announce "Devil Square: 1 monstros para vitória!",8;
+if($mob == 0) mapannounce "ordeal_1-1","Devil Square: Parabéns! 10 Caixas do Tesouro para você(s). ATIVEM O @AUTOLOOT",0,0x808080;
+pvpoff "ordeal_1-1";
+if($mob == 0) goto Ondevilfinal;
+end;
+
+Ondevilfinal:
+set $mob,10;
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+monster "ordeal_1-1",0,0,"Caixa do Tesouro",2700,1,"HiddenNpc::Onboxdead";
+end;
+
+Onboxdead:
+if ($status == 1) end;
+set $mob,$mob-1;
+Announce "Devil Square: " + strcharinfo(0) +" abriu a Caixa do Tesouro.",8;
+getitem 7549,rand(5,1);
+set .@spoint$, getsavepoint(0);
+set .@x, getsavepoint(1);
+set .@y, getsavepoint(2);
+warp .@spoint$, .@x, .@y;
+if($mob == 10) enablenpc "Saída";
+if($mob == 0) set $status,0;
+end;
+
+}
+
+// -- Mapflags de "ordeal_1-1" (Mapa do DS)
+ordeal_1-1	mapflag	nowarp
+ordeal_1-1	mapflag	nowarpto
+ordeal_1-1	mapflag	noteleport
+ordeal_1-1	mapflag	nosave	SavePoint
+ordeal_1-1	mapflag	nomemo
+//ordeal_1-1	mapflag	pvp
+ordeal_1-1	mapflag	nobranch
+ordeal_1-1	mapflag	nopenalty
+// -- Fim dos Mapflags
+
+ordeal_1-1,156,138,3	script	Saída	51,{
+show "[Saída]";
+show "Até mais ^^";
+next;
+warp "prontera", 155, 171;
+close;
+}

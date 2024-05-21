@@ -1,0 +1,284 @@
+//By Bob Esponja
+prontera.gat,149,194,4	script	Garota da Enquete::enq	831,{
+
+if ($the_poll_question$ == "") goto L_NoQuestion;
+
+L_Begin:
+    show "[^666699 Garota da Enquete ^000000]";
+    show "^FF0000" + $the_poll_question$ + "^000000";
+    
+    if (#the_pollid != $the_pollid) goto L_NotVoted;
+
+    // Sets bar length
+    set @the_PB$[0], "                    ";
+    set @the_PB$[1], "^0077BF|                   ^000000";
+    set @the_PB$[2], "^0081CF|^0077BF|                  ^000000";
+    set @the_PB$[3], "^008BDF|^0081CF|^0077BF|                 ^000000";
+    set @the_PB$[4], "^0094EF|^008BDF|^0081CF|^0077BF|                ^000000";
+    set @the_PB$[5], "^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|               ^000000";
+    set @the_PB$[6], "^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|              ^000000";
+    set @the_PB$[7], "^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|             ^000000";
+    set @the_PB$[8], "^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|            ^000000";
+    set @the_PB$[9], "^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|           ^000000";
+    set @the_PB$[10], "^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|          ^000000";
+    set @the_PB$[11], "^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|         ^000000";
+    set @the_PB$[12], "^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|        ^000000";
+    set @the_PB$[13], "^7FCCFF|^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|       ^000000";
+    set @the_PB$[14], "^8FD2FF|^7FCCFF|^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|      ^000000";
+    set @the_PB$[15], "^9FD8FF|^8FD2FF|^7FCCFF|^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|     ^000000";
+    set @the_PB$[16], "^AFDFFF|^9FD8FF|^8FD2FF|^7FCCFF|^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|    ^000000";
+    set @the_PB$[17], "^BFE5FF|^AFDFFF|^9FD8FF|^8FD2FF|^7FCCFF|^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|   ^000000";
+    set @the_PB$[18], "^CFEBFF|^BFE5FF|^AFDFFF|^9FD8FF|^8FD2FF|^7FCCFF|^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|  ^000000";
+    set @the_PB$[19], "^DFF1FF|^CFEBFF|^BFE5FF|^AFDFFF|^9FD8FF|^8FD2FF|^7FCCFF|^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF| ^000000";
+    set @the_PB$[20], "^EFF8FF|^DFF1FF|^CFEBFF|^BFE5FF|^AFDFFF|^9FD8FF|^8FD2FF|^7FCCFF|^6FC8FF|^5FC2FF|^4FBCFF|^3FB6FF|^2FB0FF|^1FAAFF|^0FA4FF|^009EFF|^0094EF|^008BDF|^0081CF|^0077BF|^000000";
+    
+    // Calculates percentage
+    set @the_total,$the_PA[1]+$the_PA[2]+$the_PA[3]+$the_PA[4]+$the_PA[5]+$the_PA[6]+$the_PA[7]+$the_PA[8]+$the_PA[9];
+    set @the_PC[1],$the_PA[1]*100/@the_total;
+    set @the_PC[2],$the_PA[2]*100/@the_total;
+    set @the_PC[3],$the_PA[3]*100/@the_total;
+    set @the_PC[4],$the_PA[4]*100/@the_total;
+    set @the_PC[5],$the_PA[5]*100/@the_total;
+    set @the_PC[6],$the_PA[6]*100/@the_total;
+    set @the_PC[7],$the_PA[7]*100/@the_total;
+    set @the_PC[8],$the_PA[8]*100/@the_total;
+    set @the_PC[9],$the_PA[9]*100/@the_total;
+    
+    // Displays results
+    if ($the_PQ$[1] != "") show $the_PQ$[1];
+    if ($the_PQ$[1] != "") show "["+@the_PB$[@the_PC[1]/5]+"] " + $the_PA[1] + " ("+@the_PC[1]+"%)";
+    if ($the_PQ$[2] != "") show $the_PQ$[2];
+    if ($the_PQ$[2] != "") show "["+@the_PB$[@the_PC[2]/5]+"] " + $the_PA[2] + " ("+@the_PC[2]+"%)";
+    if ($the_PQ$[3] != "") show $the_PQ$[3];
+    if ($the_PQ$[3] != "") show "["+@the_PB$[@the_PC[3]/5]+"] " + $the_PA[3] + " ("+@the_PC[3]+"%)";
+    if ($the_PQ$[4] != "") show $the_PQ$[4];
+    if ($the_PQ$[4] != "") show "["+@the_PB$[@the_PC[4]/5]+"] " + $the_PA[4] + " ("+@the_PC[4]+"%)";
+    if ($the_PQ$[5] != "") show $the_PQ$[5];
+    if ($the_PQ$[5] != "") show "["+@the_PB$[@the_PC[5]/5]+"] " + $the_PA[5] + " ("+@the_PC[5]+"%)";
+    if ($the_PQ$[6] != "") show $the_PQ$[6];
+    if ($the_PQ$[6] != "") show "["+@the_PB$[@the_PC[6]/5]+"] " + $the_PA[6] + " ("+@the_PC[6]+"%)";
+    if ($the_PQ$[7] != "") show $the_PQ$[7];
+    if ($the_PQ$[7] != "") show "["+@the_PB$[@the_PC[7]/5]+"] " + $the_PA[7] + " ("+@the_PC[7]+"%)";
+    if ($the_PQ$[8] != "") show $the_PQ$[8];
+    if ($the_PQ$[8] != "") show "["+@the_PB$[@the_PC[8]/5]+"] " + $the_PA[8] + " ("+@the_PC[8]+"%)";
+    if ($the_PQ$[9] != "") show $the_PQ$[9];
+    if ($the_PQ$[9] != "") show "["+@the_PB$[@the_PC[9]/5]+"] " + $the_PA[9] + " ("+@the_PC[9]+"%)";
+    show "Total de Votos: " + @the_total;
+    if (getgmlevel() > 90) menu "Editar uma das Opções",L_Edit,"Editar Resultados",L_EditCount,"Criar nova Enquete",L_SetQuestion,"Sair",-;
+    close;
+
+// Vote menu
+L_NotVoted:
+    menu    $the_PQ$[1],P1,
+            $the_PQ$[2],P2,
+            $the_PQ$[3],P3,
+            $the_PQ$[4],P4,
+            $the_PQ$[5],P5,
+            $the_PQ$[6],P6,
+            $the_PQ$[7],P7,
+            $the_PQ$[8],P8,
+            $the_PQ$[9],P9,
+            "Cancelar",L_Cancel;
+            
+P1:    set @the_vote,1; goto P_Vote;
+P2:    set @the_vote,2; goto P_Vote;
+P3:    set @the_vote,3; goto P_Vote;
+P4:    set @the_vote,4; goto P_Vote;
+P5:    set @the_vote,5; goto P_Vote;
+P6:    set @the_vote,6; goto P_Vote;
+P7:    set @the_vote,7; goto P_Vote;
+P8:    set @the_vote,8; goto P_Vote;
+P9:    set @the_vote,9; goto P_Vote;
+
+P_Vote:
+    if ($the_PQ$[@the_vote] == "") goto L_Begin;
+    
+    set $the_PA[@the_vote],$the_PA[@the_vote]+1;
+    set #the_pollid,$the_pollid;
+    next;
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Obrigado pelo seu voto!";
+    next;
+    goto L_Begin;
+
+// No question is set
+L_NoQuestion:
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Nenhuma enquete está no ar...";
+    if (getgmlevel() > 90) goto L_SetQuestion;
+    close;
+
+// Set question
+L_SetQuestion:
+    set $the_PQ$[1],"";
+    set $the_PQ$[2],"";
+    set $the_PQ$[3],"";
+    set $the_PQ$[4],"";
+    set $the_PQ$[5],"";
+    set $the_PQ$[6],"";
+    set $the_PQ$[7],"";
+    set $the_PQ$[8],"";
+    set $the_PQ$[9],"";
+    set $the_PA[1],"";
+    set $the_PA[2],"";
+    set $the_PA[3],"";
+    set $the_PA[4],"";
+    set $the_PA[5],"";
+    set $the_PA[6],"";
+    set $the_PA[7],"";
+    set $the_PA[8],"";
+    set $the_PA[9],"";
+    set $the_poll_question$,"";
+
+    next;
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Criar enquete?";
+    next;
+    menu "Sim",-,"Não",L_Cancel;
+    
+    digit $the_poll_question$;
+    set $the_pollid,rand(100000,999999);
+    show "Enquete ajustada para: ^FF0000" + $the_poll_question$ + "^000000";
+    next;
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Insira as opções:";
+    show "Entre com 'fim' para feixar a enquete...";
+    next;
+    
+    P_Set:
+        digit $the_PQ$[1];
+        if ($the_PQ$[1] == "fim") goto P_Set;    // Disallows no option poll
+    P_Set2:
+        digit $the_PQ$[2];
+        if ($the_PQ$[2] == "fim") goto P_Set2; // Disallows 1 option poll
+        digit $the_PQ$[3];
+        set @the_last,3;
+        if ($the_PQ$[3] == "fim") goto L_SetEnd;
+        digit $the_PQ$[4];
+        set @the_last,4;
+        if ($the_PQ$[4] == "fim") goto L_SetEnd;
+        digit $the_PQ$[5];
+        set @the_last,5;
+        if ($the_PQ$[5] == "fim") goto L_SetEnd;
+        digit $the_PQ$[6];
+        set @the_last,6;
+        if ($the_PQ$[6] == "fim") goto L_SetEnd;
+        digit $the_PQ$[7];
+        set @the_last,7;
+        if ($the_PQ$[7] == "fim") goto L_SetEnd;
+        digit $the_PQ$[8];
+        set @the_last,8;
+        if ($the_PQ$[8] == "fim") goto L_SetEnd;
+        digit $the_PQ$[9];
+        set @the_last,9;
+        if ($the_PQ$[9] == "fim") goto L_SetEnd;
+
+// Add poll field
+L_Add:
+    next;
+    show "[^666699 Garota da Enquete ^000000]";
+
+    if ($the_PQ$[3] == "") goto PA3;
+    if ($the_PQ$[4] == "") goto PA4;
+    if ($the_PQ$[5] == "") goto PA5;
+    if ($the_PQ$[6] == "") goto PA6;
+    if ($the_PQ$[7] == "") goto PA7;
+    if ($the_PQ$[8] == "") goto PA8;
+    if ($the_PQ$[9] == "") goto PA9;
+    
+    show "Sinto muito mas o máximo de opções é 9 opções.";
+    close;
+
+    PA3:    set @the_add,3; goto L_Add2;
+    PA4:    set @the_add,4; goto L_Add2;
+    PA5:    set @the_add,5; goto L_Add2;
+    PA6:    set @the_add,6; goto L_Add2;
+    PA7:    set @the_add,7; goto L_Add2;
+    PA8:    set @the_add,8; goto L_Add2;
+    PA9:    set @the_add,9; goto L_Add2;
+    
+    L_Add2:
+    show "Entre com o nome da opção que você deseja criar:";
+    digit $the_PQ$[@the_add];
+    next;
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Opção adicionada...";
+    close;
+    
+// Edit poll count
+L_EditCount:
+    next;
+    show "[^666699 Garota da Enquete ^000000]";
+    show "De qual opção você deseja mudar o número de votos?";
+    next;
+    menu    $the_PQ$[1],PEC1,
+            $the_PQ$[2],PEC2,
+            $the_PQ$[3],PEC3,
+            $the_PQ$[4],PEC4,
+            $the_PQ$[5],PEC5,
+            $the_PQ$[6],PEC6,
+            $the_PQ$[7],PEC7,
+            $the_PQ$[8],PEC8,
+            $the_PQ$[9],PEC9,
+            "Cancelar",L_Cancel;
+    
+    PEC1:    digit $the_PA[1]; goto L_EditCountSet;
+    PEC2:    digit $the_PA[2]; goto L_EditCountSet;
+    PEC3:    digit $the_PA[3]; goto L_EditCountSet;
+    PEC4:    digit $the_PA[4]; goto L_EditCountSet;
+    PEC5:    digit $the_PA[5]; goto L_EditCountSet;
+    PEC6:    digit $the_PA[6]; goto L_EditCountSet;
+    PEC7:    digit $the_PA[7]; goto L_EditCountSet;
+    PEC8:    digit $the_PA[8]; goto L_EditCountSet;
+    PEC9:    digit $the_PA[9]; goto L_EditCountSet;
+    
+    L_EditCountSet:
+        show "[^666699 Garota da Enquete ^000000]";
+        show "Opção modificada!";
+        close;
+    
+// Edit poll field
+L_Edit:
+    next;
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Qual opção você deseja modificar?";
+    next;
+    menu    $the_PQ$[1],PE1,
+            $the_PQ$[2],PE2,
+            $the_PQ$[3],PE3,
+            $the_PQ$[4],PE4,
+            $the_PQ$[5],PE5,
+            $the_PQ$[6],PE6,
+            $the_PQ$[7],PE7,
+            $the_PQ$[8],PE8,
+            $the_PQ$[9],PE9,
+            "Cancelar",L_Cancel;
+        
+        PE1:    digit $the_PQ$[1]; goto L_EditSet;
+        PE2:    digit $the_PQ$[2]; goto L_EditSet;
+        PE3:    digit $the_PQ$[3]; goto L_EditSet;
+        PE4:    digit $the_PQ$[4]; goto L_EditSet;
+        PE5:    digit $the_PQ$[5]; goto L_EditSet;
+        PE6:    digit $the_PQ$[6]; goto L_EditSet;
+        PE7:    digit $the_PQ$[7]; goto L_EditSet;
+        PE8:    digit $the_PQ$[8]; goto L_EditSet;
+        PE9:    digit $the_PQ$[9]; goto L_EditSet;
+
+L_EditSet:
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Opção modificada!";
+    close;
+
+L_SetEnd:
+    Announce "[Enquete] Uma nova Enquete está no ar!",8;
+    Announce "[Enquete] "+ $the_poll_question$ +" ",8;
+    set $the_PQ$[@the_last],"";
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Enquete ajustada!";
+    close;
+
+L_Cancel:
+    show "[^666699 Garota da Enquete ^000000]";
+    show "Até a proxima!";
+    close;
+}

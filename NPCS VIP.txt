@@ -1,0 +1,1037 @@
+prontera,148,185,3	script	VIP#Ragna TEN::x1x	915,{
+
+set @npc$,"[^1E90FF Opções VIP ^000000]";
+
+if (getgmlevel() < 1) goto L_nvip;
+if (getgmlevel() >= 1) goto L_Vip;
+
+L_nvip:
+mes @npc$;
+mes "Desculpe, mas você não é VIP.";
+close;
+
+L_Vip:
+mes @npc$;
+mes " ";
+mes "Olá ^1E90FF"+strcharinfo(0)+"^000000,";
+mes " ";
+mes "O que deseja fazer?";
+next;
+menu "Buffers",L_Buff,"Reparar Itens",L_Repair,"Retirar Cartas",L_Remover,"Ir Para Sala ViP",L_Sala;
+mes "[^1E90FF Opções VIP ^000000]";
+mes "Volte quando quiser algo.";
+close;
+
+L_Sala:	warp "sec_in02",	161,	162;	end;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+L_Buff:
+mes @npc$;
+mes "Um momento por favor...";
+next;
+specialeffect2 EF_HEAL2;
+percentheal 100,100;
+sc_start SC_MAGNIFICAT,360000,5;
+sc_start SC_GLORIA,360000,5;
+sc_start SC_BLESSING,360000,10;
+sc_start SC_INCREASEAGI,360000,10;
+sc_start SC_ANGELUS,360000,10;
+sc_start SC_EXPBOOST,1800000,50;
+sc_start SC_ITEMBOOST,1800000,100;
+specialeffect2 53;
+close;
+
+naovip:
+percentheal 100,100;
+sc_start SC_BLESSING,360000,10;
+sc_start SC_INCREASEAGI,360000,10;
+sc_start SC_ANGELUS,360000,10;
+close;
+
+percentheal 100,100;
+mes @npc$;
+mes "Prontinho...";
+close;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+L_Repair:
+mes @npc$;
+mes "Oi, Quer Reparar seus itens?";
+next;
+menu "Sim eu quero.",yes,"Não agora.",no;
+
+no:
+mes @npc$;
+mes "Volte quando quiser reparar seus itens...";
+close;
+
+yes:
+mes @npc$;
+mes "Ok,espere um momento...";
+mes "prontinho...";
+next;
+atcommand strcharinfo(0)+":@repairall";
+close;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+L_Remover:
+set .@Price,50000;
+set .@PriceCard,20000;
+	
+mes @npc$;
+mes "Bom dia " + strcharinfo(0) + ",";
+mes "tenho o poder de retirar cartas de equipamentos.";
+mes "Esta idéia te agrada?";
+next;
+if( select("- Sim, bastante.","- Não, nenhum pouco.") == 2 )
+{
+mes @npc$;
+mes "Muito bem, volte quando desejar remover suas cartas.";
+close;
+}
+
+mes @npc$;
+mes "Muito bem, eu preciso de " + .@Price + "z.";
+mes "Mais o custo de " + .@PriceCard + "z por carta.";
+mes "Deseja remover uma carta de algum equipamento?";
+next;
+
+for( set .@i,10; .@i <= 1; set .@i,.@i+1 )
+{
+if( getequipisequiped(.@i) )
+set .@Choose$, .@Choose$+"- "+getequipname(.@i);
+
+set .@Choose$, .@Choose$+":";
+}
+
+set .@Choose$, .@Choose$+":- Cancelar";
+
+set .@part, Select(.@Choose$);
+
+if( .@part > 10 )
+{
+mes @npc$;
+mes "Muito bem, volte quando desejar remover suas cartas.";
+close;
+}
+
+if( getequipcardcnt(.@part) == 0 )
+{
+mes @npc$;
+mes "Sinto muito, mais você não tem cartas para remover!";
+close;
+}
+
+set .@Amount, getequipcardcnt(.@part);
+set .@ZenyCost, (.@PriceCard * .@Amount) + .@Price;
+
+mes @npc$;
+mes "Muito bem, são " + .@Price + "z,";
+mes "Mais " + (.@PriceCard * .@Amount ) + "z por carta equipada.";
+mes "Totalizamos isto em " + .@ZenyCost + "z para remover suas cartas.";
+mes "Deseja remover suas cartas?";
+next;
+if( select("- Sim.","- Não.") == 2 )
+{
+mes @npc$;
+mes "Humm... OK!";
+close;
+}
+
+if( Zeny < .@ZenyCost )
+{
+mes @npc$;
+mes "Me desculpe, mais você não tem " + .@ZenyCost + " Zenys.";
+close;
+}
+
+set Zeny, Zeny - .@ZenyCost;
+successremovecards .@part;
+
+
+mes @npc$;
+mes "Muito bem, processo sem nenhum problema.";
+close;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+sec_in02,158,153,4	script	Entrar na Piscina#LykO	728,{
+warp "sec_in02",	156,	164;	close;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+sec_in02,161,153,4	script	Sair da Piscina#LykO	845,{
+warp "sec_in02",	161,	162;	close;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//ANUNCIADOR
+sec_in02,170,181,4	script	Anunciador[VIP]	71,{
+
+set $@name$, "[^A020F0Anunciadora^000000]"; //-- Nome da NPC
+set $@nomedoserver$, "^0000FFPrivate Server Brasil^000000"; //-- Nome do Servidor
+
+if (getgmlevel()<1) goto novip;
+
+	mes $@name$;
+	mes "Olá ^871F78"+ strcharinfo(0) +"^000000 Gostaria de manda uma torpedo grátis para todos que estão conectados agora no ^0000FF"+$svname$+"^000000?";
+	next;
+	menu "- Sim",sim,"- Não",nao;
+
+sim:
+	mes $@name$;
+	mes "Hmm... Então vamos lá!";
+	mes "Escolha o que deseja fazer!";
+	next;
+	menu	"^FF0000- Comprar^000000",comprar,"^0000FF- Vender^000000",vender,"^871F78- Recrutamento^000000",recrutamento;
+
+
+comprar:
+	mes $@name$;
+ 	show "Primeiro Passo:";
+	show "^FF0000Digite corretamente o ID do item que deseja comprar!^000000";
+	input @ID;
+	next;
+	mes $@name$;
+	show "Segundo Passo:";
+	show "^FF0000Digite corretamente a quantidade de itens que deseja comprar^000000";
+	digit @id2;
+	next;
+	mes $@name$;
+	show "Teceiro Passo:";
+	show "^FF0000Escolha o que deseja abaixo:";
+	show "Preço fixo? ou A negociar?";
+	next;
+	menu "Preço Fixo",fixo,"Á negociar",negociar;
+	
+	fixo:
+	mes $@name$;
+	show "Deseja comprar por quanto?";
+	show "^FF0000Coloque os numeros com virgulas!^000000";
+	digit $@dinheiro$;
+	next;
+	mes $@name$;
+	show "Escolha uma opção abaixo!";
+	next;
+	menu "Item refinavel",refinavel,"Item não refinavel",norefinavel;
+	
+	refinavel:
+	mes $@name$;
+	show "Quinto Passo:";
+	show "^FF0000Digite o Refine do item que deseja comprar!^000000";
+	digit @id4;
+	next;
+	mes $@name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está comprando ^A020F0"+@id2+" "+getitemname(@ID)+"^000000";
+		Sleep2 3000;
+		show "Por ^FF0000"+$@dinheiro$+"^000000z ";
+		Sleep2 3000;
+		show "Refinado (+^FF0000"+@id4+"^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto,"Não!",comprar;
+		
+		L_correto:
+		mes $@name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Compra "+@id2+" "+getitemname(@ID)+"(+"+@id4+") por "+$@dinheiro$+"z",bc_blue;
+		close;
+		
+	norefinavel:	
+		mes $@name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está comprando ^A020F0"+@id2+" "+getitemname(@ID)+"^000000";
+		Sleep2 3000;
+		show "Por ^FF0000"+$@dinheiro$+"^000000z";
+		Sleep2 3000;
+		show "(^FF0000Item não refinado!^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto666,"Não!",comprar;
+		
+		L_correto666:
+		mes $@name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Compra "+@id2+" "+getitemname(@ID)+" por "+$@dinheiro$+"z",bc_blue;
+		close;
+		
+		negociar:
+		mes $@name$;
+		show "Escolha uma opção abaixo!";
+		next;
+		menu "Item refinavel",refinavel2,"Item não refinavel",norefinavel2;
+		
+		refinavel2:
+	mes $@name$;
+	show "Quinto Passo:";
+	show "^FF0000Digite o Refine do item que deseja comprar!^000000";
+	digit @id4;
+	next;
+	mes $@name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está comprando ^A020F0"+@id2+" "+getitemname(@ID)+"^000000";
+		Sleep2 3000;
+		show "Preço (^FF0000Á negociar^000000)";
+		Sleep2 3000;
+		show "Refinado (+^FF0000"+@id4+"^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",correto3,"Não!",comprar;
+		
+		correto3:
+		mes $@name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Compra "+@id2+" "+getitemname(@ID)+"(+"+@id4+"). Preço [Á negociar]",0,0xC0C0C0;
+		close;
+		
+	norefinavel2:	
+		mes $@name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está comprando ^A020F0"+@id2+" "+getitemname(@ID)+"^000000";
+		Sleep2 3000;
+		show "Preço (^FF0000Á negociar^000000)";
+		Sleep2 3000;
+		show "(^FF0000Item não refinado!^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim.",correto669,"Não.",comprar;
+		
+		correto669:
+		mes $@name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Compra "+@id2+" "+getitemname(@ID)+". Preço [Á negociar]",0,0xC0C0C0;
+		close;
+
+vender:
+	mes $@name$;
+ 	show "Primeiro Passo:";
+	show "^FF0000Digite corretamente o ID do item que deseja Vender^000000";
+	input @ID666;
+	next;
+	mes $@name$;
+	show "Segundo Passo:";
+	show "^FF0000Digite corretamente a quantidade de itens que deseja Vender^000000";
+	digit @id2666;
+	next;
+	mes $@name$;
+	show "Teceiro Passo:";
+	show "^FF0000Escolha o que deseja abaixo:";
+	show "Preço fixo? ou A negociar?";
+	next;
+	menu "Preço Fixo",fixo666,"á negociar",negociar666;
+	
+	fixo666:
+	mes $@name$;
+	show "Deseja vender por quanto?";
+	show "^FF0000Coloque os numeros com virgulas!^000000";
+	digit $@grana$;
+	next;
+	mes $@name$;
+	show "Escolha uma opção abaixo!";
+	next;
+	menu "Item refinavel",refinavel666,"Item não refinavel",norefinavel666;
+	
+	refinavel666:
+	mes $@name$;
+	show "Quinto Passo:";
+	show "^FF0000Digite o Refine do item que deseja vender!^000000";
+	digit @id3666;
+	next;
+	mes $@name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está vendendo ^A020F0"+@id2666+" "+getitemname(@ID666)+"^000000";
+		Sleep2 3000;
+		show "Por ^FF0000"+$@grana$+"^000000z ";
+		Sleep2 3000;
+		show "Refinado (+^FF0000"+@id3666+"^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto668,"Não!",vender;
+		
+		L_correto668:
+		mes $@name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Vende "+@id2666+" "+getitemname(@ID666)+"(+"+@id3666+") por "+$@grana$+"z",8;
+		close;
+		
+	norefinavel666:	
+		mes $@name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está vendendo ^A020F0"+@id2666+" "+getitemname(@ID666)+"^000000";
+		Sleep2 3000;
+		show "Por ^FF0000"+$@grana$+"^000000z";
+		Sleep2 3000;
+		show "(^FF0000Item não refinado!^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto671,"Não!",vender;
+		
+		L_correto671:
+		mes $@name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Vende "+@id2666+" "+getitemname(@ID666)+" por "+$@grana$+"z",8;
+		close;
+		
+		negociar666:
+		mes $@name$;
+		show "Escolha uma opção abaixo!";
+		next;
+		menu "Item refinavel",refinavel222,"Item não refinavel",norefinavel222;
+		
+		refinavel222:
+	mes $@name$;
+	show "Quinto Passo:";
+	show "^FF0000Digite o Refine do item que deseja comprar!^000000";
+	digit @id3666;
+	next;
+	mes $@name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está vendendo ^008000"+@id2666+" "+getitemname(@ID666)+"^000000";
+		Sleep2 3000;
+		show "Preço (^FF0000Á negociar^000000)";
+		Sleep2 3000;
+		show "Refinado (+^FF0000"+@id3666+"^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",correto8,"Não!",vender;
+		
+		correto8:
+		mes $@name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Vende "+@id2666+" "+getitemname(@ID666)+"(+"+@id3666+"). Preço [Á negociar]",bc_all,0x008000;
+		close;
+		
+	norefinavel222:	
+		mes $@name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está vendendo ^008000"+@id2666+" "+getitemname(@ID666)+"^000000";
+		Sleep2 3000;
+		show "Preço (^FF0000Á negociar^000000)";
+		Sleep2 3000;
+		show "(^FF0000Item não refinado!^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim.",correto670,"Não.",vender;
+		
+		correto670:
+		mes $@name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Vende "+@id2666+" "+getitemname(@ID666)+". Preço [Á negociar]",bc_all,0x008000;
+		close;
+		
+	recrutamento:
+   	mes "[^A020F0Anunciadora^000000]";
+ 	show "Primeiro Passo:";
+	show "^FF0000Digite o nome do seu Clã^000000";
+ 	input @msgz$;
+	next;
+	show "[^A020F0Anunciadora^000000]";
+	show "Segundo Passo:";
+	show "^FF0000Digite o Level Máximo que deseja recrutar";
+	show "Ex: 99/70^000000";
+	digit @idz2$;
+	next;
+	show "[^A020F0Anunciadora^000000]";
+	show "Teceiro Passo:";
+	show "^FF0000Digite corretamente o nome da classe que deseja Recrutar!^000000";
+	digit @msgz2$;
+	next;
+	show "[^A020F0Anunciadora^000000]";
+	show "Quarto Passo:";
+	show "^FF0000Recrutamento:";
+	show "Via Fórum!";
+	show "Via In-Game!";
+	show "Via Team-Speak/Skype^000000";
+	digit @msgz3$;
+	next;
+	show "[^A020F0Anunciadora^000000]";
+		show "Aguarde...";
+		Sleep2 2000;
+		show "O Clã "+@msgz$+" está recrutando ^A020F0"+@msgz2$+" Level "+@idz2$+"^000000";
+		Sleep2 3000;
+		show "Recrutamento via ^FF0000"+@msgz3$+"^000000 ";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto123,"Não!",recrutamento;
+		
+		L_correto123:
+		show "[^A020F0Anunciadora^000000]";
+		show "Pronto toperdo enviado com sucesso!";
+		announce "Recrutamento: O Clã ["+@msgz$+"] esta recrutando "+@msgz2$+" Level "+@idz2$+". Estilo de recrutamento {"+@msgz3$+"}",8;
+		close;
+
+
+nao:
+mes $@name$;
+mes "Até a proxima!";
+close;
+
+
+novip:
+mes $@name$;
+mes "Lamento, mas você não é VIP";
+mes "Acesse o site e veja como se torna VIP.";
+close;
+
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//Retirar Equipes
+sec_in02,154,181,4	script	Removedora[VIP]	73,{
+
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "Tudo bem. Qual item quer que eu";
+show "examine para você?";
+next;
+menu "- Deixe-me pensar.",CLOSEOUT,
+getequipname(1),SLOT1,
+getequipname(2),SLOT2,
+getequipname(3),SLOT3,
+getequipname(4),SLOT4,
+getequipname(5),SLOT5,
+getequipname(6),SLOT6,
+getequipname(7),SLOT7,
+getequipname(8),SLOT8,
+getequipname(9),SLOT9,
+getequipname(10),SLOT10;
+
+SLOT1:
+set @part,1;
+goto CARDNUMCHECK;
+
+SLOT2:
+set @part,2;
+goto CARDNUMCHECK;
+
+SLOT3:
+set @part,3;
+goto CARDNUMCHECK;
+
+SLOT4:
+set @part,4;
+goto CARDNUMCHECK;
+
+SLOT5:
+set @part,5;
+goto CARDNUMCHECK;
+
+SLOT6:
+set @part,6;
+goto CARDNUMCHECK;
+
+SLOT7:
+set @part,7;
+goto CARDNUMCHECK;
+
+SLOT8:
+set @part,8;
+goto CARDNUMCHECK;
+
+SLOT9:
+set @part,9;
+goto CARDNUMCHECK;
+
+SLOT10:
+set @part,10;
+goto CARDNUMCHECK;
+
+CARDNUMCHECK:
+if(getequipcardcnt(@part) == 0) goto DENYCARDCOUNT;
+set @cardcount,getequipcardcnt(@part);
+if(@cardcount > 1) goto CARDNUMMULTIMSG;
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "Esse ítem tem tem " + @cardcount + " cartas.";
+goto CARDNUMPOSTMSG;
+CARDNUMMULTIMSG:
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "Proseguir?";
+next;
+menu "Sim",CARDNUMPOSTMSG,"Não",CLOSEOUT;
+CARDNUMPOSTMSG:
+next;
+menu "Sim",PRIORITYCARD,"Não",CLOSEOUT;
+
+PRIORITYITEM:
+set @failtype,1;
+goto REMOVECARD;
+
+PRIORITYCARD:
+set @failtype,2;
+goto REMOVECARD;
+
+REMOVECARD:
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "O processo foi um grande sucesso. Tome suas cartas e seus ítens.";
+successremovecards @part;
+close;
+
+FAILREMOVECARD0:
+failedremovecards @part,0;
+next;
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "O processo foi uma falha total. Estou com muita pena, seus itens.";
+close;
+
+FAILREMOVECARD1:
+failedremovecards @part,1;
+next;
+show "[^1E90FFOpções VIP^000000]";
+show "Eu falhei tentando remover as cartas do seu ítem, suas cartas foram destruídas durante o processo. O ítem, está em perfeito estado.";
+close;
+
+FAILREMOVECARD2:
+failedremovecards @part,2;
+next;
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "Menos mal. Eu tive sucesso em remover as cartas, só que o ítem foi destruído no processo.";
+close;
+
+FAILREMOVECARD3:
+failedremovecards @part,3;
+next;
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "Eu falhei tentando remover as cartas. Sorte sua, os ítens e as cartas estão perfeitos.";
+close;
+
+DENYCARDCOUNT:
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "Meu jovem não há cartas equipadas neste ítem. Não posso trabalhar assim.";
+close;
+
+
+CLOSEOUT:
+show "[^A020F0Removedora "+$svname$+"^000000]";
+show "Tudo bem. Volte quando precisar dos meus serviços.";
+close;
+
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//VENDEDORES
+sec_in02,157,181,4	shop	Vendedora[VIP]	47,522:-1,505:5000,578:250,533:350,717:500,716:500,715:500,610:4000,501:50,502:200,503:550,504:1200,514:200,506:40,525:500,645:800,656:1500,657:3000:1750:1,1770:2,1753:4,1755:3,1752:3,1754:3,1756:3,1751:3,1765:30,1761:10,1760:10,1759:10,1757:10,1769:10,1763:10,1762:10,1767:10,1764:20,1768:10,1758:10,1766:40,601:-1,602:-1,1065:-1,7521:-1,7522:-1,7523:-1,7524:-1,13200:-1,13201:-1,13202:-1,13203:-1,13204:-1,13205:-1,13206:-1,13207:100
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//SAIDA
+sec_in02,161,162,5	script	Saida [VIP]	712,{
+	show "[Saida]";
+	show "Então, o que dejesa fazer?";
+	next;
+	if( select("Ir Embora:Não Ir Embora") == 2 )
+	{
+		show "[Saida]";
+		show "Eu estarei aqui quando você precisar dos meus serviços.";
+		close;
+	}
+
+	set .@spoint$, getsavepoint(0);
+	set .@x, getsavepoint(1);
+	set .@y, getsavepoint(2);
+	show "[Saida]";
+	show "Você será levado de volta à " + .@spoint$ + ".";
+	close2;
+	warp .@spoint$, .@x, .@y;
+	end;
+}
+//MAPSFLAGS
+sec_in02	mapflag	nowarp
+sec_in02	mapflag	nowarpto
+sec_in02	mapflag	noteleport
+sec_in02	mapflag	nosave
+sec_in02	mapflag	nomemo
+sec_in02	mapflag	nobranch
+sec_in02	mapflag	nopenalty
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//CHANGESEX
+sec_in02,173,181,5	script	Mudança de Sexo[VIP]	911,{
+
+set .@nome$, "[^A020F0Change Sex^000000]";
+
+show .@nome$;
+show "Olá eu tenho o poder te trocar de Sexo...";
+next;
+show .@nome$;
+show "Eu posso te deixar Feminino ou Masculino";
+next;
+show .@nome$;
+show "Deseja ver isso?";
+next;
+menu "Sim, claro",sim,"Não",no;
+
+sim:
+show .@nome$;
+show "Deseja trocar de Sexo?";
+menu "Claro",yes,"Não",no;
+
+yes:
+atcommand "@changesex";
+close;
+
+no:
+close;
+
+}
+que_temsky,93,147,5	script	Resetador[VIP]	798,{
+
+mes "[ ^0000FF Resetador ^000000 ]";
+mes "Olá, eu posso resetar suas habilidades e seus Atributos grátis ";
+mes "O que você deseja resetar?";
+next;
+menu "[ ^FF6600 Resetar Atributos ^000000 ]",stats,"[ ^FF6600 Resetar Habilidades ^000000 ]",abi,"[ ^FF6600 Resetar Ambos ^000000 ]",ambos,"[ Não, Agora não! ]",nao;
+
+stats:
+mes "[ ^0000FF Resetador ^000000 ]";
+mes "Atributos resetado com sucesso!";
+resetstatus;
+close;
+
+abi:
+mes "[ ^0000FF Resetador ^000000 ]";
+mes "Habilidades resetado com sucesso!";
+resetskill;
+close;
+
+ambos:
+mes "[ ^0000FF Resetador ^000000 ]";
+mes "Atributos e Habilidades resetado com sucesso!";
+resetstatus;
+resetskill;
+close;
+
+nao:
+close;
+
+}
+que_temsky,91,147,3	script	Reparador	56,{
+atcommand "@repairall";
+close;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//FABRICANTE DE TINTAS
+sec_in02,178,178,4	script	Fabricante[VIP]	854,{
+
+show "[Pintor Ademar]";
+show "Olá "+ strcharinfo(0) +", eu posso fabricar tintas no "+$svname$+"!";
+show "Deseja fazer alguma tintas?";
+next;
+menu "Claro",-,"Deixa para a proxima!",proxima;
+show "[Pintor Ademar]";
+show "Você deseja fazer que Tintura?";
+next;
+menu "Tintura Vermelha",verm,"Tintura Amarela",amar,"Tintura Azul",azul,"Tintura Verde",verde,"Tintura Laranja",laran,"Tintura Violeta",viol,"Tintura Branca",bran,"Tintura Preta",preta;
+
+verm:
+show "[Pintor Ademar]";
+show "Para fazer a Tintura Vermelha";
+show "você precisa dos seguintes itens:";
+show "10 Garrafas Vazias,";
+show "50 Ervas Vermelhas,";
+show "e 5 Gemas Vermelhas.";
+next;
+
+show "[Pintor Ademar]";
+show "Então, já possui os itens para fazer ?";
+next;
+menu "Sim, me dê a tintura",-,"Não, outra hora eu volto",nao;
+
+show "[Pintor Ademar]";
+show "Deixe-me verificar se você realmente possui os itens ....";
+next;
+if(countitem(713)<10)goto l_semitem;
+if(countitem(507)<50)goto l_semitem;
+if(countitem(716)<5)goto l_semitem;
+
+show "[Pintor Ademar]";
+show "Muito bem, os itens estão certinhos ...";
+show "Me dê os ingredientes e leve a tintura e aproveite !";
+delitem 713,10;
+delitem 507,50;
+delitem 716,5;
+additem 975,1;
+close;
+
+amar:
+show "[Pintor Ademar]";
+show "Para fazer a Tintura Amarela";
+show "você precisa dos seguintes itens:";
+show "10 Garrafas Vazias,";
+show "50 Ervas Amarelas,";
+show "e 5 Gemas Amarelas.";
+next;
+
+show "[Pintor Ademar]";
+show "Então, já possui os itens para fazer ?";
+next;
+menu "Sim, me dê a tintura",-,"Não, outra hora eu volto",nao;
+
+show "[Pintor Ademar]";
+show "Deixe-me verificar se você realmente possui os itens ....";
+next;
+if(countitem(713)<10)goto l_semitem;
+if(countitem(508)<50)goto l_semitem;
+if(countitem(715)<5)goto l_semitem;
+
+show "[Pintor Ademar]";
+show "Muito bem, os itens estão certinhos ...";
+show "Me dê os ingredientes e leve a tintura e aproveite !";
+delitem 713,10;
+delitem 508,50;
+delitem 715,5;
+additem 976,1;
+close;
+
+azul:
+show "[Pintor Ademar]";
+show "Para fazer a Tintura Azul";
+show "você precisa dos seguintes itens:";
+show "10 Garrafas Vazias,";
+show "50 Ervas Azuis,";
+show "e 5 Gemas Azuis.";
+next;
+
+show "[Pintor Ademar]";
+show "Então, já possui os itens para fazer ?";
+next;
+menu "Sim, me dê a tintura",-,"Não, outra hora eu volto",nao;
+
+show "[Pintor Ademar]";
+show "Deixe-me verificar se você realmente possui os itens ....";
+next;
+if(countitem(713)<10)goto l_semitem;
+if(countitem(510)<50)goto l_semitem;
+if(countitem(717)<5)goto l_semitem;
+
+show "[Pintor Ademar]";
+show "Muito bem, os itens estão certinhos ...";
+show "Me dê os ingredientes e leve a tintura e aproveite !";
+delitem 713,10;
+delitem 510,50;
+delitem 717,5;
+additem 978,1;
+close;
+
+verde:
+show "[Pintor Ademar]";
+show "Para fazer a Tintura Verde";
+show "você precisa dos seguintes itens:";
+show "10 Garrafas Vazias,";
+show "50 Ervas Verdes,";
+show "e 5 Vidas Verdejantes.";
+next;
+
+show "[Pintor Ademar]";
+show "Então, já possui os itens para fazer ?";
+next;
+menu "Sim, me dê a tintura",-,"Não, outra hora eu volto",nao;
+
+show "[Pintor Ademar]";
+show "Deixe-me verificar se você realmente possui os itens ....";
+next;
+if(countitem(713)<10)goto l_semitem;
+if(countitem(511)<50)goto l_semitem;
+if(countitem(993)<5)goto l_semitem;
+
+show "[Pintor Ademar]";
+show "Muito bem, os itens estão certinhos ...";
+show "Me dê os ingredientes e leve a tintura e aproveite !";
+delitem 713,10;
+delitem 511,50;
+delitem 993,5;
+additem 979,1;
+close;
+
+laran:
+show "[Pintor Ademar]";
+show "Para fazer a Tintura Lanranja";
+show "você precisa dos seguintes itens:";
+show "10 Garrafas Vazias,";
+show "50 Laranjas,";
+show "e 5 Poções Laranjas.";
+next;
+
+show "[Pintor Ademar]";
+show "Então, já possui os itens para fazer ?";
+next;
+menu "Sim, me dê a tintura",-,"Não, outra hora eu volto",nao;
+
+show "[Pintor Ademar]";
+show "Deixe-me verificar se você realmente possui os itens ....";
+next;
+if(countitem(713)<10)goto l_semitem;
+if(countitem(582)<50)goto l_semitem;
+if(countitem(502)<5)goto l_semitem;
+
+show "[Pintor Ademar]";
+show "Muito bem, os itens estão certinhos ...";
+show "Me dê os ingredientes e leve a tintura e aproveite !";
+delitem 713,10;
+delitem 582,50;
+delitem 502,5;
+additem 980,1;
+close;
+
+viol:
+show "[Pintor Ademar]";
+show "Para fazer a Tintura Violeta";
+show "você precisa dos seguintes itens:";
+show "10 Garrafas Vazias,";
+show "50 Garletas,";
+show "e 5 Uvas.";
+next;
+
+show "[Pintor Ademar]";
+show "Então, já possui os itens para fazer ?";
+next;
+menu "Sim, me dê a tintura",-,"Não, outra hora eu volto",nao;
+
+show "[Pintor Ademar]";
+show "Deixe-me verificar se você realmente possui os itens ....";
+next;
+if(countitem(713)<10)goto l_semitem;
+if(countitem(910)<50)goto l_semitem;
+if(countitem(514)<5)goto l_semitem;
+
+show "[Pintor Ademar]";
+show "Muito bem, os itens estão certinhos ...";
+show "Me dê os ingredientes e leve a tintura e aproveite !";
+delitem 713,10;
+delitem 910,50;
+delitem 514,5;
+additem 981,1;
+close;
+
+bran:
+show "[Pintor Ademar]";
+show "Para fazer a Tintura Branca";
+show "você precisa dos seguintes itens:";
+show "10 Garrafas Vazias,";
+show "50 Ervas Brancas,";
+show "e 5 Poções Brancas.";
+next;
+
+show "[Pintor Ademar]";
+show "Então, já possui os itens para fazer ?";
+next;
+menu "Sim, me dê a tintura",-,"Não, outra hora eu volto",nao;
+
+show "[Pintor Ademar]";
+show "Deixe-me verificar se você realmente possui os itens ....";
+next;
+if(countitem(713)<10)goto l_semitem;
+if(countitem(509)<50)goto l_semitem;
+if(countitem(504)<5)goto l_semitem;
+
+show "[Pintor Ademar]";
+show "Muito bem, os itens estão certinhos ...";
+show "Me dê os ingredientes e leve a tintura e aproveite !";
+delitem 713,10;
+delitem 509,50;
+delitem 504,5;
+additem 982,1;
+close;
+
+preta:
+show "[Pintor Ademar]";
+show "Para fazer a Tintura Preta";
+show "você precisa dos seguintes itens:";
+show "10 Garrafas Vazias,";
+show "50 Carvões,";
+show "e 5 Pedras.";
+next;
+
+show "[Pintor Ademar]";
+show "Então, já possui os itens para fazer ?";
+next;
+menu "Sim, me dê a tintura",-,"Não, outra hora eu volto",nao;
+
+show "[Pintor Ademar]";
+show "Deixe-me verificar se você realmente possui os itens ....";
+next;
+if(countitem(713)<10)goto l_semitem;
+if(countitem(1003)<50)goto l_semitem;
+if(countitem(7049)<5)goto l_semitem;
+
+show "[Pintor Ademar]";
+show "Muito bem, os itens estão certinhos ...";
+show "Me dê os ingredientes e leve a tintura e aproveite !";
+delitem 713,10;
+delitem 1003,50;
+delitem 7049,5;
+additem 983,1;
+close;
+
+nao:
+show "[Pintor Ademar]";
+show "Ok, te espero aqui !";
+close;
+
+proxima:
+close;
+
+l_semitem:
+show "[Pintor Ademar]";
+show "Ei, você não tem os itens!";
+show "Volte quando tiver ...";
+close;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+morocc,153,97,4	duplicate(x1x)	VIP#1	101
+geffen,113,64,4	duplicate(x1x)	VIP#2	101
+payon,179,104,4	duplicate(x1x)	VIP#3	101
+izlude,122,114,4	duplicate(x1x)	VIP#oV2-5	101
+gonryun,153,122,4	duplicate(x1x)	VIP#oV2-6	101
+niflheim,26,161,4	duplicate(x1x)	VIP#oV2-7	101
+hugel,90,149,3	duplicate(x1x)	VIP#oV2-8	101
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Gerente de Guild
+sec_in02,169,172,4	script	Gerente de Guild	780,{
+
+set @nome$, "[Gerente de Guild]";
+
+mes @nome$;
+mes "Olá "+strcharinfo(0)+" o que deseja fazer?";
+next;
+switch(select("- Criar uma Guild","- Mudar liderança")){
+
+case 1:
+mes @nome$;
+mes "Digite o nome que deseja colocar para sua guild:";
+digit @nomedaguild$;
+next;
+mes @nome$;
+mes "Aguarde um momento...";
+sleep2 2000;
+mes "O nome que deseja é ^FF0000"+@nomedaguild$+"^000000";
+mes "Tem certeza?";
+if(select("- Sim:- Não") == 2) close;
+
+atcommand "@guild "+@nomedaguild$+"";
+mes "Concluido...";
+close;
+
+case 2:
+mes @nome$;
+mes "Digite o nome do jogador que deseja dá a liderança:";
+digit @nomedochar$;
+next;
+mes @nome$;
+mes "Aguarde um momento...";
+sleep2 2000;
+mes "O nome do jogador é ^FF0000"+@nomedochar$+"^000000";
+mes "Tem certeza?";
+if(select("- Sim:- Não") == 2) close;
+
+atcommand "@changegm "+@nomedochar$+"";
+mes "Concluido...";
+close;
+}
+}

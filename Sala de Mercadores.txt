@@ -1,0 +1,52 @@
+// --- Sala dos Mercadores --- \\
+// --- RagnarokSHOP.net --- \\
+prontera.gat,150,179,3	script	Sala dos Mercadores::expRO	858,{ 
+
+mes "[ ^FF8040"+strnpcinfo(1)+"^000000 ]";
+	mes "Olá "+strcharinfo(0)+"!";
+	mes "Deseja entrar na Sala dos Mercadores?";
+	mes "Quantidade de jogadores na Sala:";
+	mes "^FF8040("+getmapusers("pvp_y_1-1")+"/1000)^000000";
+	if(select("Sim:Não") == 2) close;
+	
+		mes "Nesse momento tem ^FF8040("+getmapusers("pvp_y_1-1")+")^000000 jogador(es) na Sala de Mercadores";
+		next;
+		mes "[ ^FF8040"+strnpcinfo(1)+"^000000 ]";
+		mes "Irei te teleportar pra Sala dos Mercadores!";
+		close2;
+		warp "pvp_y_1-1",156,180; end;
+	}
+aldebaran,133,117,5	duplicate(expRO)	Sala dos Mercadores#1	857
+morocc,147,94,5	duplicate(expRO)	Sala dos Mercadores#2	857
+brasilis,199,220,5	duplicate(expRO)	Sala dos Mercadores#3	857
+geffen,125,61,5	duplicate(expRO)	Sala dos Mercadores#4	857
+comodo,195,157,5	duplicate(expRO)	Sala dos Mercadores#5	857
+//SAIDA
+pvp_y_1-1,149,179,5	script	Sair da Sala::sair	715,{
+	show "[Sala dos Mercadores]";
+	show "Então, o que dejesa fazer?";
+	next;
+	if( select("Ir Embora:Não Ir Embora") == 2 )
+	{
+		show "[Sala dos Mercadores]";
+		show "Eu estarei aqui quando você precisar dos meus serviços.";
+		close;
+	}
+
+	set .@spoint$, getsavepoint(0);
+	set .@x, getsavepoint(1);
+	set .@y, getsavepoint(2);
+	show "[Sala dos Mercadores]";
+	show "Você será levado de volta à ^ff0000" + .@spoint$ + "^000000.";
+	show "Tem ^ff0000"+getmapusers(""+.@spoint$+"")+"^000000 jogador(es) em " + .@spoint$ + "!";
+	close2;
+	warp .@spoint$, .@x, .@y;
+	end;
+	
+OnInit:
+	waitingroom "Sala de Mercadores",0;
+	end;
+}
+
+que_temsky,40,143,5	duplicate(sair)	Sair da Sala#1	715
+quiz_00,112,84,5	duplicate(sair)	Sair da Sala#2	715

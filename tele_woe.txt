@@ -1,0 +1,49 @@
+//Script Burn, Newgate é Viado
+
+prontera,156,182,4	script	Teleportador WoE	49,{
+
+set .n$,"[^FF8000Teleportador WoE^000000]";
+
+mes .n$;
+mes "Olá, ^0000FF"+strcharinfo(0)+"^000000";
+mes "Segundo os dias e horários, posso te teleportar para os castelos da WoE.";
+mes "Se deseja participar, fale comigo.";
+next;
+mes .n$;
+mes "Deseja ser teleportado?";
+next;
+if(select("Sim:Não") == 2){ mes .n$; mes "Volte quando quiser!~"; close; }
+mes .n$;
+mes "^00FF00Checando dia e horário...^000000";
+next;
+if(gettime(4) == 3) goto Quarta;
+if(gettime(4) == 0) goto Domingo;
+mes .n$;
+mes "Desculpe, não trabalho neste dia de semana...";
+close;
+
+Quarta:
+mes .n$;
+mes "Hm.. Hoje é Quarta-Feira!!";
+mes "Sim, hoje temos WoE 1.0.";
+mes "Escolha o castelo que deseja ir.";
+next;
+switch(select("Skoegul")){
+case 1:
+	warp "prt_gld",125,240;
+	break; }
+end;
+
+Domingo:
+mes .n$;
+mes "Hm.. Hoje é Domingo!!";
+mes "Sim, hoje temos WoE 2.0.";
+mes "Escolha o castelo que deseja ir.";
+next;
+switch(select("Horn")){
+case 1:
+	warp "aru_gld",67,160;
+	break; }
+end;
+
+}

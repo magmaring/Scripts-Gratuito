@@ -1,0 +1,63 @@
+//====================================
+// ==Aqui a tabela do vip
+//==ALTER TABLE `login` ADD `diasvip` INT( 11 ) UNSIGNED NOT NULL DEFAULT '0';
+//====================================
+
+
+-	script	VIPGRATIS	-1,{
+
+OnPCLoginEvent:
+if(#japegou != 1){
+mes "Bem-Vindo(a) ao Ragna TEN ";
+mes "Você sera relogado para evitar qual quer error durante sua estadia em nosso servidor.";
+mes "Você será desconectado para que a operação tenha efeito. Basta digitar seu Login e sua senha normalmente e continuar a jogar";
+close2;
+query_sql "UPDATE `login` SET `level`='1',`diasvip`='999' WHERE `account_id` = '"+ getcharid(3) +"'";
+set #japegou,1;
+atcommand "@kick "+strcharinfo(0);
+end;
+}else{
+end;
+}
+}
+
+
+OnPCLoginEvent:
+if(getgmlevel != 1){
+dispbottom "Voce ainda tem vip.";
+
+
+//========================================
+//==Abaixo o controle dos dias vip
+//========================================
+
+
+-	script	contador vip	-1,{
+
+OnPCLoginEvent:
+query_sql "SELECT `diasvip` FROM `login` WHERE `account_id` = '"+ getcharid(3) +"'", .@diasvip;
+if (.@diasvip > 0) && 
+{
+dispbottom "[Controle VIP]: Você ainda tem "+.@diasvip+" dia(s) de VIP.";
+end;
+}else{
+
+OnPCLoginEvent:
+query_sql "SELECT `diasvip` FROM `login` WHERE `account_id` = '"+ getcharid(3) +"'", .@diasvip;
+if (.@diasvip <= 3)
+{
+dispbottom "[Controle VIP]: O seu vip está acabando, você só tem mais "+.@diasvip+" dia(s) de VIP.";
+dispbottom "[Controle VIP]: Acesse o Site e faça uma doação para continuar utilizando esta conta com os benefícios vip";
+end;
+}
+
+
+OnClock0000:
+query_sql "UPDATE `login` SET `diasvip`=`diasvip`-1 WHERE `level`>='1'";
+end;
+OnClock0000:
+query_sql "UPDATE `login` SET `level`='0' WHERE `diasvip`<='0' AND `level`>='1'";
+end;
+}
+
+//=========================================

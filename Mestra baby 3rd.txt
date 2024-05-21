@@ -1,0 +1,445 @@
+prontera.gat,150,192,5	script	Baby 3rd	706,{
+
+	set .@name$,"[ ^CC00CCBaby Jobchanger^000000 ]";
+	
+	if (Class == 0) goto L_WantBabyNovice;
+	if (Class == 4023) goto L_BabyFirst;
+	if ((Class >= 4024) && (Class <= 4029)) goto L_BabySecond;
+	if ((Class >= 4030) && (Class <= 4044)) goto L_BabyThird;
+	if (Class == 4045) goto L_Cant;
+	if ((Class >= 4096) && (Class <=4108)) goto L_Cant;
+	
+	mes .@name$;
+	mes "Desculpe, mas eu não posso fazer nada por você ... você ... é Gente Grande!!";
+	close;
+	
+L_WantBabyNovice:
+	
+	mes .@name$;
+	mes "olá "+strcharinfo(0)+",";
+	mes "Gostária de ser um Baby no RagnaClick?";
+	next;
+	menu "Sim Porfavor",-,"Não Valeu.",L_Cancel;
+	
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set BaseLevel, 1;
+	set JobLevel, 1;
+    resetstatus;
+	resetskill;
+	set SkillPoint, 0;
+    set StatusPoint, 30;
+	jobchange 4023;
+	mes .@name$;
+	mes "Ok, Parabéns " +strcharinfo(0)+ ", Você é um baby!";
+	close;
+	
+L_BabyFirst:
+
+	mes .@name;
+	mes "Bem Vindo de Volta "+strcharinfo(0)+",";
+	mes "Gostaria de sua primeira Classe Baby??";
+	next;
+	menu "Sim ^^",L_Weiter,"Não Valeu.",L_Cancel;
+	
+L_Weiter:
+	
+	mes .@name$;
+	mes "Ok Então escolha sua primeira classe!";
+	next;
+	menu "Baby Espadachin",L_BabyS,"Baby Mago",L_BabyM,"Baby Arqueiro",L_BabyArch,"Baby Noviço",L_BabyAco,"Baby Mercador",L_BabyMerch,"Baby Gatuno",L_BabyThief,"Super Baby!",L_SuperBaby;
+	
+L_SuperBaby:
+	if (JobLevel < 40) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4045;
+	mes .@name$;
+	mes "Ok Parabéns " +strcharinfo(0)+ ", Você é Super Baby!";
+	close;
+
+L_BabyS:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4024;
+	mes .@name$;
+	mes "Ok Parabéns " +strcharinfo(0)+ ", Você é Baby Espadachim!";
+	close;
+
+L_BabyM:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4025;
+	mes .@name$;
+	mes "Ok Parabéns " +strcharinfo(0)+ ", Você é Baby Mago!";
+	close;
+
+L_BabyArch:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4026;
+	mes .@name$;
+	mes "Ok Parabéns " +strcharinfo(0)+ ", Você é Baby Arqueiro!";
+	close;
+
+L_BabyAco:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4027;
+	mes .@name$;
+	mes "Ok Parabéns " +strcharinfo(0)+ ", Você é Baby Noviço!";
+	close;
+
+L_BabyMerch:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4028;
+	mes .@name$;
+	mes "Ok Parabéns " +strcharinfo(0)+ ", Você é Baby Mercador!";
+	close;
+
+L_BabyThief:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4029;
+	mes .@name$;
+	mes "Ok Parabéns " +strcharinfo(0)+ ", Você é Baby Gatuno!";
+	close;
+	
+L_BabySecond:
+
+	mes .@name$;
+	mes "Olá " +strcharinfo(0)+ ".";
+	mes "Gostária de ser 2º Classe?";
+	next;
+	menu "Sim!",-,"Não.",L_Cancel;
+	
+	if (Class == 4024) goto L_BabyKnight;
+	if (Class == 4025) goto L_BabyMagician;
+	if (Class == 4026) goto L_BabyHunter;
+	if (Class == 4027) goto L_BabyAcoChoice;
+	if (Class == 4028) goto L_BabyMerchChoice;
+	if (Class == 4029) goto L_BabySinStalk;
+	
+L_BabyKnight:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Gostária de ser Baby Cavaleiro, ou Templáio?";
+	next;
+	menu "Cavaleiro",L_BabyKn,"Templário",L_Sader;
+
+L_BabyKn:
+	mes .@name$;
+	mes "Execelente " +strcharinfo(0)+ ", Você é um Baby Cavaleiro!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4030;
+	close;
+
+L_Sader:
+	mes .@name$;
+	mes "Execelente " +strcharinfo(0)+ ", você é um Baby Templário!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4037;
+	close;
+
+L_BabyMagician:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Gostária de ser Baby Bruxo, ou Sábio?";
+	next;
+	menu "Bruxo",L_Wiz,"Sábio",L_Sage;
+
+L_Wiz:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Bruxo!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4032;
+	close;
+
+L_Sage:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Sábio!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4039;
+	close;
+
+L_BabyHunter:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Gostária de ser um Baby Caçador, ou Bardo/Odalisca?";
+	next;
+	menu "Caçador",L_Hun,"Bardo/Odalisca",L_BardDeceiph;
+
+L_Hun:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Caçador!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4034;
+	close;
+
+L_BardDeceiph:
+	if (Sex == 1) goto L_Bard;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Odalisca!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4043;
+	close;
+
+L_Bard:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Bardo!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4042;
+	close;
+
+L_BabyAcoChoice:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Gostária de ser um Baby Sacerdote, ou Monge?";
+	next;
+	menu "Sacerdote",L_Priest,"Monge",L_Monk;
+
+L_Priest:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Sacerdote!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4031;
+	close;
+
+L_Monk:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Monge!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4038;
+	close;
+
+L_BabyMerchChoice:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Gostária de ser Baby Ferreiro, ou Baby Alquímista?";
+	next;
+	menu "Ferreiro",L_Hammerfall,"Aquímista",L_Alch;
+	close;
+
+L_Hammerfall:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Ferreiro!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4033;
+	close;
+
+L_Alch:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Alquimista!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4041;
+	close;
+
+L_BabySinStalk:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Gostária de ser Baby Mercenário, ou Arruaceiro?";
+	next;
+	menu "Mercenário",L_sin,"Arruaceiro",L_rogue;
+
+L_sin:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Mercenário!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4035;
+	close;
+
+L_rogue:
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Arruaceiro!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4040;
+	close;
+	
+L_BabyThird:
+	mes .@name$;
+	mes "Parece que você tenha atingido os seus limites,";
+	mes "mas você ainda não tem o suficiente e quer ir ainda mais longe!?";
+	mes "Então deixe-me fazer de você um 3º Classe Baby.!";
+	mes "gostária de ser 3º Classe Baby?";
+	next;
+	menu "Sim, por favor, deixe-me mudar!",-,"não Valeu.",L_Cancel;
+	
+	if ((BaseLevel != 99) && (JobLevel != 50))goto L_BaseLevel;
+	if (SkillPoint > 10) goto L_SkillPoints;
+	if (StatusPoint > 10) goto L_StatusPoints;
+	if (Class == 4030) goto L_BabyRuneKnight;
+	if (Class == 4031) goto L_BabyArchBishop;
+	if (Class == 4032) goto L_BabyWarlock;
+	if (Class == 4033) goto L_BabyMechanic;
+	if (Class == 4034) goto L_BabyRanger;
+	if (Class == 4035) goto L_BabyGCross;
+	if (Class == 4037) goto L_BabyRoyalGuard;
+	if (Class == 4038) goto L_BabyShura;
+	if (Class == 4039) goto L_BabySorcerer;
+	if (Class == 4040) goto L_BabyShadowChaser;
+	if (Class == 4041) goto L_BabyGenetic;
+	if (Class == 4042) goto L_BabyMinstrell;
+	if (Class == 4043) goto L_BabyWanderer;
+	
+L_BabyRuneKnight:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4096;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Cavaleiro Rúnico!";
+	close;
+	
+L_BabyArchBishop:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby ArceBispo!";
+	close;
+	
+L_BabyWarlock:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4097;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Arcano!";
+	close;
+	
+L_BabyMechanic:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4100;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Mecânico!";
+	close;
+	
+L_BabyRanger:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	getitem 6124,1;
+	jobchange 4098;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Sentinela!";
+	close;
+	
+L_BabyGCross:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4101;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Sicário!";
+	close;
+	
+L_BabyRoyalGuard:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4102;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Guardião Real!";
+	close;
+	
+L_BabyShura:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4106;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Shura!";
+	close;
+	
+L_BabySorcerer:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4103;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Feiticeiro!";
+	close;
+	
+L_BabyShadowChaser:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4108;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Renegado!";
+	close;
+	
+L_BabyGenetic:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4107;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Bioquímico!";
+	close;
+
+L_BabyMinstrell:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4104;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é um Baby Trovador!";
+	close;
+	
+L_BabyWanderer:
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4105;
+	mes .@name$;
+	mes "Excelente " +strcharinfo(0)+ ", Você é uma Baby Musa!";
+	close;
+	
+L_Cancel:
+	mes .@name$;
+	mes "Ok Tchau.";
+	close;
+	
+L_Cant:
+	mes .@name$;
+	mes "Desculpe, mas eu não posso fazer nada por você!";
+	close;
+	
+L_SkillPoints:
+	mes .@name$;
+	mes "Por favor, defina todos os seus Skillpoints e depois voltar para mim!";
+	close;
+	
+L_StatusPoints:
+	mes .@name$;
+	mes "Por favor, defina todos os seus Statuspoints e depois voltar para mim!";
+	close;
+	
+L_JobLevel:
+	mes .@name$;
+	mes "Desculpe, mas seu Nível é baixo para alterar.";
+	close;
+	
+L_BaseLevel:
+	mes .@name$;
+	mes "Desculpe, mas sua Base / Job Level é baixo para alterar.";
+	close;
+	
+}

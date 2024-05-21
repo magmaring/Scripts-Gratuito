@@ -1,0 +1,168 @@
+sec_in01,169,96,4	script	Removedora	73,{
+
+show "[^A020F0Removedora Ragna TEN^000000]";
+show "Tudo bem. Qual item quer que eu";
+show "examine para você?";
+next;
+menu "- Deixe-me pensar.",CLOSEOUT,
+getequipname(1),SLOT1,
+getequipname(2),SLOT2,
+getequipname(3),SLOT3,
+getequipname(4),SLOT4,
+getequipname(5),SLOT5,
+getequipname(6),SLOT6,
+getequipname(7),SLOT7,
+getequipname(8),SLOT8,
+getequipname(9),SLOT9,
+getequipname(10),SLOT10;
+
+SLOT1:
+set @part,1;
+goto CARDNUMCHECK;
+
+SLOT2:
+set @part,2;
+goto CARDNUMCHECK;
+
+SLOT3:
+set @part,3;
+goto CARDNUMCHECK;
+
+SLOT4:
+set @part,4;
+goto CARDNUMCHECK;
+
+SLOT5:
+set @part,5;
+goto CARDNUMCHECK;
+
+SLOT6:
+set @part,6;
+goto CARDNUMCHECK;
+
+SLOT7:
+set @part,7;
+goto CARDNUMCHECK;
+
+SLOT8:
+set @part,8;
+goto CARDNUMCHECK;
+
+SLOT9:
+set @part,9;
+goto CARDNUMCHECK;
+
+SLOT10:
+set @part,10;
+goto CARDNUMCHECK;
+
+CARDNUMCHECK:
+if(getequipcardcnt(@part) == 0) goto DENYCARDCOUNT;
+set @cardcount,getequipcardcnt(@part);
+if(@cardcount > 1) goto CARDNUMMULTIMSG;
+show "[^A020F0Removedora Brasil-Pro^000000]";
+show "Esse ítem tem tem " + @cardcount + " cartas.";
+goto CARDNUMPOSTMSG;
+CARDNUMMULTIMSG:
+show "[^A020F0Removedora Ragna TEN^000000]";
+show "Proseguir?";
+next;
+menu "Sim",CARDNUMPOSTMSG,"Não",CLOSEOUT;
+CARDNUMPOSTMSG:
+next;
+menu "Sim",PRIORITYCARD,"Não",CLOSEOUT;
+
+PRIORITYITEM:
+set @failtype,1;
+goto REMOVECARD;
+
+PRIORITYCARD:
+set @failtype,2;
+goto REMOVECARD;
+
+REMOVECARD:
+show "[^A020F0Removedora Ragna TEN^000000]";
+show "O processo foi um grande sucesso. Tome suas cartas e seus ítens.";
+successremovecards @part;
+close;
+
+FAILREMOVECARD0:
+failedremovecards @part,0;
+next;
+show "[^A020F0Removedora Ragna TEN^000000]";
+show "O processo foi uma falha total. Estou com muita pena, seus itens.";
+close;
+
+FAILREMOVECARD1:
+failedremovecards @part,1;
+next;
+show "[^1E90FFOpções VIP^000000]";
+show "Eu falhei tentando remover as cartas do seu ítem, suas cartas foram destruídas durante o processo. O ítem, está em perfeito estado.";
+close;
+
+FAILREMOVECARD2:
+failedremovecards @part,2;
+next;
+show "[^A020F0Removedora Ragna TEN^000000]";
+show "Menos mal. Eu tive sucesso em remover as cartas, só que o ítem foi destruído no processo.";
+close;
+
+FAILREMOVECARD3:
+failedremovecards @part,3;
+next;
+show "[^A020F0Removedora Ragna TEN^000000]";
+show "Eu falhei tentando remover as cartas. Sorte sua, os ítens e as cartas estão perfeitos.";
+close;
+
+DENYCARDCOUNT:
+show "[^A020F0Removedora Ragna TEN^000000]";
+show "Meu jovem não há cartas equipadas neste ítem. Não posso trabalhar assim.";
+close;
+
+
+CLOSEOUT:
+show "[^A020F0Removedora Ragna TEN^000000]";
+show "Tudo bem. Volte quando precisar dos meus serviços.";
+close;
+
+}
+//VENDEDORES
+sec_in01,166,98,6	shop	Vendedora Ragna TEN	47,522:10000,505:6000,533:800,717:800,716:800,715:800,610:5200,2800:8000,12020:8000,14536:30000,606:1000,14537:30000,14535:30000
+
+
+//resetador
+sec_in01,166,101,5	script	Resetador	798,{
+
+mes "[ ^0000FF Resetador ^000000 ]";
+mes "Olá, eu posso resetar suas habilidades e seus Atributos grátis ";
+mes "O que você deseja resetar?";
+next;
+menu "[ ^FF6600 Resetar Atributos ^000000 ]",stats,"[ ^FF6600 Resetar Habilidades ^000000 ]",abi,"[ ^FF6600 Resetar Ambos ^000000 ]",ambos,"[ Não, Agora não! ]",nao;
+
+stats:
+mes "[ ^0000FF Resetador ^000000 ]";
+mes "Atributos resetado com sucesso!";
+resetstatus;
+close;
+
+abi:
+mes "[ ^0000FF Resetador ^000000 ]";
+mes "Habilidades resetado com sucesso!";
+resetskill;
+close;
+
+ambos:
+mes "[ ^0000FF Resetador ^000000 ]";
+mes "Atributos e Habilidades resetado com sucesso!";
+resetstatus;
+resetskill;
+close;
+
+nao:
+close;
+
+}
+quiz_00,80,33,3	script	Reparador	-1,{
+atcommand "@repairall";
+close;
+}

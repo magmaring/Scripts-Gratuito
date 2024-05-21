@@ -1,0 +1,477 @@
+// --- Sala de Emperium --- \\
+// --- RagnarokSHOP.net --- \\
+
+prontera,140,182,2	script	Sala do Emperium	61,{
+    
+    set @time, $empbrk_record;
+    set @m, @time / 60000;
+    set @time, @time - (@m * 60000);
+    set @s, @time /1000;
+    set @time, @time - (@s * 1000);
+    
+    mes "[Sala do Emperium]";
+    mes "O Recorde Global é d"+$empbrk_sex$+"";
+    mes " "+(($empbrk_record$=="")?"Nulo/Ningém":"^5050A0"+$empbrk_record$+"^000000")+" - ^000080"+@m+"^000000m ^000080"+@s+"^000000s ^000080"+@time+"^000000ms";
+    mes "- - - - - - - - - - - - ";
+    
+    set @time, empbrk_record;
+    set @m, @time / 60000;
+    set @time, @time - (@m * 60000);
+    set @s, @time /1000;
+    set @time, @time - (@s * 1000);
+    mes "O seu recorde é de: "+((empbrk_record==0)?"Nulo":"^000080"+@m+"^000000m ^000080"+@s+"^000000s ^000080"+@time+"^000000ms")+"";
+    mes "- - - - - - - - - - - - ";
+    mes "Você gostaria de tentar um novo recorde?";
+    next;
+    if (getgmlevel()==99) { menu "Menu Padrão",-,"Resetar",L_reset,"Resetar Salas",L_emptyrooms,"Sair",L_exit;}
+    menu "- Sim",-,"- Não",L_exit,"- Resetar (apagar) meu recorde",L_resc;
+    cleararray .arena$[0],"",4;
+    mes "[Sala de Teste do Emperium]";
+    if (getareausers("pvp_n_4-5",94,128,105,139)) mes "Sala n° ^0000DF1 ^FF0000 Ocupada^000000";
+    else{ mes "Sala n° ^0000DF1 ^00A000 Livre^000000";  set .arena$[0],"Sala nº ^0000DF1^000000";}
+    if (getareausers("pvp_n_4-5",60,94,71,105)) mes "Sala n° ^B05D002 ^FF0000 Ocupada^000000";
+    else{ mes "Sala n° ^B05D002 ^00A000 Livre^000000"; set .arena$[1],"Sala nº ^B05D002^000000";}
+    if (getareausers("pvp_n_4-5",94,60,105,71)) mes "Sala n° ^B00FB03 ^FF0000 Ocupada^000000";
+    else{ mes "Sala n° ^90AF003 ^00A000 Livre^000000"; set .arena$[2],"Sala nº ^90AF003^000000";}
+    if (getareausers("pvp_n_4-5",128,94,139,105)) mes "Sala n° ^50AF004 ^FF0000 Ocupada^000000";
+    else{ mes "Sala n° ^500F004 ^00A000 Livre^000000"; set .arena$[3],"Sala nº ^500F004^000000";}
+    next;
+	getmapxy(@mpempbrk$,@empbrkx,@empbrky,0,strcharinfo(0));
+    switch (select(.arena$[0],.arena$[1],.arena$[2],.arena$[3],"Sair")){
+        
+    case 1:
+    if (getareausers("pvp_n_4-5",60,94,71,105) == 0){
+    if($@someonegotin1 > 0){ mes "A sala está OUCUPADA agora."; close;}
+    set $@someonegotin1, 1;
+    warp "pvp_n_4-5",99,128;
+    killmonster "pvp_n_4-5","EmpBrk#1::OnThisMobDeath";
+    initnpctimer "EmpBrk#1";}
+    break;
+    
+    case 2:
+    if (getareausers("pvp_n_4-5",60,94,71,105) == 0){    
+    if($@someonegotin2 > 0){ mes "A sala está OUCUPADA agora."; close;}
+    set $@someonegotin2, 1;     
+    warp "pvp_n_4-5",68,99;
+    killmonster "pvp_n_4-5","EmpBrk#2::OnThisMobDeath";
+    initnpctimer "EmpBrk#2";}
+    break;
+
+    case 3:
+    if (getareausers("pvp_n_4-5",94,60,105,71) == 0){   
+    if($@someonegotin3 > 0){ mes "A sala está OUCUPADA agora."; close;}
+    set $@someonegotin3, 1;      
+    warp "pvp_n_4-5",100,68;
+    killmonster "pvp_n_4-5","EmpBrk#3::OnThisMobDeath";
+    initnpctimer "EmpBrk#3";}
+    break;
+
+    case 4:
+    if (getareausers("pvp_n_4-5",128,94,139,105) == 0){  
+    if($@someonegotin4 > 0){ mes "A sala está OUCUPADA agora."; close;}
+    set $@someonegotin4, 1;       
+    warp "pvp_n_4-5",130,99;
+    killmonster "pvp_n_4-5","EmpBrk#4::OnThisMobDeath";
+    initnpctimer "EmpBrk#4";}
+    break;
+    
+    default:
+    close;
+    
+    }
+sc_end SC_ALL;
+close;
+
+L_reset:
+    mes "[Sala do Emperium]";
+    mes "Você tem certeza que quer resetar o Recorde Global?";
+    menu "Sim",-,"Não",L_exit;
+    set $empbrk_record, 0;
+    set $empbrk_record$, "";
+close;
+L_resc:
+    mes "[Sala do Emperium]";
+    mes "Você tem certeza que quer resetar o seu recorde?";
+    menu "Sim",-,"Não",L_exit;
+    set empbrk_record, 0;
+
+L_emptyrooms:
+set $@someonegotin1, 0;
+set $@someonegotin2, 0;
+set $@someonegotin3, 0;
+set $@someonegotin4, 0;
+close;
+L_exit:
+close;    
+    
+}
+
+-	script	EmpBrk#1	-1,{
+
+OnTimer3000:
+    if (.end == 1) {    warpchar "sec_in01",127,87,.charid;
+    stopnpctimer;
+    set .end, 0;
+    }
+end;    
+    
+OnTimer5000:
+    set .x1,94;
+    set .y1,128;
+    set .x2,105;
+    set .y2,139;
+    set .xe,100;
+    set .ye,134;
+    
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Prepare-se para quebrar o Emperium! Contagem regressiva!",0;
+set $@someonegotin1, 0;
+end;
+    
+OnTimer7000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"5",0;
+end;
+
+OnTimer8000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"4",0;
+end;
+
+OnTimer9000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"3",0;
+end;
+
+OnTimer10000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"2",0;
+end;
+
+OnTimer11000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"1",0;
+end;
+
+OnTimer12000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"VAI!!!",0;
+monster "pvp_n_4-5",.xe,.ye,"Emperium",1288,1,"EmpBrk#1::OnThisMobDeath";
+end;
+
+OnTimer1200000:
+warpchar "sec_in01",127,87,.charid;
+stopnpctimer;
+set .end, 1;
+end;
+
+OnThisMobDeath:
+    stopnpctimer "EmpBrk#1";
+    set .time, getnpctimer(0,"EmpBrk#1");
+    set .time, .time - 12000;
+    if (.time < empbrk_record || empbrk_record == 0)
+    {
+        areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Novo Recorde próprio, parabéns!!!",0;
+        set empbrk_record, .time;
+        
+    }
+    if (.time < $empbrk_record || $empbrk_record == 0)
+    {
+        sleep2 5000;
+	areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Novo Recorde Global, seu tempo é o melhor de todos!!!",0;
+	sleep2 4000;
+	announce strcharinfo(0)+" é é o quebrador(a)  de Emperium Nº1, seu tempo é o melhor tempo de toda Rune-Midgard!!",0; 
+        set $empbrk_record, .time;
+        set $empbrk_record$,strcharinfo(0);
+	set $empbrk_sex$, "o(a)"; 
+    }
+    set .m, .time / 60000;
+    set .time, .time - (.m * 60000);
+    set .s, .time /1000;
+    set .time, .time - (.s * 1000);
+sleep2 3800;
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Seu tempo é "+.m+"m "+.s+"s "+.time+"ms",0;
+    set .end,1;
+    set .charid,getcharid(0);
+    initnpctimer;
+end;
+}
+pvp_n_4-5,99,125,0	script	EmpBrk#1_touch	45,2,1,{
+
+    OnTouch:
+	set $@someonegotin1, 0;
+	warp @mpempbrk$,@empbrkx,@empbrky;
+	end;
+    
+}
+
+-	script	EmpBrk#2	-1,{
+
+    
+OnTimer3000:
+    if (.end == 1) {    warpchar "sec_in01",127,87,.charid;
+    stopnpctimer;
+    set .end, 0;
+    }
+end;
+    
+OnTimer5000:
+    set .x1,60;
+    set .y1,94;
+    set .x2,71;
+    set .y2,105;
+    set .xe,65;
+    set .ye,99;
+    
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Prepare-se para quebrar o Emperium! Contagem regressiva!",0;
+set $@someonegotin2, 0;
+end;
+    
+OnTimer7000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"5",0;
+end;
+
+OnTimer8000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"4",0;
+end;
+
+OnTimer9000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"3",0;
+end;
+
+OnTimer10000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"2",0;
+end;
+
+OnTimer11000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"1",0;
+end;
+
+OnTimer12000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"VAI!!!",0;
+monster "pvp_n_4-5",.xe,.ye,"Emperium",1288,1,"EmpBrk#2::OnThisMobDeath";
+end;
+
+OnTimer1200000:
+warpchar "sec_in01",127,87,.charid;
+stopnpctimer;
+set .end, 1;
+end;
+
+OnThisMobDeath:
+    stopnpctimer "EmpBrk#2";
+    set .time, getnpctimer(0,"EmpBrk#2");
+    set .time, .time - 12000;
+    if (.time < empbrk_record || empbrk_record == 0)
+    {
+        areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Novo Recorde próprio, parabéns!!!",0;
+        set empbrk_record, .time;
+        
+    }
+    if (.time < $empbrk_record || $empbrk_record == 0)
+    {
+        sleep2 4000;
+	areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Novo Recorde Global, seu tempo é o melhor de todos!!!",0;
+	sleep2 4000;
+	announce strcharinfo(0)+" é é o quebrador(a)  de Emperium Nº1, seu tempo é o melhor tempo de toda Rune-Midgard!!",0; 
+        set $empbrk_record, .time;
+        set $empbrk_record$,strcharinfo(0); 
+	set $empbrk_sex$, "o(a)"; 
+    }
+    set .m, .time / 60000;
+    set .time, .time - (.m * 60000);
+    set .s, .time /1000;
+    set .time, .time - (.s * 1000);
+	sleep2 4000;
+	areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Seu tempo é "+.m+"m "+.s+"s "+.time+"ms",0;
+    set .end,1;
+    set .charid,getcharid(0);
+    initnpctimer;
+end;
+}
+pvp_n_4-5,74,99,0	script	EmpBrk#2_touch	45,1,2,{
+
+    OnTouch:
+	set $@someonegotin2, 0;
+	warp @mpempbrk$,@empbrkx,@empbrky;
+	end;
+    
+}
+
+-	script	EmpBrk#3	-1,{
+
+OnTimer3000:
+    if (.end == 1) {    warpchar "sec_in01",127,87,.charid;
+    stopnpctimer;
+    set .end, 0;
+    }
+end;    
+    
+OnTimer5000:
+    set .x1,94;
+    set .y1,60;
+    set .x2,105;
+    set .y2,71;
+    set .xe,99;
+    set .ye,65;
+    
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Prepare-se para quebrar o Emperium! Contagem regressiva!",0;
+set $@someonegotin3, 0;
+end;
+    
+OnTimer7000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"5",0;
+end;
+
+OnTimer8000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"4",0;
+end;
+
+OnTimer9000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"3",0;
+end;
+
+OnTimer10000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"2",0;
+end;
+
+OnTimer11000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"1",0;
+end;
+
+OnTimer12000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"VAI!!!",0;
+monster "pvp_n_4-5",.xe,.ye,"Emperium",1288,1,"EmpBrk#3::OnThisMobDeath";
+end;
+
+OnTimer1200000:
+warpchar "sec_in01",127,87,.charid;
+stopnpctimer;
+set .end, 1;
+end;
+
+OnThisMobDeath:
+    stopnpctimer "EmpBrk#3";
+    set .time, getnpctimer(0,"EmpBrk#3");
+    set .time, .time - 12000;
+    if (.time < empbrk_record || empbrk_record == 0)
+    {
+        areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Novo Recorde próprio, parabéns!!!",0;
+        set empbrk_record, .time;
+        
+    }
+    if (.time < $empbrk_record || $empbrk_record == 0)
+    {
+        sleep2 4000;
+	areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Novo Recorde Global, seu tempo é o melhor de todos!!!",0;
+	sleep2 4000;
+	announce strcharinfo(0)+" é o quebrador(a) de Emperium Nº1, seu tempo é o melhor tempo de toda Rune-Midgard!!",0; 
+        set $empbrk_record, .time;
+        set $empbrk_record$,strcharinfo(0); 
+	set $empbrk_sex$, "o(a)"; 
+    }
+    set .m, .time / 60000;
+    set .time, .time - (.m * 60000);
+    set .s, .time /1000;
+    set .time, .time - (.s * 1000);
+sleep2 4000;
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Seu tempo é "+.m+"m "+.s+"s "+.time+"ms",0;
+    set .end,1;
+    set .charid,getcharid(0);
+    initnpctimer;
+end;
+}
+pvp_n_4-5,100,74,0	script	EmpBrk#3_touch	45,2,1,{
+
+    OnTouch:
+	set $@someonegotin3, 0;
+	warp @mpempbrk$,@empbrkx,@empbrky;
+	end;
+    
+}
+
+
+-	script	EmpBrk#4	-1,{
+
+OnTimer3000:
+    if (.end == 1) {    warpchar "sec_in01",127,87,.charid;
+    stopnpctimer;
+    set .end, 0;
+    }
+end;    
+    
+OnTimer5000:
+    set .x1,128;
+    set .y1,94;
+    set .x2,139;
+    set .y2,105;
+    set .xe,134;
+    set .ye,99;
+    
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Prepare-se para quebrar o Emperium! Contagem regressiva!",0;
+set $@someonegotin4, 0;
+end;
+    
+OnTimer7000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"5",0;
+end;
+
+OnTimer8000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"4",0;
+end;
+
+OnTimer9000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"3",0;
+end;
+
+OnTimer10000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"2",0;
+end;
+
+OnTimer11000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"1",0;
+end;
+
+OnTimer12000:
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"VAI!!!",0;
+monster "pvp_n_4-5",.xe,.ye,"Emperium",1288,1,"EmpBrk#4::OnThisMobDeath";
+end;
+
+OnTimer1200000:
+warpchar "sec_in01",127,87,.charid;
+stopnpctimer;
+set .end, 1;
+end;
+
+OnThisMobDeath:
+    stopnpctimer "EmpBrk#4";
+    set .time, getnpctimer(0,"EmpBrk#4");
+    set .time, .time - 12000;
+    if (.time < empbrk_record || empbrk_record == 0)
+    {
+        areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Novo Recorde próprio, parabéns!!!",0;
+        set empbrk_record, .time;
+        
+    }
+    if (.time < $empbrk_record || $empbrk_record == 0)
+    {
+        sleep2 4000;
+	areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Novo Recorde Global, seu tempo é o melhor de todos!!!",0;
+	sleep2 4000;
+	announce strcharinfo(0)+" é é o quebrador(a)  de Emperium Nº1, seu tempo é o melhor tempo de toda Rune-Midgard!!",0; 
+        set $empbrk_record, .time;
+        set $empbrk_record$,strcharinfo(0); 
+	set $empbrk_sex$, "o(a)"; 
+    }
+    set .m, .time / 60000;
+    set .time, .time - (.m * 60000);
+    set .s, .time /1000;
+    set .time, .time - (.s * 1000);
+	sleep2 4000;
+areaannounce "pvp_n_4-5",.x1,.y1,.x2,.y2,"Seu tempo é "+.m+"m "+.s+"s "+.time+"ms",0;
+    set .end,1;
+    set .charid,getcharid(0);
+    initnpctimer;
+end;
+}
+pvp_n_4-5,125,100,0	script	EmpBrk#4_touch	45,1,2,{
+
+    OnTouch:
+	set $@someonegotin4, 0;
+	warp @mpempbrk$,@empbrkx,@empbrky;
+	end;
+    
+}

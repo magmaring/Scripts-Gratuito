@@ -1,0 +1,2120 @@
+//sala de quest/ nom mexi
+
+prontera,164,169,5	script	Sala de quest	867,{
+	mes "[Segurança]";
+	mes "Olá";
+	mes "Gostaria de ir ver novas quest ?";
+	next;
+	mes "Vms Lá?";
+	menu "Sim",shop,"Não",msg;
+	shop:	warp "sec_in01" ,85,58;
+	msg:	mes "Ok! Volte quando precisar!";
+	close;
+}
+
+
+//saiida
+sec_in01,82,60,5	script	Retornar 	712,{
+	show "[Retornar]";
+	show "Então, o que dejesa fazer?";
+	next;
+	if( select("Ir Embora:Não Ir Embora") == 2 )
+	{
+		show "[Retornar]";
+		show "Eu estarei aqui quando você precisar dos meus serviços.";
+		close;
+	}
+
+	set .@spoint$, getsavepoint(0);
+	set .@x, getsavepoint(1);
+	set .@y, getsavepoint(2);
+	show "[Retornar]";
+	show "Você será levado de volta à " + .@spoint$ + ".";
+	close2;
+	warp .@spoint$, .@x, .@y;
+	end;
+}
+//------------------------------------------------------
+
+sec_in01,83,63,6	script	Chapéu de Lamen	62,{
+	mes "[Chapéu de Lamen]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Chapéu de Lamen]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Chapéu de Lamen]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Chapéu de Lamen:Nenhum"))
+	{
+	case 1:
+		mes "[Chapéu de Lamen]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5293);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(7006);
+		mes "3x "+getitemname(706);
+		mes "100x "+getitemname(1057);
+		mes "500000 Zenys";
+		next;
+		mes "[Chapéu de Lamen]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Chapéu de Lamen]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(7006) >= 200 && countitem(706) >= 3 && countitem(1057) >= 100 && Zeny >= 500000)
+		{
+			delitem 7037,100;
+			delitem 7006,200;
+			delitem 706,3;
+			delitem 1057,100;
+			set Zeny,Zeny-500000;
+			getitem 5293,1;
+			mes "[Chapéu de Lamen]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Chapéu de Lamen]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Chapéu de Lamen]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+//=============================================
+sec_in01,83,66,6	script	Máscara Colorida	62,{
+	mes "[Máscara Colorida]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Máscara Colorida]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Máscara Colorida]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Máscara Colorida:Nenhum"))
+	{
+	case 1:
+		mes "[Máscara Colorida]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5463);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "100x "+getitemname(999);
+		mes "10x "+getitemname(1040);
+		mes "50x "+getitemname(711);
+		mes "150000 Zenys";
+		next;
+		mes "[Máscara Colorida]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Máscara Colorida]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(999) >= 100 && countitem(1930) >= 100 && countitem(711) >= 50 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 999,100;
+			delitem 1930,100;
+			delitem 711,50;
+			set Zeny,Zeny-150000;
+			getitem 5463,1;
+			mes "[Máscara Colorida]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Máscara Colorida]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Máscara Colorida]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+
+//=============================================
+sec_in01,83,69,6	script	Boina Brasileira	62,{
+	mes "[Boina Brasileira]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Boina Brasileira]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Boina Brasileira]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Boina Brasileira:Nenhum"))
+	{
+	case 1:
+		mes "[Boina Brasileira]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5601);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "3x "+getitemname(979);
+		mes "1x "+getitemname(5172);
+		mes "50x "+getitemname(1059);
+		mes "150000 Zenys";
+		next;
+		mes "[Boina Brasileira]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Boina Brasileira]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(979) >= 3 && countitem(5172) >= 1 && countitem(1059) >= 50 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 979,3;
+			delitem 5172,1;
+			delitem 1059,50;
+			set Zeny,Zeny-150000;
+			getitem 5601,1;
+			mes "[Boina Brasileira]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Boina Brasileira]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Boina Brasileira]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,72,6	script	Elmo de Anubis	62,{
+	mes "[Elmo de Anubis]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Elmo de Anubis]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Elmo de Anubis]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Elmo de Anubis:Nenhum"))
+	{
+	case 1:
+		mes "[Elmo de Anubis]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5490);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "500x "+getitemname(1045);
+		mes "50x "+getitemname(7315);
+		mes "30x "+getitemname(12002);
+		mes "150000 Zenys";
+		next;
+		mes "[Elmo de Anubis]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Elmo de Anubis]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(1045) >= 500 && countitem(7315) >= 50 && countitem(12002) >= 30 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 1045,500;
+			delitem 7315,50;
+			delitem 12002,30;
+			set Zeny,Zeny-150000;
+			getitem 5490,1;
+			mes "[Elmo de Anubis]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Elmo de Anubis]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Elmo de Anubis]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+
+//=============================================
+
+sec_in01,83,75,6	script	Chapéu de Chaleira	62,{
+	mes "[Chapéu de Chaleira]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Chapéu de Chaleira]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Chapéu de Chaleira]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Chapéu de Chaleira:Nenhum"))
+	{
+	case 1:
+		mes "[Chapéu de Chaleira]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5291);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "150x "+getitemname(523);
+		mes "100x "+getitemname(621);
+		mes "50x "+getitemname(994);
+		mes "150000 Zenys";
+		next;
+		mes "[Chapéu de Chaleira]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Chapéu de Chaleira]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(523) >= 150 && countitem(621) >= 100 && countitem(994) >= 50 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 523,150;
+			delitem 621,100;
+			delitem 994,50;
+			set Zeny,Zeny-150000;
+			getitem 5291,1;
+			mes "[Chapéu de Chaleira]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Chapéu de Chaleira]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Chapéu de Chaleira]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,63,2	script	Chapéu de Lunático	62,{
+	mes "[Chapéu de Lunático]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Chapéu de Lunático]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Chapéu de Lunático]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Chapéu de Lunático:Nenhum"))
+	{
+	case 1:
+		mes "[Chapéu de Lunático]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5527);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "50x "+getitemname(916);
+		mes "1x "+getitemname(2221);
+		mes "1x "+getitemname(982);
+		mes "150000 Zenys";
+		next;
+		mes "[Chapéu de Lunático]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Chapéu de Lunático]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(916) >= 50 && countitem(2221) >= 1 && countitem(982) >= 1 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 916,50;
+			delitem 2221,1;
+			delitem 982,1;
+			set Zeny,Zeny-150000;
+			getitem 5527,1;
+			mes "[Chapéu de Lunático]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Chapéu de Lunático]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Chapéu de Lunático]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+
+//=============================================
+
+sec_in01,88,69,2	script	Máscara de Oxigênio	62,{
+	mes "[Máscara de Oxigênio]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Máscara de Oxigênio]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Máscara de Oxigênio]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Máscara de Oxigênio:Nenhum"))
+	{
+	case 1:
+		mes "[Máscara de Oxigênio]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5004);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "250x "+getitemname(7033);
+		mes "100x "+getitemname(972);
+		mes "100x "+getitemname(921);
+		mes "150000 Zenys";
+		next;
+		mes "[Máscara de Oxigênio]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Máscara de Oxigênio]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(7033) >= 250 && countitem(972) >= 100 && countitem(921) >= 100 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 7033,250;
+			delitem 972,100;
+			delitem 921,100;
+			set Zeny,Zeny-150000;
+			getitem 5004,1;
+			mes "[Máscara de Oxigênio]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Máscara de Oxigênio]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Máscara de Oxigênio]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,72,2	script	Chapéu de Bandeira	62,{
+	mes "[Chapéu de Bandeira]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Chapéu de Bandeira]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Chapéu de Bandeira]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Chapéu de Bandeira:Nenhum"))
+	{
+	case 1:
+		mes "[Chapéu de Bandeira]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5308);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "250x "+getitemname(7201);
+		mes "3x "+getitemname(706);
+		mes "250x "+getitemname(907);
+		mes "150000 Zenys";
+		next;
+		mes "[Chapéu de Bandeira]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Chapéu de Bandeira]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(7201) >= 250 && countitem(706) >= 3 && countitem(907) >= 250 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 7201,250;
+			delitem 706,3;
+			delitem 907,250;
+			set Zeny,Zeny-150000;
+			getitem 5308,1;
+			mes "[Chapéu de Bandeira]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Chapéu de Bandeira]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Chapéu de Bandeira]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,75,2	script	Pintinho Avermelhado	62,{
+	mes "[Pintinho Avermelhado]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Pintinho Avermelhado]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Pintinho Avermelhado]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Pintinho Avermelhado:Nenhum"))
+	{
+	case 1:
+		mes "[Pintinho Avermelhado]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5822);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "300x "+getitemname(916);
+		mes "150x "+getitemname(949);
+		mes "1x "+getitemname(975);
+		mes "150000 Zenys";
+		next;
+		mes "[Pintinho Avermelhado]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Pintinho Avermelhado]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(916) >= 300 && countitem(949) >= 150 && countitem(975) >= 1 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 916,300;
+			delitem 716,150;
+			delitem 975,1;
+			set Zeny,Zeny-150000;
+			getitem 5822,1;
+			mes "[Pintinho Avermelhado]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Pintinho Avermelhado]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Pintinho Avermelhado]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,78,4	script	Signo de Escorpião	62,{
+	mes "[Signo de Escorpião]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Escorpião]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Escorpião]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Escorpião:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Escorpião]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5677);
+		mes "1x "+getitemname(5676);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "150x "+getitemname(531);
+		mes "50x "+getitemname(7563);
+		mes "100x "+getitemname(1061);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Escorpião]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Escorpião]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7211) >= 100 && countitem(531) >= 150 && countitem(7563) >= 50 && countitem(1061) >= 100 && Zeny >= 150000)
+		{
+			delitem 7037,1;
+			delitem 531,150;
+			delitem 7563,50;
+			delitem 1061,100;
+			set Zeny,Zeny-150000;
+			getitem 5677,1;
+			getitem 5676,1;
+			mes "[Signo de Escorpião]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Escorpião]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Escorpião]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,81,4	script	Signo de Virgem	62,{
+	mes "[Signo de Virgem]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Virgem]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Virgem]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Virgem:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Virgem]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5599);
+		mes "1x "+getitemname(5598);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "100x "+getitemname(466);
+		mes "50x "+getitemname(1001);
+		mes "100x "+getitemname(938);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Virgem]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Virgem]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(466) >= 100 && countitem(1001) >= 50 && countitem(938) >= 100 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 466,100;
+			delitem 732,50;
+			delitem 938,100;
+			set Zeny,Zeny-150000;
+			getitem 5599,1;
+			getitem 5598,1;
+			mes "[Signo de Virgem]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Virgem]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Virgem]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,84,4	script	Signo de Libra	62,{
+	mes "[Signo de Libra]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Libra]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Libra]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Libra:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Libra]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5563);
+		mes "1x "+getitemname(5562);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(1055);
+		mes "150x "+getitemname(7053);
+		mes "50x "+getitemname(748);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Libra]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Libra]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(1055) >= 200 && countitem(7053) >= 150 && countitem(748) >= 50 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 1055,200;
+			delitem 7053,150;
+			delitem 748,50;
+			set Zeny,Zeny-150000;
+			getitem 5563,1;
+			getitem 5562,1;
+			mes "[Signo de Libra]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Libra]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Libra]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,87,4	script	Signo de Sagitário	62,{
+	mes "[Signo de Sagitário]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Sagitário]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Sagitário]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Sagitário:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Sagitário]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5739);
+		mes "1x "+getitemname(5740);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "50x "+getitemname(993);
+		mes "100x "+getitemname(1002);
+		mes "100x "+getitemname(466);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Sagitário]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Sagitário]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7115) >= 100 && countitem(993) >= 50 && countitem(1002) >= 100 && countitem(466) >= 100 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 993,50;
+			delitem 1002,100;
+			delitem 466,100;
+			set Zeny,Zeny-150000;
+			getitem 5739,1;
+			getitem 5740,1;
+			mes "[Signo de Sagitário]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Sagitário]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Sagitário]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,90,4	script	Signo de Capricórnio		62,{
+	mes "[Signo de Capricórnio]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Capricórnio]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Capricórnio]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Capricórnio:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Capricórnio]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5744);
+		mes "1x "+getitemname(5745);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "100x "+getitemname(938);
+		mes "50x "+getitemname(1001);
+		mes "50x "+getitemname(955);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Capricórnio]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Capricórnio]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(938) >= 100 && countitem(1001) >= 50 && countitem(955) >= 50 && Zeny >= 150000)
+		{
+			delitem 7037,5;
+			delitem 938,100;
+			delitem 1001,50;
+			delitem 955,50;
+			set Zeny,Zeny-150000;
+			getitem 5744,1;
+			getitem 5745,1;
+			mes "[Signo de Capricórnio]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Capricórnio]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Capricórnio]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,93,4	script	Signo de Gêmeos	62,{
+	mes "[Signo de Gêmeos]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Gêmeos]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Gêmeos]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Gêmeos:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Gêmeos]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5570);
+		mes "1x "+getitemname(5569);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "100x "+getitemname(920);
+		mes "200x "+getitemname(466);
+		mes "50x "+getitemname(510);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Gêmeos]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Gêmeos]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(920) >= 100 && countitem(466) >= 200 && countitem(510) >= 50 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 920,100;
+			delitem 466,200;
+			delitem 510,50;
+			set Zeny,Zeny-150000;
+			getitem 5570,1;
+			getitem 5569,1;
+			mes "[Signo de Gêmeos]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Gêmeos]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Gêmeos]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,96,4	script	Signo de Câncer	62,{
+	mes "[Signo de Câncer]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Câncer]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Câncer]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Câncer:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Câncer]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5581);
+		mes "1x "+getitemname(5582);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "50x "+getitemname(919);
+		mes "100x "+getitemname(999);
+		mes "50x "+getitemname(510);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Câncer]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Câncer]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(919) >= 200 && countitem(7754) >= 1 && countitem(510) >= 50 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 919,200;
+			delitem 7754,1;
+			delitem 510,50;
+			set Zeny,Zeny-150000;
+			getitem 5581,1;
+			getitem 5582,1;
+			mes "[Signo de Câncer]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Câncer]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Câncer]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,99,4	script	Signo de Peixes	62,{
+	mes "[Signo de Peixes]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Peixes]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Peixes]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Peixes:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Peixes]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5514);
+		mes "1x "+getitemname(5515);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "250x "+getitemname(7150);
+		mes "100x "+getitemname(999);
+		mes "50x "+getitemname(587);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Peixes]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Peixes]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(7150) >= 250 && countitem(999) >= 100 && countitem(587) >= 50 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 7150,250;
+			delitem 999,100;
+			delitem 587,50;
+			set Zeny,Zeny-150000;
+			getitem 5514,1;
+			getitem 5515,1;
+			mes "[Signo de Peixes]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Peixes]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Peixes]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,102,4	script	Signo de Áries	62,{
+	mes "[Signo de Áries]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Áries]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Áries]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Áries:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Áries]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5546);
+		mes "1x "+getitemname(5545);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "150x "+getitemname(942);
+		mes "100x "+getitemname(517);
+		mes "30x "+getitemname(507);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Áries]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Áries]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(942) >= 150 && countitem(517) >= 100 && countitem(507) >= 30 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 942,150;
+			delitem 517,100;
+			delitem 507,30;
+			set Zeny,Zeny-150000;
+			getitem 5546,1;
+			getitem 5545,1;
+			mes "[Signo de Áries]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Áries]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Áries]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,105,4	script	Signo de Touro	62,{
+	mes "[Signo de Touro]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Touro]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Touro]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Touro:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Touro]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5550);
+		mes "1x "+getitemname(7037);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "100x "+getitemname(992);
+		mes "300x "+getitemname(1002);
+		mes "100x "+getitemname(915);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Touro]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Touro]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(992) >= 100 && countitem(1002) >= 300 && countitem(915) >= 100 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 992,100;
+			delitem 1002,300;
+			delitem 915,100;
+			set Zeny,Zeny-150000;
+			getitem 5550,1;
+			getitem 5549,1;
+			mes "[Signo de Touro]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Touro]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Touro]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,83,108,4	script	Signo de Aquário	62,{
+	mes "[Signo de Aquário]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Signo de Aquário]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Aquário]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Signo de Aquário:Nenhum"))
+	{
+	case 1:
+		mes "[Signo de Aquário]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5513);
+		mes "1x "+getitemname(5512);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "20x "+getitemname(1001);
+		mes "50x "+getitemname(720);
+		mes "200x "+getitemname(951);
+		mes "150000 Zenys";
+		next;
+		mes "[Signo de Aquário]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Signo de Aquário]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(1001) >= 20 && countitem(720) >= 50 && countitem(951) >= 200 && Zeny >= 150000)
+		{
+			delitem 7037,100;
+			delitem 1001,20;
+			delitem 720,50;
+			delitem 951,200;
+			set Zeny,Zeny-150000;
+			getitem 5513,1;
+			getitem 5512,1;
+			mes "[Signo de Aquário]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Signo de Aquário]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Signo de Aquário]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,78,4	script	Visão do Sentinela	62,{
+	mes "[Visão do Sentinela]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Visão do Sentinela]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Visão do Sentinela]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Visão do Sentinela:Nenhum"))
+	{
+	case 1:
+		mes "[Visão do Sentinela]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5748);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Visão do Sentinela]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Visão do Sentinela]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5589,1;
+			mes "[Visão do Sentinela]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Visão do Sentinela]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Visão do Sentinela]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,81,4	script	Inspiração do Artista	62,{
+	mes "[Inspiração do Artista]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Inspiração do Artista]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Inspiração do Artista]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Inspiração do Artista:Nenhum"))
+	{
+	case 1:
+		mes "[Inspiração do Artista]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5751);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Inspiração do Artista]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Inspiração do Artista]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5751,1;
+			mes "[Inspiração do Artista]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Inspiração do Artista]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Inspiração do Artista]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,84,4	script	Artifício das Sombras	62,{
+	mes "[Artifício das Sombras]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Artifício das Sombras]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Artifício das Sombras]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Artifício das Sombras:Nenhum"))
+	{
+	case 1:
+		mes "[Artifício das Sombras]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5750);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Artifício das Sombras]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Artifício das Sombras]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5750,1;
+			mes "[Artifício das Sombras]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Artifício das Sombras]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Artifício das Sombras]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,87,4	script	Mistério da Magia	62,{
+	mes "[Mistério da Magia]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Mistério da Magia]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Mistério da Magia]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Mistério_da_Magia:Nenhum"))
+	{
+	case 1:
+		mes "[Mistério_da_Magia]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5753);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Mistério da Magia]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Mistério da Magia]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5753,1;
+			mes "[Mistério da Magia]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Mistério da Magia]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Mistério da Magia]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,90,4	script	Sussurro de Midas	62,{
+	mes "[Sussurro de Midas]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Sussurro de Midas]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Sussurro de Midas]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Sussurro de Midas:Nenhum"))
+	{
+	case 1:
+		mes "[Sussurro de Midas]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5752);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Sussurro de Midas]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Sussurro de Midas]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5752,1;
+			mes "[Sussurro de Midas]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Sussurro de Midas]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Sussurro de Midas]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,93,4	script	Som do Silêncio	62,{
+	mes "[Som do Silêncio]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Som do Silêncio]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Som do Silêncio]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Som do Silêncio:Nenhum"))
+	{
+	case 1:
+		mes "[Som do Silêncio]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5755);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Som do Silêncio]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Som do Silêncio]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5755,1;
+			mes "[Som do Silêncio]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Som do Silêncio]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Som do Silêncio]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,96,4	script	Poder das Runas	62,{
+	mes "[Poder das Runas]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Poder das Runas]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Poder das Runas]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Poder das Runas:Nenhum"))
+	{
+	case 1:
+		mes "[Poder das Runas]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5746);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Poder das Runas]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Poder das Runas]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5746,1;
+			mes "[Poder das Runas]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Poder das Runas]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Poder das Runas]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,99,4	script	Sussurro dos Elementos	62,{
+	mes "[Sussurro dos Elementos]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Sussurro dos Elementos]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Sussurro dos Elementos]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Sussurro dos Elementos:Nenhum"))
+	{
+	case 1:
+		mes "[Sussurro dos Elementos]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5756);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Sussurro dos Elementos]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Sussurro dos Elementos]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(12738) >= 10 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5756,1;
+			mes "[Sussurro dos Elementos]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Sussurro dos Elementos]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Sussurro dos Elementos]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,101,4	script	Súplica do Cisne	62,{
+	mes "[Súplica do Cisne]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Súplica do Cisne]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Súplica do Cisne]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Súplica do Cisne:Nenhum"))
+	{
+	case 1:
+		mes "[Súplica do Cisne]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5758);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Súplica do Cisne]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Súplica do Cisne]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5758,1;
+			mes "[Súplica do Cisne]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Súplica do Cisne]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Súplica do Cisne]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,101,4	script	Disciplina do Espírito	62,{
+	mes "[Disciplina do Espírito]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Disciplina do Espírito]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Disciplina do Espírito]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Disciplina do Espírito:Nenhum"))
+	{
+	case 1:
+		mes "[Disciplina do Espírito]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5754);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Disciplina do Espírito]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Disciplina do Espírito]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5754,1;
+			mes "[Disciplina do Espírito]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Disciplina do Espírito]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Disciplina do Espírito]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,104,4	script	Talento do Piloto	62,{
+	mes "[Talento do Piloto]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Talento do Piloto]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Talento do Piloto]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Talento do Piloto:Nenhum"))
+	{
+	case 1:
+		mes "[Talento do Piloto]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5749);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Talento do Piloto]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Talento do Piloto]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5749,1;
+			mes "[Talento do Piloto]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Talento do Piloto]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Talento do Piloto]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,107,4	script	Ordem do Protetor	62,{
+	mes "[Ordem do Protetor]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Ordem do Protetor]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Ordem do Protetor]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Ordem do Protetor:Nenhum"))
+	{
+	case 1:
+		mes "[Ordem do Protetor]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5757);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Ordem do Protetor]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Ordem do Protetor]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5757,1;
+			mes "[Ordem do Protetor]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Ordem do Protetor]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Ordem do Protetor]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+
+//=============================================
+sec_in01,88,110,4	script	Desejo dos Deuses	62,{
+	mes "[Desejo dos Deuses]";
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Eu tenho alguns itens interessantes aqui, deseja dar uma olhada?";
+	next;
+	if( select("Claro!:Talvez mais tarde...") == 2 )
+	{
+		mes "[Desejo dos Deuses]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Desejo dos Deuses]";
+	mes "Bem, estes são os itens que eu tenho...";
+	mes "Sobre qual deles vai querer saber mais?";
+	next;
+	switch(select("Desejo dos Deuses:Nenhum"))
+	{
+	case 1:
+		mes "[Desejo dos Deuses]";
+		mes "Recompensa:";
+		mes "1x "+getitemname(5747);
+		mes " ";
+		mes "Requerimento:";
+		mes "100x "+getitemname(7037);
+		mes "200x "+getitemname(943);
+		mes "50x "+getitemname(518);
+		mes "300000 Zenys";
+		next;
+		mes "[Desejo dos Deuses]";
+		mes "Deseja fazer esta quest?";
+		next;
+		if( select("Sim!:Agora não...") == 2 )
+		{
+			mes "[Desejo dos Deuses]";
+			mes "Tudo bem... Até mais!";
+			close;
+		}
+		if(countitem(7037) >= 100 && countitem(943) >= 200 && countitem(518) >= 50 && Zeny >= 300000)
+		{
+			delitem 7037,100;
+			delitem 943,200;
+			delitem 518,50;
+			set Zeny,Zeny-300000;
+			getitem 5747,1;
+			mes "[Desejo dos Deuses]";
+			mes "Parabéns! Aqui está!";
+			close;
+		}
+		break;
+	case 2:
+		mes "[Desejo dos Deuses]";
+		mes "Tudo bem, estarei aqui se você mudar de idéia.";
+		close;
+	}
+	mes "[Desejo dos Deuses]";
+	mes "Me desculpe, mas você não tem todos os itens necessários para esta quest.";
+	mes "Volte quando você tiver todos os itens!";
+	close;
+}
+//demonstrador de kest
+
+sec_in01,88,60,5	cashshop	Veja As Quest Aqui	911,5293:8000,5463:8000,5308:8000,5601:8000,5490:8000,5291:8000,5527:8000,5004:8000,5822:8000,5748:8000,5751:8000,5750:8000,5753:8000,5752:8000,5755:8000,5746:8000,5756:8000,5758:8000,5754:8000,5749:8000,5757:8000,5747:8000,5676:8000,5677:8000,5598:8000,5599:8000,5588:8000,5589:8000,5662:8000,5663:8000,5570:8000,5569:8000,5582:8000,5581:8000,5515:8000,5514:8000,5546:8000,5545:8000,5550:8000,5549:8000,5513:8000,5512:8000

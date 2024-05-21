@@ -1,0 +1,207 @@
+prontera,152,193,4	script	Teleportadora WoE	745,{
+
+show "[^ff0000Teleportadora WoE^000000]";
+show "Oi ^0000CD"+strcharinfo(0)+"^000000! Eu posso te teleportar para qualquer feudo da WoE!";
+show "A WoE é a guerra entre os clãs para conquistar os castelos de Rune-Midgard!";
+next;
+show "[^ff0000Teleportadora WoE^000000]";
+show "Posso te levar para qualquer castelo de qualquer feudo!";
+show "Você gostaria de ser teleportado para algum feudo?";
+menu "Sim, meu clã irá conquistar muitos castelos!",L_YES,"Não, hoje eu não vou para a guerra...",L_NO;
+next;
+
+L_YES:
+next;
+show "[^ff0000Teleportadora WoE^000000]";
+show "Ótimo, escolha o feudo!";
+menu
+"^008000- ^000000 Castelos de Prontera ^FF0000["+ (getmapusers("prt_gld.gat"))+ "]^000000",PRT,
+next;
+
+PRT:
+next;
+show "[^ff0000Teleportadora WoE^000000]";
+show "Ok! Agora escolha um dos castelos:";
+menu "Kriemhild",C_KRI,"Skoegul",C_SKO,"Cancelar",L_NO;
+next;
+
+	C_KRI:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Prontera - Castelo Kriemhild.";
+	show "Boa sorte!!";
+	next;
+	warp "prt_gld.gat", 135,53;
+	close;
+
+	C_SKO:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Prontera - Castelo Skoegul.";
+	show "Boa sorte!!";
+	next;
+	warp "prt_gld.gat", 130,248;
+	close;
+
+PAY:
+next;
+show "[^ff0000Teleportadora WoE^000000]";
+show "Ok! Agora escolha o castelo do Feudo do Bosque Celestial, em ^5555FFPayon^000000, que você quer ir:";
+menu "Palácio do Sol",C_SOL,"Palácio do Lago Sagrado",C_LAKE,"Palácio da Sombra",C_SOM,"Palácio Escarlate",C_ESC,"Palácio da Colina",C_COL,"Cancelar",L_NO;
+next;
+
+	C_SOL:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Payon - Feudo do Bosque Celestial - Castelo Palácio do Sol";
+	show "Boa sorte!!";
+	next;
+	warp "pay_gld.gat", 132,228;
+	close;
+
+	C_LAKE:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Payon - Feudo do Bosque Celestial - Castelo Palácio do Lago Sagrado";
+	show "Boa sorte!!";
+	next;
+	warp "pay_gld.gat", 139,173;
+	close;
+
+	C_SOM:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Payon - Feudo do Bosque Celestial - Castelo Palácio da Sombra";
+	show "Boa sorte!!";
+	next;
+	warp "pay_gld.gat", 310,297;
+	close;
+
+	C_ESC:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Payon - Feudo do Bosque Celestial - Castelo Palácio Escarlate";
+	show "Boa sorte!!";
+	next;
+	warp "pay_gld.gat", 298,102;
+	close;
+
+	C_COL:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Payon - Feudo do Bosque Celestial - Castelo Palácio da Colina";
+	show "Boa sorte!!";
+	next;
+	warp "pay_gld.gat", 193,275;
+	close;
+
+GEF:
+next;
+show "[^ff0000Teleportadora WoE^000000]";
+show "Ok! Agora escolha o castelo do Feudo de Britoniah, em ^5555FFGeffen^000000, que você quer ir:";
+menu "Yesnelph",C_ARS,"Bergel",C_TRA,"Eeyolbriggar",C_RUA,"Repherion",C_SAF,"Mersetzdeitz",C_ARI,"Cancelar",L_NO;
+next;
+
+	C_ARS:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Geffen - Feudo de Britoniah - Castelo Yesnelph";
+	show "Boa sorte!!";
+	next;
+	warp "gef_fild13.gat", 154,237;
+	close;
+
+	C_TRA:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Geffen - Feudo de Britoniah - Castelo Bergel";
+	show "Boa sorte!!";
+	next;
+	warp "gef_fild13.gat", 198,267;
+	close;
+
+	C_RUA:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Geffen - Feudo de Britoniah - Castelo Eeyolbriggar";
+	show "Boa sorte!!";
+	next;
+	warp "gef_fild13.gat", 296,241;
+	close;
+
+	C_SAF:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Geffen - Feudo de Britoniah - Castelo Repherion";
+	show "Boa sorte!!";
+	next;
+	warp "gef_fild13.gat", 164,44;
+	close;
+
+	C_ARI:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Geffen - Feudo de Britoniah - Castelo Mersetzdeitz";
+	show "Boa sorte!!";
+	next;
+	warp "gef_fild13.gat", 315,89;
+	close;
+
+ALDE:
+next;
+show "[^ff0000Teleportadora WoE^000000]";
+show "Ok! Agora escolha o castelo do Feudo de Luina, em ^5555FFAl De Baran^000000, que você quer ir:";
+menu "Wuerzburg",C_SIR,"Hohenschwangan",C_AST,"Nuenberg",C_CAN,"Neuschwanstein",C_RIG,"Rothenburg",C_ACR,"Cancelar",L_NO;
+next;
+
+	C_SIR:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Al De Baran - Feudo de Luina - Castelo Wuerzburg";
+	show "Boa sorte!!";
+	next;
+	warp "alde_gld.gat", 236,253;
+	close;
+
+	C_AST:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Al De Baran - Feudo de Luina - Castelo Hohenschwangan";
+	show "Boa sorte!!";
+	next;
+	warp "alde_gld.gat", 105,245;
+	close;
+
+	C_CAN:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Al De Baran - Feudo de Luina - Castelo Nuenberg";
+	show "Boa sorte!!";
+	next;
+	warp "alde_gld.gat", 143,99;
+	close;
+
+	C_RIG:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Al De Baran - Feudo de Luina - Castelo Neuschwanstein";
+	show "Boa sorte!!";
+	next;
+	warp "alde_gld.gat", 63,97;
+	close;
+
+	C_ACR:
+	next;
+	show "[^ff0000Teleportadora WoE^000000]";
+	show "Destino: Al De Baran - Feudo de Luina - Castelo Rothenburg";
+	show "Boa sorte!!";
+	next;
+	warp "alde_gld.gat", 277,102;
+	close;
+
+L_NO:
+next;
+show "[^ff0000Teleportadora WoE^000000]";
+show "Ok, até mais!!";
+close;
+}

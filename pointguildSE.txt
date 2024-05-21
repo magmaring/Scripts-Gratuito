@@ -1,0 +1,47 @@
+prontera,155,188,4	script	Sala do Clã 2.0 	913,{
+
+if (getgmlevel() > 98) goto entre;
+
+	set .@GID, GetCastleData("aru_gld",1);
+	if (.@GID == 0) {
+		mes "[Decreto do Reino de Rune-Midgard]";
+		mes "Se o seu Clã conseguir";
+		mes "passar por todos os desafios";
+		mes "e destruír o Emperium do castelo Horn,";
+		mes "você terá acesso a sala do clã.";
+close;
+	}
+	else {
+		if (getcharid(2) == .@GID) {
+			mes "Olá mestre!";
+			mes "Deseja visitar a sala do clã?";
+			next;
+			if (select("Visitar a sala do clã:") == 1) {
+				if (getcharid(2) == GetCastleData("prtg_cas01",1)) {
+					warp "quiz_02",350,378;
+					end;
+				}
+			}
+			close;
+		}
+		mes "Lamento, somente os membros do clã";
+		mes "^ff0000" + GetGuildName(.@GID) + "^000000.";
+		mes "Tem direito de acessar a sala do clã. ";
+		mes "Se você deseja ter acesso a sala,";
+		mes "conquiste Horn e faça seu nome ser lembrado!";
+	}
+			close;
+entre:
+			if (select("Visitar a sala do clã") == 1)
+					warp "quiz_02",350,378;
+					end;
+	close; }
+
+
+//mapflags, TROQUE TODOS caso mude a localização da sala.
+quiz_00	mapflag	nobranch
+quiz_00	mapflag	nomemo
+quiz_00	mapflag	nosave	SavePoint
+quiz_00	mapflag	noteleport
+quiz_00	mapflag	nowarp
+quiz_00	mapflag	nowarpto

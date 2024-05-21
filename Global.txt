@@ -1,0 +1,326 @@
+sec_in01,169,103,4	script	Anunciador	71,{
+// --- Configuração da NPC ---
+set $name$, "[^A020F0Anunciadora^000000]"; //-- Nome da NPC
+set $nomedoserver$, "^0000FFRagna TEN^000000"; //-- Nome do Servidor
+
+if (getgmlevel()<0) goto novip;
+
+	mes $name$;
+	mes "Olá ^871F78"+ strcharinfo(0) +"^000000 Gostaria de manda uma torpedo grátis para todos que estão conectados agora no "+$nomedoserver$+"?";
+	next;
+	menu "- Sim",sim,"- Não",nao;
+
+sim:
+	mes $name$;
+	mes "Hmm... Então vamos lá!";
+	mes "Escolha o que deseja fazer!";
+	next;
+	menu	"^FF0000- Comprar^000000",comprar,"^0000FF- Vender^000000",vender,"^871F78- Recrutamento^000000",recrutamento;
+
+
+comprar:
+	mes $name$;
+ 	show "Primeiro Passo:";
+	show "^FF0000Digite corretamente o ID do item que deseja comprar!^000000";
+	input @ID;
+	next;
+	mes $name$;
+	show "Segundo Passo:";
+	show "^FF0000Digite corretamente a quantidade de itens que deseja comprar^000000";
+	digit @id2;
+	next;
+	mes $name$;
+	show "Teceiro Passo:";
+	show "^FF0000Escolha o que deseja abaixo:";
+	show "Preço fixo? ou A negociar?";
+	next;
+	menu "Preço Fixo",fixo,"Á negociar",negociar;
+	
+	fixo:
+	mes $name$;
+	show "Deseja comprar por quanto?";
+	show "^FF0000Coloque os numeros com virgulas!^000000";
+	digit $@dinheiro$;
+	next;
+	mes $name$;
+	show "Escolha uma opção abaixo!";
+	next;
+	menu "Item refinavel",refinavel,"Item não refinavel",norefinavel;
+	
+	refinavel:
+	mes $name$;
+	show "Quinto Passo:";
+	show "^FF0000Digite o Refine do item que deseja comprar!^000000";
+	digit @id4;
+	next;
+	mes $name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está comprando ^A020F0"+@id2+" "+getitemname(@ID)+"^000000";
+		Sleep2 3000;
+		show "Por ^FF0000"+$@dinheiro$+"^000000z ";
+		Sleep2 3000;
+		show "Refinado (+^FF0000"+@id4+"^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto,"Não!",comprar;
+		
+		L_correto:
+		mes $name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Compra "+@id2+" "+getitemname(@ID)+"(+"+@id4+") por "+$@dinheiro$+"z",bc_blue;
+		close;
+		
+	norefinavel:	
+		mes $name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está comprando ^A020F0"+@id2+" "+getitemname(@ID)+"^000000";
+		Sleep2 3000;
+		show "Por ^FF0000"+$@dinheiro$+"^000000z";
+		Sleep2 3000;
+		show "(^FF0000Item não refinado!^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto666,"Não!",comprar;
+		
+		L_correto666:
+		mes $name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Compra "+@id2+" "+getitemname(@ID)+" por "+$@dinheiro$+"z",bc_blue;
+		close;
+		
+		negociar:
+		mes $name$;
+		show "Escolha uma opção abaixo!";
+		next;
+		menu "Item refinavel",refinavel2,"Item não refinavel",norefinavel2;
+		
+		refinavel2:
+	mes $name$;
+	show "Quinto Passo:";
+	show "^FF0000Digite o Refine do item que deseja comprar!^000000";
+	digit @id4;
+	next;
+	mes $name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está comprando ^A020F0"+@id2+" "+getitemname(@ID)+"^000000";
+		Sleep2 3000;
+		show "Preço (^FF0000Á negociar^000000)";
+		Sleep2 3000;
+		show "Refinado (+^FF0000"+@id4+"^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",correto3,"Não!",comprar;
+		
+		correto3:
+		mes $name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Compra "+@id2+" "+getitemname(@ID)+"(+"+@id4+"). Preço [Á negociar]",0,0xC0C0C0;
+		close;
+		
+	norefinavel2:	
+		mes $name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está comprando ^A020F0"+@id2+" "+getitemname(@ID)+"^000000";
+		Sleep2 3000;
+		show "Preço (^FF0000Á negociar^000000)";
+		Sleep2 3000;
+		show "(^FF0000Item não refinado!^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim.",correto669,"Não.",comprar;
+		
+		correto669:
+		mes $name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Compra "+@id2+" "+getitemname(@ID)+". Preço [Á negociar]",0,0xC0C0C0;
+		close;
+
+vender:
+	mes $name$;
+ 	show "Primeiro Passo:";
+	show "^FF0000Digite corretamente o ID do item que deseja Vender^000000";
+	input @ID666;
+	next;
+	mes $name$;
+	show "Segundo Passo:";
+	show "^FF0000Digite corretamente a quantidade de itens que deseja Vender^000000";
+	digit @id2666;
+	next;
+	mes $name$;
+	show "Teceiro Passo:";
+	show "^FF0000Escolha o que deseja abaixo:";
+	show "Preço fixo? ou A negociar?";
+	next;
+	menu "Preço Fixo",fixo666,"á negociar",negociar666;
+	
+	fixo666:
+	mes $name$;
+	show "Deseja vender por quanto?";
+	show "^FF0000Coloque os numeros com virgulas!^000000";
+	digit $@grana$;
+	next;
+	mes $name$;
+	show "Escolha uma opção abaixo!";
+	next;
+	menu "Item refinavel",refinavel666,"Item não refinavel",norefinavel666;
+	
+	refinavel666:
+	mes $name$;
+	show "Quinto Passo:";
+	show "^FF0000Digite o Refine do item que deseja vender!^000000";
+	digit @id3666;
+	next;
+	mes $name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está vendendo ^A020F0"+@id2666+" "+getitemname(@ID666)+"^000000";
+		Sleep2 3000;
+		show "Por ^FF0000"+$@grana$+"^000000z ";
+		Sleep2 3000;
+		show "Refinado (+^FF0000"+@id3666+"^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto668,"Não!",vender;
+		
+		L_correto668:
+		mes $name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Vende "+@id2666+" "+getitemname(@ID666)+"(+"+@id3666+") por "+$@grana$+"z",8;
+		close;
+		
+	norefinavel666:	
+		mes $name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está vendendo ^A020F0"+@id2666+" "+getitemname(@ID666)+"^000000";
+		Sleep2 3000;
+		show "Por ^FF0000"+$@grana$+"^000000z";
+		Sleep2 3000;
+		show "(^FF0000Item não refinado!^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto671,"Não!",vender;
+		
+		L_correto671:
+		mes $name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Vende "+@id2666+" "+getitemname(@ID666)+" por "+$@grana$+"z",8;
+		close;
+		
+		negociar666:
+		mes $name$;
+		show "Escolha uma opção abaixo!";
+		next;
+		menu "Item refinavel",refinavel222,"Item não refinavel",norefinavel222;
+		
+		refinavel222:
+	mes $name$;
+	show "Quinto Passo:";
+	show "^FF0000Digite o Refine do item que deseja comprar!^000000";
+	digit @id3666;
+	next;
+	mes $name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está vendendo ^008000"+@id2666+" "+getitemname(@ID666)+"^000000";
+		Sleep2 3000;
+		show "Preço (^FF0000Á negociar^000000)";
+		Sleep2 3000;
+		show "Refinado (+^FF0000"+@id3666+"^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",correto8,"Não!",vender;
+		
+		correto8:
+		mes $name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Vende "+@id2666+" "+getitemname(@ID666)+"(+"+@id3666+"). Preço [Á negociar]",bc_all,0x008000;
+		close;
+		
+	norefinavel222:	
+		mes $name$;
+		show "Aguarde...";
+		Sleep2 2000;
+		show "Você está vendendo ^008000"+@id2666+" "+getitemname(@ID666)+"^000000";
+		Sleep2 3000;
+		show "Preço (^FF0000Á negociar^000000)";
+		Sleep2 3000;
+		show "(^FF0000Item não refinado!^000000)";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim.",correto670,"Não.",vender;
+		
+		correto670:
+		mes $name$;
+		show "Pronto! Toperdo enviado com sucesso!";
+		announce "O Jogador ["+ strcharinfo(0) +"] Vende "+@id2666+" "+getitemname(@ID666)+". Preço [Á negociar]",bc_all,0x008000;
+		close;
+		
+	recrutamento:
+   	mes "[^A020F0Anunciadora^000000]";
+ 	show "Primeiro Passo:";
+	show "^FF0000Digite o nome do seu Clã^000000";
+ 	input @msgz$;
+	next;
+	show "[^A020F0Anunciadora^000000]";
+	show "Segundo Passo:";
+	show "^FF0000Digite o Level Máximo que deseja recrutar";
+	show "Ex: 99/70^000000";
+	digit @idz2$;
+	next;
+	show "[^A020F0Anunciadora^000000]";
+	show "Teceiro Passo:";
+	show "^FF0000Digite corretamente o nome da classe que deseja Recrutar!^000000";
+	digit @msgz2$;
+	next;
+	show "[^A020F0Anunciadora^000000]";
+	show "Quarto Passo:";
+	show "^FF0000Recrutamento:";
+	show "Via Fórum!";
+	show "Via In-Game!";
+	show "Via Team-Speak/Skype^000000";
+	digit @msgz3$;
+	next;
+	show "[^A020F0Anunciadora^000000]";
+		show "Aguarde...";
+		Sleep2 2000;
+		show "O Clã "+@msgz$+" está recrutando ^A020F0"+@msgz2$+" Level "+@idz2$+"^000000";
+		Sleep2 3000;
+		show "Recrutamento via ^FF0000"+@msgz3$+"^000000 ";
+		Sleep2 4000;
+		show "Estou correto?";
+		next;
+		menu "Sim!",L_correto123,"Não!",recrutamento;
+		
+		L_correto123:
+		show "[^A020F0Anunciadora^000000]";
+		show "Pronto toperdo enviado com sucesso!";
+		announce "Recrutamento: O Clã ["+@msgz$+"] esta recrutando "+@msgz2$+" Level "+@idz2$+". Estilo de recrutamento {"+@msgz3$+"}",8;
+		close;
+
+
+nao:
+mes $name$;
+mes "Até a proxima!";
+close;
+
+
+novip:
+mes $name$;
+mes "Lamento, mas você não é VIP";
+mes "Acesse o site e veja como se torna VIP.";
+close;
+
+}

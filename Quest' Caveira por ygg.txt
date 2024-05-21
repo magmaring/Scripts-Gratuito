@@ -1,0 +1,36 @@
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+
+// Npc criado por Tips
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+
+// Nome do Npc Caveira por Ygg
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+
+// Versão atual 1.0
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+
+// Compatível com Cronus
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+
+force_1-1,89,110,5	script	Caveira por Ygg	867,{
+mes "[ Trocador ]";
+mes "Eu troco caveiras por Ygg's..";
+mes "A cada uma caveira eu te dou 5 yggs";
+mes "Você quer?";
+menu "Claro",s,"Agora Não",n1;
+
+s:
+next;
+mes "[ Trocador ]";
+mes "Digite quantas caveiras você quer trocar!";
+input $n;
+if(countitem(7420) >= $n) goto s1;
+
+n1:
+mes "[ Trocador ]";
+mes "Você não tem nada!";
+close;
+
+s1:
+delitem 7420, $n;
+getitem 607, 5*$n;
+specialeffect 894;
+mes "[ Trocador ]";
+mes "Pronto!";
+close;
+}

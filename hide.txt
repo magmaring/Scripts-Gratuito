@@ -1,0 +1,38 @@
+//===== Cronus Script ========================================
+//= GM Hide
+//===== Por: =================================================
+//= "[ADM]Ameratsu" o antigo SerpenteSilva
+//===== Versão Atual: ========================================
+//= 3.0 sem bugs
+//===== Compatibilidade: =====================================
+//= (Cronus  TXT)    
+//===== Descrição: ===========================================
+//= quando qualquer um da staff entr ano jogo ele fica de hide automatico
+// server pra o players nao encher o saco , e apareçe uma aba
+// dizendo nao abuse de sua autoridade de GM ou CM qualquer duvida entre
+// em contato com o ADM 
+//===== Comentários Adicionais: ==============================
+//= Sem bug nehum
+//============================================================
+///////////////////////////////////////////////////////////
+//// Favor nao tire os creditos  /////////////////////////
+/////////////////////////////////////////////////////////
+
+-	script	gm_hide		-1,{
+OnPcLoginEvent:
+	if (getgmlevel() >=20) {
+		atcommand strcharinfo(0) + "@hide";
+dispbottom "Este npc foi feito pelo, [ADM]";
+		show "Não Abuse da Sua Autoridade de GM ou CM";
+		show "Qualquer Duvida ou Bug, Procure Um ADM";
+		show "Contato:";
+		show "";
+		show "";
+		show "lol";
+		close;
+		end;
+	} else {
+		sleep2 5000;
+		end;
+	}
+}

@@ -1,0 +1,203 @@
+//============================================================
+
+force_1-1,101,110,5	script	Pergunta Premiada	966,{
+
+//====================== Configurações =======================
+	set $NN$, "[^0000FFPergunta Premiada^000000]";
+	set $NvGM, 99;
+//============================================================
+
+	if(getgmlevel() >= $NvGM)
+	{
+		pGM:
+		mes $NN$;
+		mes "Olá "+StrCharInfo(0)+" qual função deseja realizar ?";
+		next;
+		switch(select("Ligar Evento:Desligar Evento:Alterar Pergunta:Alterar Premio:Ver o NPC:Nada"))
+		{
+			case 1:
+			mes $NN$;
+			mes "-----------------------------------";
+			mes "          Informações              ";
+			mes "-----------------------------------";
+			mes "^FF0000Pergunta^000000: "+$perguntap$+".";
+			mes "^228822Resposta^000000: "+$respostap$+".";
+			mes "-----------------------------------";
+			mes "Deseja realmente Ligar o Evento ?";
+			next;
+			if(select("Sim:Não")== 2)goto pGM;
+			{
+				if($ppLIGADO == 0)
+				{
+					mes $NN$;
+					mes "Evento Ligado.";
+					close2;
+					announce "[EVENTO] O Evento Pergunta Premiada esta Ativo.",bc_all;
+					set $ppLIGADO, 1;
+					end;
+				}
+				else
+				{
+					mes $NN$;
+					mes "O Evento ja esta Ligado.";
+					close;
+				}
+			
+			}
+			
+			case 2:
+			mes $NN$;
+			mes "Deseja Realmente Desligar o Evento ?";
+			next;
+			if(select("Sim:Não")==2)goto pGM;
+			{
+				if($ppLIGADO == 1)
+				{
+					mes $NN$;
+					mes "Evento Desligado.";
+					close2;
+					announce "[EVENTO] O Evento Pergunta Premiada foi Desativado.",bc_all;
+					set $ppLIGADO, 0;
+					end;
+				}
+				else
+				{
+					mes $NN$;
+					mes "O Evento ja esta Desligado.";
+					close;
+				}
+			}
+			
+			case 3:
+			mes $NN$;
+			mes "-----------------------------------";
+			mes "          Informações              ";
+			mes "-----------------------------------";
+			mes "^FF0000Pergunta^000000:"+$perguntap$+".";
+			mes "^228822Resposta^000000: "+$respostap$+".";
+			mes "-----------------------------------";
+			mes "Deseja alterar a Pergunta e Resposta ?";
+			next;
+			if(select("Sim:Não")==2)close;
+			{
+				iP:
+				mes $NN$;
+				mes "Digite a Nova Pergunta : ";
+				input $perguntap$;
+				next;
+				mes $NN$;
+				mes "^FF0000Pergunta^000000: "+$perguntap$+".";
+				mes "Esta Correto ?";
+				next;
+				if(select("Sim:Não")==2)goto iP;
+				{
+					rP:
+					mes $NN$;
+					mes "Digite a Resposta: ";
+					input $respostap$;
+					next;
+					mes $NN$;
+					mes "^228822Resposta^000000: "+$respostap$+".";
+					mes "Esta Correto ?";
+					next;
+					if(select("Sim:Não")==2)goto rP;
+					{
+						mes $NN$;
+						mes "Pergunta e resposta ja Definida agora você pode Ligar o Evento.";
+						close;
+					}
+				}
+			}
+
+			case 4:
+			mes $NN$;
+			mes "-----------------------------------";
+			mes "          Informações              ";
+			mes "-----------------------------------";
+			mes "^992299Premio Atual^000000: "+getitemname($rpPremio)+".";
+			mes "Deseja Realmente alteralo ?";
+			next;
+			if(select("Sim:Não")==2)goto pGM;
+			{
+				iT:
+				mes $NN$;
+				mes "Digite o ID do novo Premio: ";
+				input $rpPremio;
+				next;
+				mes $NN$;
+				mes "^009A00ID do Premio^000000: "+$rpPremio+".";
+				mes "^992299Nome do Premio^000000: "+getitemname($rpPremio)+".";
+				mes "Esta Correto ?";
+				next;
+				if(select("Sim:Não")==2)goto iT;
+				{
+					mes $NN$;
+					mes ""+getitemname($rpPremio)+" é o Novo Premio do Evento.";
+					close;
+				}
+			}
+			
+			case 5:
+			goto nE;
+			
+			case 6:
+			mes $NN$;
+			mes "Até mais.";
+			close;
+			
+		}
+	}
+	else
+	{
+		if($ppLIGADO == 1)
+		{
+			nE:
+			mes $NN$;
+			mes "Olá ^0000FF"+StrCharInfo(0)+"^000000 oque Deseja ?";
+			next;
+			if(select("Responder a Pergunta:Nada")==2)close;
+			{
+				mes $NN$;
+				mes "-----------------------------------";
+				mes "          Informações              ";
+				mes "-----------------------------------";
+				mes "^FF0000Pergunta^000000: "+$perguntap$+".";
+				mes "-----------------------------------";
+				mes "Você sabe a resposta ? ";
+				next;
+				if(select("Sim:Não")==2)close;
+				{
+					mes $NN$;
+					mes "Digite a Resposta: ";
+					input $respostapp$;
+					next;
+					if($respostapp$ == $respostap$)
+					{
+						mes $NN$;
+						mes "Parabens você acertou.";
+						mes "^992299Premio^000000: "+getitemname($rpPremio)+".";
+						close2;
+						getitem $rpPremio,1;
+						announce "[EVENTO]O Jogador "+StrCharInfo(0)+" acertou a Pergunta Premiada.",bc_all;
+						set $ppLIGADO, 0;
+						end;
+					}
+					else
+					{
+						mes $NN$;
+						mes "Você errou, mas pode tentar novamente.";
+						close;
+					}
+				}
+			}
+		}
+		else
+		{
+			mes $NN$;
+			mes "Desculpe mas o Evento esta Desligado.";
+			close;
+		}
+	
+	}
+
+}

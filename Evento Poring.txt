@@ -1,0 +1,120 @@
+//============mapflag==================
+poring_w01	mapflag	nowarp
+poring_w01	mapflag	nosave
+poring_w01	mapflag	noicewall
+poring_w01	mapflag	noteleport
+poring_w01	mapflag	nowarpto
+poring_w01	mapflag	nostorage
+poring_w01	mapflag	noskill
+poring_w01	mapflag	pvp	on
+poring_w01	mapflag	nobranch
+poring_w01	mapflag	nomemo
+poring_w01	mapflag	noreturn
+//======================================
+
+-	script	Evento Premiado#var	-1,{
+end;
+	OnInit:
+		//- ID do item do prêmio.
+		set $ipe, 7030;
+
+		//- Quantidade do item do prêmio.
+		set $qpe, 3;
+
+		//- Tirar 50% de HP quando matar
+		//- um poring falso?
+		//- [0=NÃO|1=SIM]
+		set $hpe, 1;
+	end;
+
+force_1-1,109,106,3	script	Evento	51,{
+
+	if(getgmlevel() < 50)
+	{
+		if(!.poringcatch)
+		{
+			show "Não tem evento por inquanto.";
+			close;
+		}
+		show "Olá "+strcharinfo(0)+" o que posso fazer por você?";
+		next;
+		switch(select("Entrar no evento.:Informação."))
+		{
+			case 1:
+				show "Divirta-se!";
+				next;
+				warp "poring_w01", 100, 100;
+				end;
+
+			case 2:
+				show "São invocados 100 monstros.";
+				show "Somente 1 é verdadeiro e você tem que acha-lo.";
+				show "Caso consiga, ganhará um item.";
+				show "Boa Sorte!.";
+				close;
+		}
+	}
+	show "Olá "+strcharinfo(0)+" o que posso fazer por você?";
+	next;
+	menu "Ligar evento",open,"Entrar no evento",go,"Sair",fim; callsub OnEventStart;
+
+	go:
+	show "Teletransportanto";
+	warp "poring_w01", 0, 0;
+	end;
+
+		Onclock0200: callsub OnEventStart;
+		Onclock0030: callsub OnEventStart;
+		OnClock1630: callsub OnEventStart;
+		OnClock0500: callsub OnEventStart;
+		OnClock2000: callsub OnEventStart;
+		OnClock1900: callsub OnEventStart;
+
+	open:
+		OnEventStart:
+			announce "[Evento Premiado]: Gente, é hora do evento. Falem comigo para entrar.",0;
+			initnpctimer;
+			monster "pvp_n_5-5",0,0,"Premiado",1116,1,strnpcinfo(0)+"::OnMobKilled";
+			monster "pvp_n_5-5",0,0,"Premiadooo",1116,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Premiaddo",1116,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Premiad0",1116,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Pr3miado",1116,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Premi4do",1116,5,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"PremIado",1116,1,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Pre01ado",1116,1,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Prem23ado",1116,1,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Prem*ado",1116,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Pre-ado",1116,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Me mate",1116,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"click aki",1116,10,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Otario vem aki",1116,20,strnpcinfo(0)+"::OnWrongKilled";
+			monster "pvp_n_5-5",0,0,"Clique e ganhe",1116,1,strnpcinfo(0)+"::OnWrongKilled";
+			set .poringcatch,1; goto fim;
+			end;
+
+		OnTimer600000:
+			stopnpctimer;
+			announce "[Evento Premiado]: O tempo acabou, tente na próxima vez.",0;
+			set .poringcatch,0;
+			killmonsterall "poring_w01";
+			end;
+
+		OnMobKilled:
+			stopnpctimer;
+			announce "[Evento Premiado]: "+strcharinfo(0)+" encontrou o monstro premiado!.Obrigado por participarem, Esperem até o próximo evento.",0;
+			dispbottom "Parabéns, você me achou.";
+			getitem $ipe,$qpe;
+			killmonsterall "poring_w01";
+			set .poringcatch,0;
+			end;
+
+		OnWrongKilled:
+			dispbottom "Whaa, você errou feio.";
+			if($hpe) percentheal -50,0;
+			warp "prontera",150,185;
+			end;
+	fim:
+	show "Ok, volte sempre!";
+	close;
+	end;
+}

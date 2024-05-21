@@ -1,0 +1,420 @@
+//                                                                                                 
+//                                                                                                    
+//  DDDDDDDD      D                          D       DDDDDDDDDD                                       
+// DDDDDDDDDDD  DDDD                      DDDDD      DDDDDDDDDDD                                      
+//  DDDDDDDDDD DDDDD                      DDDDD       DDDD  DDDD                                      
+//   DDDD  DDDD DD                        DDDDD       DDDD    DD                                      
+//   DDDD  DDDD    D    DD   DD     DD     DDDD       DDDD          DD       DD  D     D   D    D     
+//   DDDD  DDDD DDDD  DDDDDD DDD  DDDDDD   DDDD       DDDD  D     DDDDDD   DDDD DDD DDDD DDDD DDDDD   
+//   DDDD  DDDDDDDDD  DDDDDD DD  DDD  DD   DDDD       DDDD DD    DD  DDD  DDDDDDDDD DDDDDDDDDDDDDDD   
+//   DDDDDDDDD  DDDD   DDDDD D   DDD  DDD  DDDD       DDDDDDD    DD  DDDD  DDDDDDDD DDDDDDDDDD DDDD   
+//   DDDDDDDD   DDDD    DDDDDD  DDDDDDDDD  DDDD       DDDDDDD        DDDD  DDDD DD  DDDD  DDDD DDDD   
+//   DDDDDD     DDDD     DDDD   DDDDDDDDD  DDDD       DDDD  D     DDDDDDD  DDDD     DDDD  DDDD  DDD   
+//   DDDD       DDDD    DDDDDD  DDDD       DDDD       DDDD  D    DDD DDDD  DDDD     DDDD  DDDD  DDD   
+//   DDDD       DDDD    D DDDD   DDD       DDDD       DDDD      DDDD DDDD  DDDD     DDDD  DDDD DDDD   
+//   DDDD       DDDD   DD DDDDD  DDDD  DD  DDDD       DDDD      DDDD DDDDD DDDD     DDDD  DDDD DDDD   
+//  DDDDDD     DDDDDD DDD DDDDDD DDDDDDD  DDDDDD    DDDDDDD     DDDDDDDDD DDDDDD    DDDDDDDDDD DDDDD  
+//  DDDDDD     DDDDDDDDDD DDDDDD  DDDDD   DDDDD      DDDDDD      DDDD DDD DDDDDD   DDDDD DDDDD DDDDD  
+// ===========================================================
+//===== Cronus Script ========================================
+//= War of Treasure
+//===== Por: =================================================
+//= Pixel Farm
+//===== Versão Atual: ========================================
+//= 2.0
+//===== Compatibilidade: =====================================
+//= Cronus Emulador
+//===== Descrição: ===========================================
+// Wot é um evento que ocorre de 3 em 3 horas em uma sala quando o evento e iniciado basta falar comigo que eu levo os jogadores para uma sala
+// Depois de 10 minutos o evento e fechado e ninguém mais entra no mapa o gvg é ligado e apos 10 minutos de batalha o gvg e desligadoe aparecem
+//dois báus como prêmio um em cada sala, esses baús dropam prêmios que são configurados pelo administrador.
+//===== ChangeLog: ===========================================
+//01/06/11 = Adicionado Npc In game. [Pixel Farm]
+//01/06/11 = Adicionado configuração de prêmio In Game. [Pixel Farm]
+//01/06/11 = Adicionado Prêmiação de Cash. [Pixel Farm]
+//01/06/11 = Mudando horário de 2 para 3 em 3 horas. [Pixel Farm]
+//01/06/11 = Mudando comando OnHour para OnClock. [Pixel Farm]
+//01/06/11 = Adicionando checagem para o player so entrar na wot se possuir clã. [Pixel Farm]
+//01/06/11 = Adicionando comando GvG On e Off. [Pixel Farm]
+//01/06/11 = Corrigindo Pequenos Erros. [Pixel Farm]
+//01/06/11 = Adicionado checagem, se não tiver player no mapa da wot os baús não são invocados. [Pixel Farm]
+//23/07/11 = Adicionado função callsub. [Pixel Farm]
+//23/07/11 = Adicionado Ranking. [Pixel Farm]
+//23/07/11 = Adicionado opção de resetar o ranking. [Pixel Farm]
+//23/07/11 = Adicionado opção de escolher o limite de jogadores no ranking. [Pixel Farm]
+//24/07/11 = Corrigido erro da wot esta iniciando de 1 em 1 hora. [Pixel Farm]
+//24/07/11 = Adicionado função initnpctimer. [Pixel Farm]
+//============================================================
+ra_temin,166,163,4	script	War of Treasure	417,{
+
+query_sql "SELECT `baus` FROM `char` WHERE `char_id` = '"+getcharid(0)+"'", .@baus;
+
+//====================== Configurações do Npc ============================//
+// Nome do npc
+set @npc$,"[War of Treasure]";
+
+// Level minimo da conta de gm do seu servidor
+set @lv,99;
+//====================== Não mecha daqui pra baixo ============================//
+ 
+if (getgmlevel() < @lv){
+
+Player:
+mes @npc$;
+mes "Olá "+strcharinfo(0)+" Você ja destruiu "+.@baus+" Baús.";
+mes "O que você deveja fazer?";
+switch(select("- Entrar na Wot:- Informações:- Ver Ranking:- Sair"))
+{
+case 1:
+next;
+if(!getcharid(2)){
+mes @npc$;
+mes "Desculpe mas você precisar estar em uma guild para entrar na wot.";
+close;
+}
+if($ligou == 0){
+mes @npc$;
+mes "Desculpe mas você não pode entrar enquanto a wot estiver fechada.";
+close;
+}
+mes @npc$;
+mes "Vamos la te levarei a wot, Boa Sorte.";
+warp "prt_are_in",97,30;
+close;
+
+case 2:
+next;
+mes @npc$;
+mes "Wot é um evento que ocorre de 3 em 3 horas em uma sala quando o evento e iniciado basta falar comigo que eu levo os jogadores para uma sala";
+mes "Depois de 10 minutos o evento e fechado e ninguém mais entra no mapa o gvg é ligado e apos 10 minutos de batalha o gvg e desligadoe aparecem";
+mes "dois báus como prêmio um em cada sala, esses baús dropam prêmios que são configurados pelo administrador.";
+close;
+
+case 3:
+if ($rank == 0){
+next;
+mes @npc$;
+mes "^FF0000O Ranking da wot foi desativado pelo administrador.^000000";
+close;
+}
+
+query_sql "SELECT `name`, `baus` FROM `char` WHERE '"+getcharid(O)+"' ORDER BY `baus` DESC LIMIT 10",@nome$,@pontosbau;
+next;
+mes @npc$;
+mes "Posição - Nome - Baús";
+for (set .@i,0; .@i < $rank; SET .@i, .@i + 1)
+mes (.@i+1)+"º - "+@nome$[.@i]+" - "+@pontosbau[.@i]+"";
+close;
+
+case 4:
+next;
+mes @npc$;
+mes "Tudo bem estarei aqui se precisar.";
+close;
+}
+}
+
+mes @npc$;
+mes "Olá "+strcharinfo(0)+" O que deseja fazer?";
+switch(select("- Configurar a wot:- Entrar na Wot:- Modo Player"))
+{
+case 1:
+switch(select("- Modificar Premiação:- Adicionar premiação de cash:- Modificar Limite de jogadores no Ranking:- Resetar Ranking da Wot"))
+{
+	case 1:
+	next;
+	mes @npc$;
+	mes "Você pode configurar Ate 10 itens como prêmio da wot,";
+	mes "Deseja configurar a premiação da wot?";
+	switch(select("- Sim:- Não"))
+	{
+		case 1:
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 1º item.";
+		input @premio1;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 1º item.";
+		input @qtd1;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 2º item.";
+		input @premio2;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 2º item.";
+		input @qtd2;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 3º item.";
+		input @premio3;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 3º item.";
+		input @qtd3;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 4º item.";
+		input @premio4;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 4º item.";
+		input @qtd4;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 5º item.";
+		input @premio5;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 5º item.";
+		input @qtd5;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 6º item.";
+		input @premio6;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 6º item.";
+		input @qtd6;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 7º item.";
+		input @premio7;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 7º item.";
+		input @qtd7;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 8º item.";
+		input @premio8;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 8º item.";
+		input @qtd8;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 9º item.";
+		input @premio9;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 9º item.";
+		input @qtd9;
+		next;
+		mes @npc$;
+		mes "Agora dijite o id do 10º item.";
+		input @premio10;
+		next;
+		mes @npc$;
+		mes "Agora dijite a quantidade do 10º item";
+		input @qtd10;
+		next;
+	mes @npc$;
+	mes "Os itens que você escolheu como premiação são:";
+	mes ""+@qtd1+" "+getitemname(@premio1);
+	mes ""+@qtd2+" "+getitemname(@premio2);
+	mes ""+@qtd3+" "+getitemname(@premio3);
+	mes ""+@qtd4+" "+getitemname(@premio4);
+	mes ""+@qtd5+" "+getitemname(@premio5);
+	mes ""+@qtd6+" "+getitemname(@premio6);
+	mes ""+@qtd7+" "+getitemname(@premio7);
+	mes ""+@qtd8+" "+getitemname(@premio8);
+	mes ""+@qtd9+" "+getitemname(@premio9);
+	mes ""+@qtd10+" "+getitemname(@premio10);
+	next;
+	mes @npc$;
+	mes "Tem certeja que deseja deixar assim a premiação da sua wot?";
+	switch(select("- Sim:- Não"))
+	{
+		case 1:
+		next;
+		mes @npc$;
+		mes "A Wot foi configurada com sucesso.";
+		close2;
+		setarray $premio[0],@premio1,@premio2,@premio3,@premio4,@premio5,@premio6,@premio7,@premio8,@premio9,@premio10;
+		setarray $qtd[0],@qtd1,@qtd2,@qtd3,@qtd4,@qtd5,@qtd6,@qtd7,@qtd8,@qtd9,@qtd10;
+		end;
+
+		case 2:
+		next;
+		mes @npc$;
+		mes "Tudo bem, estarei aqui se precisar.";
+		close;
+		}
+
+			case 2:
+				next;
+				mes @npc$;
+				mes "Tudo bem, estarei aqui se precisar.";
+			close;
+			}
+
+				case 2:
+				next;
+				mes @npc$;
+				mes "Dijite o valor de cash que deseja adicionar";
+				mes "0 = Não premiar cash";
+				input $cash;
+				if(0 == $cash){
+				next;
+				mes @npc$;
+				mes "Premiação de cash foi cancelada.";
+				set $cash,0;
+				close;
+				}
+
+			next;
+			mes @npc$;
+			mes "Tem certeza que deseja adicionar "+$cash+" Cash's como premiação?";
+			switch(select("- Sim:- Não"))
+			{
+				case 1:
+				next;
+				mes @npc$;
+				mes "Premiação de cash foi configurada com sucesso";
+				close;
+
+				case 2:
+				next;
+				mes @npc$;
+				mes "Tudo bem, estarei aqui se precisar.";
+				close;
+				}
+
+	case 3:
+				next;
+
+				mes @npc$;
+				mes "Dijite o limite máximo de jogadores que vai aparecer no ranking";
+				mes "0 = Desativar Ranking";
+				input @rank;
+				if(0 == @rank){
+				next;
+				mes @npc$;
+				mes "O Ranking foi desativado com sucesso.";
+				set $rank,0;
+				close;
+				}
+			next;
+			mes @npc$;
+			mes "Tem certeza que deseja modificar O limite máximo do ranking para "+@rank+" Jogadores?";
+			switch(select("- Sim:- Não"))
+			{
+
+		case 1:
+		next;
+		mes @npc$;
+		mes "O Limite de jogadores da wot foi alterado com sucesso.";
+		setarray $rank[0],@rank;
+		close;
+
+			case 2:
+			next;
+			mes @npc$;
+			mes "Tudo bem, estarei aqui se precisar.";
+			close;
+			}
+	case 4:
+	next;
+	mes @npc$;
+	mes "Tem certeza que deseja resetar o ranking da wot?";
+			switch(select("- Sim:- Não"))
+			{
+
+		case 1:
+		next;
+		mes @npc$;
+		mes "O Ranking da wot foi resetada com sucesso.";
+		query_sql "UPDATE `char` set `baus` = '0'";
+		close;
+
+			case 2:
+			next;
+			mes @npc$;
+			mes "Tudo bem, estarei aqui se precisar.";
+			close;
+			}
+	}
+
+
+case 2:
+mes @npc$;
+mes "Tudo bem te levarei ao mapa da wot.";
+warp "prt_are_in",97,30;
+close;
+
+case 3:
+goto player;
+close;
+}
+
+OnClock0200: callsub EventoWOT;
+OnClock0800: callsub EventoWOT;
+OnClock1230: callsub EventoWOT;
+OnClock1800: callsub EventoWOT;
+
+EventoWOT:
+announce "[Wot] A Wot irá começar vocês so tem 10 Minutos !",8;
+set $ligou,1;
+initnpctimer;
+end;
+
+OnTimer300000:
+announce "[Wot] A Wot irá começãr vocês so tem 5 Minutos !",8;
+end;
+
+OnTimer540000:
+announce "[Wot] A Wot irá começar vocês so tem 1 Minuto !",8;
+end;
+
+OnTimer600000:
+gvgon "prt_are_in";
+announce "[Wot] A wot Começou !",8;
+set $ligou,0;
+end;
+
+OnTimer900000:
+mapannounce "prt_are_in","[Wot] Os báus aparecerão em 5 minutos !",8;
+end;
+
+OnTimer1140000:
+mapannounce "prt_are_in","[Wot] Os báus aparecerão em 1 Minuto !",8;
+end;
+
+OnTimer1200000:
+gvgoff "prt_are_in";
+if (getmapusers("prt_are_in") == 0 ){
+announce "[Wot] Os baús não apareceram por que não há jogadores suficientes na Wot",8;
+stopnpctimer;
+end;
+}
+gvgoff "prt_are_in";
+mapannounce "prt_are_in","[Wot] Os báus apareceram !",8;
+monster "prt_are_in",178,140,"Bau do Tesouro",1324,1,"War of Treasure::OnThisMobDeath";
+monster "prt_are_in",22,89,"Bau do Tesouro",1324,1,"War of Treasure::OnThisMobDeath";
+stopnpctimer;
+
+OnThisMobDeath:
+set @char,getcharid(0);
+query_sql "UPDATE `char` SET `baus` = `baus` +1 WHERE `char_id`="+@char+"";
+for ( set @i, 0; $premio[@i]; set @i, @i + 1 )
+for ( set @i, 0; $qtd[@i]; set @i, @i + 1 )
+getitem $premio[@i], $qtd[@i];
+announce "[Wot] O Jogador "+strcharinfo(0)+" acaba de destruir um dos baús!",8;
+if( $cash == 0){ end; }
+set #CASHPOINTS,#CASHPOINTS+$cash;
+dispbottom "Você Acaba de ganhar "+$cash+" Cashs";
+end;
+}
+
+// Portais
+
+//izlude,128,226,0	warp	War Of Treasure1	1,1,prt_are_in,98,6
+prt_are_in,55,13,0	warp	War Of Treasure2	1,1,prt_are_in,177,129
+prt_are_in,177,127,0	warp	War Of Treasure3	1,1,prt_are_in,57,13
+prt_are_in,21,75,0	warp	War Of Treasure4	1,1,prt_are_in,140,13
+prt_are_in,142,13,0	warp	War Of Treasure5	1,1,prt_are_in,21,77
+
+// Mapflag
+prt_are_in	mapflag	noloot

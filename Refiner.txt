@@ -1,0 +1,202 @@
+//===== Nome: =========================================================== 
+//= Refiner +100
+//===== Por: ============================================================ 
+//= ADM Katan
+//===== Descrição: ====================================================== 
+//= Refina seus items até de +0 a +100
+//===== Emulador: =======================================================
+//= Cronus
+//===== Versão Atual: ===================================================
+//= 1.0 
+//===== mapa: ===========================================================
+prontera,170,180,1	script	Ferreiro	813,{
+//===== Variaveis: ======================================================
+set @name$,"Refinador";
+set @MaxRefine,10;
+set @MoreRefineLevel,10;
+set @MaxRefineLvl,10;
+set @RefinePrice,50000000;
+//===== NPC: ============================================================
+
+show "[" + @name$ + "]";
+show "Olá ^0000CD"+strcharinfo(0)+"^000000!";
+show "Quer refinar algumas armas?";
+next;
+menu "Sim!",L_Yes,"Não Valeu...",L_No;
+
+L_No:
+show "[" + @name$ + "]";
+show "Ok, Bye Bye.";
+close;
+
+L_Yes:
+
+show "[" + @name$ + "]";
+show "Está certo, escolha o Equipamento!";
+M_Menu:
+next;
+menu getequipname(1),PART1,getequipname(2),PART2,getequipname(3),PART3,getequipname(4),PART4,getequipname(5),PART5,getequipname(6),PART6,getequipname(7),PART7,getequipname(8),PART8,getequipname(9),PART9,getequipname(10),PART10;
+
+//Top Head
+PART1:
+set @part,1;
+if (getequipisequiped(1)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Quer que eu refine seu cérebro?";
+emotion 6;
+goto M_Menu;
+
+//Armor
+PART2:
+set @part,2;
+if (getequipisequiped(2)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Quer que eu refine seu corpo com uma martelo fervendo?";
+emotion 6;
+goto M_Menu;
+
+//Left Hand
+PART3:
+set @part,3;
+if (getequipisequiped(3)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Não posso transformar sua mão em uma arma.";
+emotion 4;
+goto M_Menu;
+
+//Right Hand
+PART4:
+set @part,4;
+if (getequipisequiped(4)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Não posso transformar sua mão em uma arma.";
+emotion 4;
+goto M_Menu;
+
+//Garment
+PART5:
+set @part,5;
+if (getequipisequiped(5)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Veja só, você não tem capa nenhuma equipada.";
+goto M_Menu;
+
+//Foot Gear
+PART6:
+set @part,6;
+if (getequipisequiped(6)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Que nojeira, não vou refinar suas frieiras!";
+emotion 16;
+goto M_Menu;
+
+//Accessory1
+PART7:
+set @part,7;
+if (getequipisequiped(7)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Qual acessório?";
+emotion 20;
+goto M_Menu;
+
+//Accessory2
+PART8:
+set @part,8;
+if (getequipisequiped(8)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Qual acessório?";
+emotion 20;
+goto M_Menu;
+
+//Mid Head
+PART9:
+set @part,9;
+if (getequipisequiped(9)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Quer que eu refine suas orelhas?";
+emotion 20;
+goto M_Menu;
+
+//Lower Head
+PART10:
+set @part,10;
+if (getequipisequiped(10)) goto CHECK1;
+show "[" + @name$ + "]";
+show "Quer que eu refine seus dentes?";
+emotion 20;
+goto M_Menu;
+
+CHECK1:
+if(getequipisenableref(@part)) goto CHECK2;
+show "[" + @name$ + "]";
+show "Não posso refinar esse item.";
+close;
+
+//Check if the item is identified... (Don't know why this is in here... but kept it anyway)
+CHECK2:
+if(getequipisidentify(@part)) goto CHECK3;
+show "[" + @name$ + "]";
+show "Você precisa indetificar o item antes.";
+close;
+
+//Check to see if the items is already +10
+CHECK3:
+if(getequiprefinerycnt(@part) < @MaxRefine) goto REFINE0;
+show "[" + @name$ + "]";
+show "Desculpe, você só pode refinar até "+ @RefineTimes +"!";
+close;
+
+CHECK4:
+show "[" + @name$ + "]";
+show "Este item não aceita um Over tão grande.";
+close;
+
+//Refine Level Manu
+REFINE0:
+show "[" + @name$ + "]";
+show "Quantas vezes você deseja refinar?";
+digit @MoreRefineLevel;
+if (@MoreRefineLevel > (@MaxRefineLvl - getequiprefinerycnt(@part))) goto CHECK4;
+if (@MoreRefineLevel <= 0) goto L_Close;
+if (getequipisequiped(@part) == 0) goto L_NoItem;
+set @ZenyPrice,@MoreRefineLevel*@RefinePrice;
+show "Você precisará pagar "+ @ZenyPrice +" zenys, Ok ?";
+next;
+menu "Ok!",-,"Não!",L_Close;
+if(Zeny < @ZenyPrice) goto L_NoZeny;
+set Zeny, Zeny - @ZenyPrice;
+set @TempLoopVar,0;
+next;
+show "[Refiner]";
+show "Vamos Refinar!!";
+goto REFINE1;
+
+// Refine Menu
+REFINE1:
+successrefitem @part;
+set @TempLoopVar,@TempLoopVar +1;
+if (@TempLoopVar == @MoreRefineLevel) goto fim;
+goto REFINE1;
+
+
+fim:
+show "[Refiner]";
+show "Thanks ^^.";
+close;
+
+//Check to see if the items are equipeds
+L_NoItem:
+show "[" + @name$ + "]";
+show "Você não tem nenhum item equipado.";
+close;
+
+//Check Zenys
+L_NoZeny:
+show "[" + @name$ + "]";
+show "Sinto muito, você precisa de "+ @ZenyPrice +" Zenys.";
+close;
+
+L_Close:
+close;
+
+}

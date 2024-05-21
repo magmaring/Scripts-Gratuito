@@ -1,0 +1,71 @@
+prontera,164,169,4	script	CashEspecial#	63,{
+mes "[^1E90FF Maximizador ^000000]";
+mes " ";
+mes "Você tem "+#CASHPOINTS+" ROPs .";
+mes " ";
+mes "Posso Maximizar sua Armadura !";
+next;
+menu"[+10 Armadura ] + 5 de Força - 2000 ROPs",FOR5,"[+10 Armadura ] + 5 de Agilidade - 2000 ROPs",AGI5,"[+10 Armadura ] + 5 de Vitalidade - 2000 ROPs",VIT5,"[+10 Armadura ] + 5 de Inteligência - 2000 ROPs",INT5,"[+10 Armadura ] + 5 de Destreza - 2000 ROPs",DES5,"[+10 Armadura ] + 5 de Sorte - 2000 ROPs",SOR5;
+
+FOR5:
+set @encantamento,4704;
+set @value,2000;
+goto CONTINUE;
+
+AGI5:
+set @encantamento,4734;
+set @value,2000;
+goto CONTINUE;
+
+VIT5:
+set @encantamento,4744;
+set @value,2000;
+goto CONTINUE;
+
+INT5:
+set @encantamento,4714;
+set @value,2000;
+goto CONTINUE;
+
+DES5:
+set @encantamento,4724;
+set @value,2000;
+goto CONTINUE;
+
+SOR5:
+set @encantamento,4754;
+set @value,2000;
+goto CONTINUE;
+
+CONTINUE:
+mes "[^1E90FF Maximizador ^000000]";
+mes "Deseja maximizar sua armadura ?";
+switch(select("SIM","NÃO")) {
+next;
+
+case 1:
+if(getequipisequiped(EQI_ARMOR) == 0) goto L_NOARMOR;
+if(#CASHPOINTS < @value) goto L_NOCASH;
+set @itemid,getequipid(EQI_ARMOR);
+delitem @itemid,1;
+getitem2 @itemid,1,1,10,0,0,0,0,@encantamento;
+set #CASHPOINTS,#CASHPOINTS-@value;
+mes "[^1E90FF Maximizador ^000000]";
+mes "Prontinho !";
+close;
+
+case 2:
+close;
+}
+
+L_NOCASH:
+mes "[^1E90FF Maximizador ^000000]";
+mes "Você não tem ROPs suficiente !";
+close;
+
+L_NOARMOR:
+mes "[^1E90FF Maximizador ^000000]";
+mes "Você deve equipar uma Armadura !";
+close;
+
+}

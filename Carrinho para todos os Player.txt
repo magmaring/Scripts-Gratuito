@@ -1,0 +1,57 @@
+//===========================================================
+//===== Por: ================================================
+//= DragoSavio
+//===== Versão Atual: =======================================
+//= 1.0
+//===== Descrição: ==========================================
+//= NPC que faz qualquer um usar carrinho
+//===========================================================
+prontera,150,150,3	script	Carrinho		938,{
+
+if (getgmlevel() < 0){
+mes "[Carrinhos]";
+mes "Todos podem falar comigo."; 
+close;
+}
+
+mes "[Carrinhos]";
+mes "Desejas ativar seu carrinho Agora?";
+menu "-Claro.",sim,"-Não...",nao;
+
+sim:
+mes "Digame o que desejas qual queres?";
+menu "-Carrinho 1",carrinho1,"-Carrinho 2",carrinho2,"-Carrinho 3",carrinho3,"-Carrinho 4",carrinho4,"-Peco Peco",carrinho5,"-Sair",nao;
+
+carrinho1:
+mes "Agora você está mais rápido...";
+atcommand "@option 0 0 128";
+close;
+
+carrinho2:
+mes "Agora você está mais rápido...";
+atcommand "@option 0 0 256";
+close;
+
+carrinho3:
+mes "Agora você está mais rápido...";
+atcommand "@option 0 0 512";
+close;
+
+carrinho4:
+mes "Agora você está mais rápido...";
+atcommand "@option 0 0 1024";
+close;
+
+carrinho5:
+mes "Agora você está mais rápido...";
+atcommand "@option 0 0 32";
+close;
+
+nao:
+next;
+mes "[Carrinhos]";
+mes "Blz, Volte quando quiser!";
+close;
+}
+
+// by Dragosavio

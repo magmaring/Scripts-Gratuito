@@ -1,0 +1,431 @@
+//                     *¨¨¨¨¨*
+//                     *¨¨¨¨¨¨¨*
+//             ____    _____     ____    _____
+//            / __ \¨¨|  _  \¨¨ / __ \¨¨/ ____|
+//           | /  \ | | (_)  | | /  \_| | |___
+//           | |  | | | __  /  | |   _  | ____|
+//           | \__/ | | | \ \  | \__/ | | |___
+//            \____/  |_|  \_\  \____/  \_____|
+//
+//               _   _   _   _   _   _   _
+//              / \ / \ / \ / \ / \ / \ / \
+//             ( S | C | R | I | P | T | S )
+//              \_/ \_/ \_/ \_/ \_/ \_/ \_/
+//
+//==============================================================
+// Copyright © 2008/2010 Orce Scripts todos os direitos reservados.
+//===========|Nome do Script|===================================
+// Nome: Monstro Premiado
+//================|Autor|=======================================
+// Autor: Orce
+//==============|Descrição|=====================================
+// Descrição: Ativa um evento. São sumonados varios monstros e
+// quem achar os monstros verdadeiros ganham premios.
+//==============================================================
+// Versão: 2.1e
+//============|Changelog|=======================================
+// V.1.0
+// - Criado NPC Monstro Premiado;
+// - Adicionado sistema de MP (Para acessar as configs do NPC basta enviar uma MP para:
+// "npc:monstropremiado"). Sem as aspas.
+// - Adicionado restrição no NPC (Apenas Gms com level igual ou superior a 90 podem ter acesso ao NPC).
+// - Adiciona opção para escolher quais itens serão dropados;
+// - Adicionado opção para escolher quantos itens serão dropados;
+// - Adicionado opção para escolher quantos monstros falsos serão dropados;
+// - Adicionado opção para escolher em que mapa será iniciado o evento;
+//
+// V.2.0
+// - Melhorado o sistema de Menus do NPC;
+// - Adicionado informativo das opções que ja foram escolhidas;
+// - Adicionado CHEK (Esta opção checa se o NPC ja foi configurado, caso a resposta seja
+// NÂO o evento não é iniciado).
+// - Adicionado CHEK2 (Esta opção verifica se o evento ja foi iniciado, caso retorne para sim,
+// ele exibe a mensagem dizendo que o evento ja foi iniiado).
+// - Adicionado a opção Auto-Start (Com esta opção ativada, o evento irá iniciar sozinho na data
+// e/ou hora desejada(*)).
+// - Adicionado a restrição nomobloot(map flag)(Esta opção foi ativada para evitar que os itens dropados
+//  pelos monstros sumonados pelo NPC venham a atrapalhar os jogadores devido a quantidade de monstros
+// umonados. A flag é ativada assim que o evento inicia e é desativada assim que o mesmo se encerra ).
+//
+// V.2.1b
+// - reconfigurado a opção Auto-Start. Agora o ADM pode escolher a hora e o dia do mes que o evento
+// inicie.
+// 
+// V.2.1c
+// - Correção no anuncio do 4º item (Agradecimentos ao Cretino e ao pandabrrox por reportarem).
+// 
+// V.2.1d
+// - Efetuado correção ortografica na fala do NPC (Adradecimentos ao ZaweOwnedz por reportar).
+//
+// V.2.1e
+// - Efetuada a correção de sintaxe nos operadores ternários de Sex.
+//
+//============|Compatibilidade|=================================
+// Emulador: Cronus
+//==============================================================
+
+-	script	poring	-1,{
+
+OnWhisperGlobal:
+	if (compare(@whispervar0$,"menu")){
+	if (getgmlevel() >= 90){
+INICIO:
+
+//================== configurações ===========================
+	set .npcname$,"^FF0000 [Monstro Premiado] ^000000 ^FFFFFFBy Orce^000000";
+	set $gmname$,""+strcharinfo(0)+"";		// Não altere aqui
+	set .servername$,"Privateserverbrasil";	//nome do servidor
+//============================================================
+
+	show .npcname$;
+	show "O que você gostaria de fazer?";
+	next;
+	switch(select("- Configurações:- Iniciar Evento:- Parar Evento:- Auto-Start:- Nada")){
+
+		Case 1:
+		SUB_MENU:
+			show .npcname$;
+			Show "o que deseja ajustar?";
+			next;
+			switch(select("- Prêmios:- ID do Monstro:- Mapa:- Quantidade de Prêmios:- Menu Principal")){
+
+				Case 1:
+					show .npcname$;
+					show "Os atuais itens são:";
+					show "1º Prê. ^993300"+getitemname($item1)+"^000000";
+					show "2º Prê. ^993300"+getitemname($item2)+"^000000";
+					show "3º Prê. ^993300"+getitemname($item3)+"^000000";
+					show "4º Prê. ^993300"+getitemname($item4)+"^000000";
+
+					next;
+					show .npcname$;
+					show "Deseja alterar??";
+					if(select("- Sim:- Não") == 2) goto SUB_MENU;
+
+						show "Digite a ID do primeiro prêmio";
+						input $item1;
+						show "Primeiro: ^993300"+getitemname($item1)+"^000000";
+
+						next;
+						show .npcname$;
+						show "Digite a ID do segundo prêmio";
+						input $item2;
+						show "Segundo: ^993300"+getitemname($item2)+"^000000";
+
+						next;
+						show .npcname$;
+						show "Digite a ID do terceiro prêmio";
+						input $item3;
+						show "Terceiro: ^993300"+getitemname($item3)+"^000000";
+
+						next;
+						show .npcname$;
+						show "Digite a ID do quarto prêmio";
+						input $item4;
+						show "Quarto: ^993300"+getitemname($item4)+"^000000";
+
+						next;
+						show .npcname$;
+						show "Lista de prêmios ajustada";
+						set $confpr,1;
+
+						next;
+						goto SUB_MENU;
+
+				Case 2:
+					show .npcname$;
+					show "Monstro Atual: ^993300"+getmonsterinfo($monster,0)+"^000000";
+
+					next;
+					show .npcname$;
+					show "Deseja alterar???";
+					if(select("- Sim:- Não") == 2) goto SUB_MENU;
+
+						show "Digite a ID do monstro a ser sumonado";
+						show "IMPORTANTE , digite somente numeros";
+						show "^993300Exemplo^000000: ^0033001002^000000 ou ^0033001118^000000";
+						input $monster;
+						set $confmt,1;
+
+						next;
+						goto SUB_MENU;
+				Case 3:
+					show .npcname$;
+					show "Mapa Atual: ^993300"+$mapa$+"^000000";
+
+					next;
+					show .npcname$;
+					show "Deseja alterar?";
+					if(select("- Sim:- Não") == 2) goto SUB_MENU;
+
+						show "Digite o nome do mapa onde você deseja ininiciar o evento";
+						show "IMPORTANTE , digite somente o nome do mapa em letras minusculas";
+						show "^993300Exemplo^000000 : ^003300prontera^000000 ou ^003300izlude^000000";
+						input $mapa$;
+						set $confmp,1;
+
+						next;
+						goto SUB_MENU;
+				Case 4:
+					show .npcname$;
+					show "Quantia de Monstros Falsos: ^993300"+$qfalso+"^000000";
+					show "Mons. c/ ^333399"+getitemname($item1)+"^000000: ^993300"+$qitem1+"^000000";
+					show "Mons. c/ ^333399"+getitemname($item2)+"^000000: ^993300"+$qitem2+"^000000";
+					show "Mons. c/ ^333399"+getitemname($item3)+"^000000: ^993300"+$qitem3+"^000000";
+					show "Mons. c/ ^333399"+getitemname($item4)+"^000000: ^993300"+$qitem4+"^000000";
+
+					next;
+					show .npcname$;
+					show "Deseja alterar?";
+					if(select("- Sim:- Não") == 2) goto SUB_MENU;
+
+						show .npcname$;
+						show "Digite quantos monstros falsos devem ser sumonado:";
+						input $qfalso;
+
+						next;
+						show .npcname$;
+						show "1º Prêmio - Digite quantos monstros premiados com ^993300"+getitemname($item1)+"^000000 deve ser sumonado:";
+						input $qitem1;
+
+						next;
+						show .npcname$;
+						show "2º Prêmio - Digite quantos monstros premiados com ^993300"+getitemname($item2)+"^000000 deve ser sumonado:";
+						input $qitem2;
+
+						next;
+						show .npcname$;
+						show "3º Prêmio - Digite quantos monstros premiados com ^993300"+getitemname($item3)+"^000000 deve ser sumonado:";
+						input $qitem3;
+
+						next;
+						show .npcname$;
+						show "4º Prêmio - Digite quantos monstros premiados com ^993300"+getitemname($item4)+"^000000 deve ser sumonado:";
+						input $qitem4;
+
+						next;
+						show .npcname$;
+						show "Lista ajustada";
+						set $confqi,1;
+
+						next;
+						goto SUB_MENU;
+				Case 5:
+					goto INICIO;
+				}
+
+		Case 2:
+			goto Start_Evento;
+
+		Case 3:
+			if($onevent != 1){	show .npcname$;
+						show "O evento ainda não foi iniciado";
+
+						next;
+						goto INICIO;
+								}
+
+			show .npcname$;
+			show "Evento Cancelado";
+			set $mobpp,0;
+			killmonsterall $mapa$;
+			set $onevent,0;
+			removemapflag $mapa$,mf_nomobloot;
+			removemapflag $mapa$,mf_nobaseexp;
+			removemapflag $mapa$,mf_nojobexp;
+			close2;
+			goto INICIO;
+
+		Case 4:
+			show .npcname$;
+			show "O AutoStart esta:";
+			if($autostart == 1) show "^339900Ativado^000000";
+			if($autostart != 1) show "^FF0000Desativado^000000";
+			show "Com esta função ativada, o evento irá começar automáticamente a cada Hora.";
+
+			next;
+			show .npcname$;
+
+			if($confpr != 1){ show .npcname$; show "Por favor, acesse o menu de configurações e ajuste os itens que vão ser entregues no Evento antes de ativar esta opção."; next; goto SUB_MENU; }
+			if($confmt != 1){ show .npcname$; show "Por favor, acesse o menu de configurações e ajuste qual monstro deve ser sumonado no Eventoantes de ativar esta opção."; next; goto SUB_MENU; }
+			if($confmp != 1){ show .npcname$; show "Por favor, acesse o menu de configurações e ajuste em qual mapa deve ser realizado o Eventoantes de ativar esta opção."; next; goto SUB_MENU; }
+			if($confqi != 1){ show .npcname$; show "Por favor, acesse o menu de configurações e ajuste a quantidade de itens que devem ter ser entregues no Evento antes de ativar esta opção."; next; goto SUB_MENU; }
+
+			show "Deseja ativar ou desativar o Auto Start??";
+			if(select("- Ativar:- Desativar:- Manter config. atual") == 3) goto INICIO;
+
+			if (@menu == 1) {
+				show .npcname$;
+				show "Auto-Start ^339900Ativado^000000";
+				set $autostart,1;
+
+				next;
+				goto INICIO;
+						}
+			if (@menu == 2) {
+				show .npcname$;
+				set $autostart,0;
+				show "Auto-Start ^FF0000Desativado^000000";
+
+				next;
+				goto INICIO;
+						}
+		Case 5:
+			show .npcname$;
+			show "Blza.";
+			close;
+
+			}
+Start_Evento:
+			if($confpr != 1){ show .npcname$; show "Por favor, acesse o menu de configurações e ajuste os itens que vão ser entregues no Evento."; next; goto SUB_MENU; }
+			if($confmt != 1){ show .npcname$; show "Por favor, acesse o menu de configurações e ajuste qual monstro deve ser sumonado no Evento."; next; goto SUB_MENU; }
+			if($confmp != 1){ show .npcname$; show "Por favor, acesse o menu de configurações e ajuste em qual mapa deve ser realizado o Evento."; next; goto SUB_MENU; }
+			if($confqi != 1){ show .npcname$; show "Por favor, acesse o menu de configurações e ajuste a quantidade de itens que devem ter ser entregues no Evento."; next; goto SUB_MENU; }
+
+			if($onevent == 1){	show .npcname$;
+						show "O evento já foi iniciado";
+
+						next;
+						goto INICIO;
+					}
+
+			set $mobpp,($qitem1 + $qitem2 + $qitem3 + $qitem4);
+			set $onevent,1;
+			setmapflag $mapa$,mf_nomobloot;
+			setmapflag $mapa$,mf_nobaseexp;
+			setmapflag $mapa$,mf_nojobexp;
+			show .npcname$;
+			show "Evento Iniciado.";
+			monster $mapa$,0,0,""+.servername$+"",$monster,$qfalso;
+			monster $mapa$,0,0,""+.servername$+"",$monster,$qitem1,"monstropremiado::OnVERDADEIROKilled1";
+			monster $mapa$,0,0,""+.servername$+"",$monster,$qitem2,"monstropremiado::OnVERDADEIROKilled2";
+			monster $mapa$,0,0,""+.servername$+"",$monster,$qitem3,"monstropremiado::OnVERDADEIROKilled3";
+			monster $mapa$,0,0,""+.servername$+"",$monster,$qitem4,"monstropremiado::OnVERDADEIROKilled4";
+			Announce ""+$gmname$+": Esta acontecendo o Evento Monstro premiado em "+$mapa$+". Encontre o "+getmonsterinfo($monster,0)+" verdadeiro e receba um prêmio!",8;
+			close;
+
+OnVERDADEIROKilled1:
+set $mobpp,$mobpp-1;
+getitem $item1,1;
+mapannounce $mapa$,""+$gmname$+": "+(Sex ? "O" : "A")+" sortud"+(Sex ? "o" : "a")+" "+strcharinfo(0)+" acabou de achar o item "+getitemname($item1)+"!",8;
+Sleep2 2000;
+goto CHEK;
+
+OnVERDADEIROKilled2:
+set $mobpp,$mobpp-1;
+getitem $item2,1;
+mapannounce $mapa$,""+$gmname$+": "+(Sex ? "O" : "A")+" sortud"+(Sex ? "o" : "a")+" "+strcharinfo(0)+" acabou de achar o item "+getitemname($item2)+"!",8;
+Sleep2 2000;
+goto CHEK;
+
+OnVERDADEIROKilled3:
+set $mobpp,$mobpp-1;
+getitem $item3,1;
+mapannounce $mapa$,""+$gmname$+": "+(Sex ? "O" : "A")+" sortud"+(Sex ? "o" : "a")+" "+strcharinfo(0)+" acabou de achar o item "+getitemname($item3)+"!",8;
+Sleep2 2000;
+goto CHEK;
+
+OnVERDADEIROKilled4:
+set $mobpp,$mobpp-1;
+getitem $item4,1;
+mapannounce $mapa$,""+$gmname$+": "+(Sex ? "O" : "A")+" sortud"+(Sex ? "o" : "a")+" "+strcharinfo(0)+" acabou de achar o item "+getitemname($item4)+"!",8;
+Sleep2 2000;
+goto CHEK;
+
+CHEK:
+if($mobpp == 0){
+mapannounce $mapa$,""+$gmname$+": Todos os prêmios já foram encontrados. Obrigado a todos que participaram! Até a próxima!",8;
+killmonsterall $mapa$;
+set $onevent,0;
+
+removemapflag $mapa$,mf_nomobloot;
+removemapflag $mapa$,mf_nobaseexp;
+removemapflag $mapa$,mf_nojobexp;
+
+
+close;
+
+	}
+		}
+end;
+	}
+
+/* == Ajustando Horários ==
+
+OnClock<hora><minuto>:
+OnMinute<minuto>:
+OnHour<hora>:
+On<diadasemana><hora><minuto>:
+OnDay<mês><dia>:
+
+Esses rótulos serão executados, quando a data do servidor ou hora, for igual
+á do label, horas e minutos são dados em tempo militar. (0105 é igual à 01:05 AM).
+Os dias da semanas são: Sun,Mon,Tue,Wed,Thu,Fri,Sat. Meses vão de 01 à 12, dias
+de 01 à 31, nunca esqueça o zero.
+
+*gettime(<tipo>)
+
+Essa função vai retornar uma informação específica sobre o tempo atual do sistema.
+Os tipos são:
+
+1 - Segundos (de um minto)
+2 - Minutos (de uma hora)
+3 - Hora (de um dia)
+4 - Dia da semana (0 para domingo, 6 é sábado)
+5 - Dia do mês
+6 - Número do mês
+7 - Ano.
+8 - Dia do ano.
+
+Só retornará números:
+
+    if (gettime(4)==6) {
+	show "Hoje é sábado, eu não trabalho dia de sábado";
+	close;
+	}
+
+   =============== */
+
+OnClock1515:
+if((gettime(5)==15 || gettime(5)==30)){
+	if($autostart != 1){ end; }
+	if($onevent == 1){ end; }
+	Announce ""+$gmname$+": Em 5 minutos começa o Evento Monstro Prêmiado!!!",8;
+	initnpctimer;
+	end;
+
+OnTimer60000:
+	Announce ""+$gmname$+": Atenção!! Em 4 minutos começa o Evento Monstro Prêmiado.",8;
+	end;
+
+OnTimer120000:
+	Announce ""+$gmname$+": Evento Monstro Prêmiado começa em 3 minutos.",8;
+	end;
+
+OnTimer180000:
+	Announce ""+$gmname$+": Em 2 minutos começa o Evento Monstro Prêmiado.",8;
+	end;
+
+OnTimer240000:
+	Announce ""+$gmname$+": Atenção!! Evento Monstro Prêmiado começa em 1 minuto no mapa "+$mapa$+"",8;
+	end;
+
+OnTimer300000:
+
+	setmapflag $mapa$,mf_nomobloot;
+	setmapflag $mapa$,mf_nobaseexp;
+	setmapflag $mapa$,mf_nojobexp;
+
+	StopNpcTimer;
+	set $mobpp,($qitem1 + $qitem2 + $qitem3 + $qitem4);
+	set $onevent,1;
+	monster $mapa$,0,0,""+.servername$+"",$monster,$qfalso;
+	monster $mapa$,0,0,""+.servername$+"",$monster,$qitem1,"monstropremiado::OnVERDADEIROKilled1";
+	monster $mapa$,0,0,""+.servername$+"",$monster,$qitem2,"monstropremiado::OnVERDADEIROKilled2";
+	monster $mapa$,0,0,""+.servername$+"",$monster,$qitem3,"monstropremiado::OnVERDADEIROKilled3";
+	monster $mapa$,0,0,""+.servername$+"",$monster,$qitem4,"monstropremiado::OnVERDADEIROKilled4";
+	Announce ""+$gmname$+": Começa o Evento Monstro premiado no mapa "+$mapa$+". Encontre o "+getmonsterinfo($monster,0)+" verdadeiro e receba um prêmio!",8;
+	end;
+		}
+end;
+	}

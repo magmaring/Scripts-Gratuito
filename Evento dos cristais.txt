@@ -1,0 +1,251 @@
+prontera,142,164,4	script	Sala dos Cristais	855,{	
+	if(getgmlevel()>79)
+	{
+		onconf:
+		if(!$cr[0]||!$cr[1]||!$cr[2]||!$cr[3])set(.@_CAINHO$,select("Menu Admnistrativo [CONFIGURAR!]"));
+		else set(.@_CAINHO$,select("Menu Administrativo:Menu do Jogador"));
+		if(@menu==2)callsub(onplayer);
+		mes("["+strnpcinfo(1)+"]");
+		mes("Painel de Configuração");
+		mes("~~~~~~~~~~~~~~~~~~");
+		mes("~ Lim. Jogadores Sala 1: "+$cr[0]);
+		mes("~ Lim. Jogadores Sala 2: "+$cr[1]);
+		mes("~ Lim. Jogadores Sala VIP: "+$cr[2]);
+		mes("~ BN para 1º Ranking: "+$cr[5]);
+		mes("~ Bonificação VIP: "+(($cr[4])?"Sim":"Não"));
+		mes("~ Nv. VIP do Servidor: "+$cr[3]);
+		next();
+		if(select("Lim. de Jogadores Sala 1:Lim. de Jogadores Sala 2:Lim. de Jogadores Sala VIP:BN para o 1º Ranking:Bonificação VIP:Nível VIP do Servidor:Resetar Valores")==6)
+		{
+			mes("["+strnpcinfo(1)+"]");
+			mes("Digite o nível da conta VIP no seu servidor:");
+			input(.@_lv,0,20);
+			next();
+			mes("["+strnpcinfo(1)+"]");
+			mes("Nível da Conta VIP: "+.@_lv);
+			select("Confirmar");
+			close2();
+			setarray($cr[3],.@_lv);
+			end();
+		}
+		if(@menu==5)
+		{
+			mes("["+strnpcinfo(1)+"]");
+			mes("Jogadores VIP tem chances de drop nos cristais alteradas, favorecendo a eles?");
+			next();
+			select("Sim.:Não.");
+			close2();
+			setarray($cr[4],((@menu==2)?0:1));
+			end();
+		}
+		if(@menu==4)
+		{
+			
+			mes("["+strnpcinfo(1)+"]");
+			mes("Quantas Bandeira Nacional o 1º do ranking de \"kills\" de Cristal deve ganhar?");
+			input(.@_nc,0);
+			next();
+			mes("["+strnpcinfo(1)+"]");
+			mes("BN para 1º Ranking: "+.@_nc);
+			select("Confirmar");
+			close2();
+			setarray($cr[5],.@_nc);
+			end();
+		}
+		if(@menu==7)
+		{
+			mes("["+strnpcinfo(1)+"]");
+			mes("Tem certeza que deseja resetar TODOS os valores já configurados?");
+			if(select("Não:Sim")==1)close();
+			next();
+			mes("["+strnpcinfo(1)+"]");
+			mes("Todos os valores foram resetados!");
+			close2();
+			cleararray($cr[0],0,getarraysize($cr));
+			end();
+		}
+		mes("["+strnpcinfo(1)+"]");
+		mes("Digite o limite de usuários na\rSala "+((@menu==3)?"VIP":@menu));
+		input(.@_mx,0);
+		next();
+		mes("["+strnpcinfo(1)+"]");
+		mes("Lim. Jogadores Sala "+((@menu==3)?"VIP":@menu)+": "+.@_mx);
+		set(.@_lastmenu,@menu);
+		select("Confirmar");
+		close2();
+		setarray($cr[.@_lastmenu-1],.@_mx);
+		end();
+	}
+	onplayer:
+	if(!$IsEventEnabled)callsub(on2mc,"["+strnpcinfo(1)+"]","A sala dos cristais está fechada.");
+	mes("["+strnpcinfo(1)+"]");
+	mes("Posso te teleportar para várias salas onde existem cristais que ao serem mortos podem ter o item Bandeira Nacional que poderá ser trocado depois por itens.");
+	next();
+	if((#trap)&&(#sct==$TrapAdd))callsub(on2mc,"["+strnpcinfo(1)+"]","Você caiu em uma armadilha de expulsão, volte na próxima rodada.");
+	mes("["+strnpcinfo(1)+"]");
+	mes("Pois bem, escolha a sala que você deseja entrar:");
+	next();
+	select("Sala Romana [^FF0000"+getmapusers("knight_1-1")+"^000000/^008B00"+$cr[0]+"^000000]:Sala Grega [^FF0000"+getmapusers("knight_2-1")+"^000000/^008B00"+$cr[1]+"^000000]"+(getgmlevel()>$cr[3]?":Sala VIP [^FF0000"+getmapusers("wizard_2-1")+"^000000/^008B00"+$cr[2]+"^000000]":""));
+	if(getgmlevel()<$cr[3])
+	{
+		sc_end(-1);
+		if(getmapusers(((@menu==1)?"knight_1-1":((@menu==2)?"knight_2-1":((@menu==3)?"wizard_2-1":""))))>=$cr[@menu-1])callsub(on2mc,"["+strnpcinfo(1)+"]","Esta sala está lotada.");
+		if(!$IsEventEnabled)callsub(on2mc,"["+strnpcinfo(1)+"]","A sala dos cristais está fechada.");
+		warp(((@menu==1)?"knight_1-1":((@menu==2)?"knight_2-1":((@menu==3)?"wizard_2-1":""))),0,0);
+		end();
+	}
+	if(!$IsEventEnabled)callsub(on2mc,"["+strnpcinfo(1)+"]","A sala dos cristais está fechada.");
+	warp(((@menu==1)?"knight_1-1":((@menu==2)?"knight_2-1":((@menu==3)?"wizard_2-1":""))),0,0);
+	end();
+	onclock0700:
+	onclock1300:
+	onclock1900:
+	onclock0100:
+		if(!$cr[0]||!$cr[1]||!$cr[2]||!$cr[3])
+		{
+			announce("["+strnpcinfo(1)+"]: A sala dos cristais não foi iniciada porque ainda não foi configurada.",bc_all|bc_blue);
+			end();
+		}
+		set($IsEventEnabled,1);
+		announce("["+strnpcinfo(1)+"]: A sala dos cristais está aberta por 10 minutos ou até destruirem todos os cristais!",bc_all|bc_blue);
+		monster("knight_1-1",0,0,"Cristal",1877,10,strnpcinfo(0)+"::onmobdie");
+		monster("knight_2-1",0,0,"Cristal",1877,10,strnpcinfo(0)+"::onmobdie");
+		monster("wizard_2-1",0,0,"Cristal",1951,20,strnpcinfo(0)+"::onmobdie");
+		end();
+	onclock0710:
+	onclock1310:
+	onclock1910:
+	onclock0110:
+		if(!$cr[0]||!$cr[1]||!$cr[2]||!$cr[3]){end();}
+		set($IsEventEnabled,set(.@c,0));
+		announce("["+strnpcinfo(1)+"]: A sala dos cristais foi fechada!",bc_all|bc_blue);
+		set($TrapAdd,$TrapAdd+1);
+		for(;.@c<getarraysize($maps$);set.@c,.@c+1)
+		{
+			mapwarp($maps$[.@c],"quiz_00",115,87);
+			killmonsterall($maps$[.@c]);
+		}
+		end();
+	onmobdie:
+		query_sql("select `kills` from `cristais_by_mara` where `char_id`='"+getcharid(0)+"'",.@_crk);
+		if(!getarraysize(.@_crk))query_sql("insert into `cristais_by_mara` (`name`,`char_id`,`kills`) values ('"+strcharinfo(0)+"','"+getcharid(0)+"','1')");
+		else query_sql("update `cristais_by_mara` set kills=kills+1  where `char_id`='"+getcharid(0)+"'");
+		set(.@rand,rand(100));
+		set(.@rane,rand(100));
+		set(.@raed,rand(100));
+		set(.@rend,rand(100));
+		set(.@eand,rand(100));
+		set(.@ranf,rand(100));
+		if(.@rand<=(($cr[4])?((getgmlevel()>$cr[3])?25:35):35))
+		{
+			specialeffect2(69);
+			announce("Você quebra um cristal e...é retirado da sala.",bc_yellow|bc_self);
+        		warp("quiz_00",115,91);
+			end();
+		}
+		if(.@rane<=(($cr[4])?((getgmlevel()>$cr[3])?3:5):5))
+		{
+			specialeffect2(69);
+			announce("Você quebra um cristal e...é retirado da sala por esta rodada.",bc_yellow|bc_self);
+        		warp("izlude",134,115);
+			set(#trap,1);
+			set(#sct,$TrapAdd);
+			end();
+		}
+		if(.@raed<=(($cr[4])?((getgmlevel()>$cr[3])?5:3):3))
+		{
+			specialeffect2(100);
+        		announce("Você quebra um cristal e...recebe 2 Bandeira Nacional !!",bc_yellow|bc_self);
+			getitem(7549,2);
+			end();
+		}
+		if(.@rend<=(($cr[4])?((getgmlevel()>$cr[3])?10:8):8))
+		{
+			specialeffect2(100);
+        		announce("Você quebra um cristal e...recebe 1 Bandeira Nacional !!",bc_yellow|bc_self);
+        		getitem(7549,1);
+			end();
+		}
+		if(.@eand<=(($cr[4])?((getgmlevel()>$cr[3])?20:15):15))
+		{
+			specialeffect2(100);
+        		announce("Você quebra um cristal e...recebe Aumentar Agilidade Nv.10 !!",bc_yellow|bc_self);
+			sc_Start(32,240000,10);
+			skilleffect(29,0);
+			end();
+		}
+		if(.@ranf<=(($cr[4])?((getgmlevel()>$cr[3])?3:4):4))
+		{
+			specialeffect2(69);
+			if (!countitem(7549))
+			{
+				announce("Você quebra um cristal e...é retirado da sala.",bc_yellow|bc_self);
+        			warp("izlude",142,128);
+				end();
+			} 
+			else
+			{
+				announce("Você quebra um cristal e...perde 1 Bandeira Nacional.",bc_yellow|bc_self);
+				delitem(7549,1);
+				end();
+			}
+			end();
+		}
+		end();
+	oninit:
+		setarray($mf[0],0,1,2,3,4,5,12,13,15,22,29,30,31,33,34,35,41);
+		setarray($maps$[0],"knight_1-1","knight_2-1","wizard_2-1");
+		for(set(.@a,0);.@a<getarraysize($mf);set.@a,.@a+1)setmapflag($maps$[0],setmapflag($maps$[1],setmapflag($maps$[2],$mf[.@a])));
+		end();
+	on2mc:
+		mes(getarg(0));
+		mes(getarg(1));
+		close();
+	onpcloginevent:
+		if(!$cr[0]||!$cr[1]||!$cr[2]||!$cr[3]&&getgmlevel()>79)
+		{
+			mes("["+strnpcinfo(1)+"]");
+			mes("Desculpe pelo incômodo, mas você ainda não me configurou totalmente.");
+			mes("Isso pode causar bugs, então peço que o faça.");
+			close2();
+			callsub(onconf);
+		}
+		end();
+}
+//Ranking
+prontera,138,184,5	script	Ranking dos Cristais	857,{
+
+	mes("["+strnpcinfo(1)+"]");
+	mes("Deseja ver o Ranking de quem mais destruiu os Cristais?");
+	mes("Todo o mês o primeiro do ranking ganha "+$cr[5]+" Bandeira Nacional.");
+	next();
+	query_sql("select `first` from `cristais_by_mara`",.@_fist);
+	if(select("Ver Ranking"+(getcharid(0)==.@_fist?":Pegar Prêmio":""))==2)
+	{
+		mes("["+strnpcinfo(1)+"]");
+		if(checkweight(7549,$cr)==0)
+		{
+			mes("Você está pesado demais!");
+			close();
+		}
+		mes("Aqui está: "+$cr[5]+" Bandeira Nacional!");
+		close2();
+		getitem(7549,$cr[5]);
+		query_sql("update `cristais_by_mara` set `first` = ''");
+		end();
+	}
+	query_sql("SELECT `kills`,`name` from `cristais_by_mara` order by `kills` desc",.@_cki,.@_nm$);
+	for(set(.@_r,0);.@_r<getarraysize(.@_cki);set(.@_r,.@_r+1))mes((.@_r+1)+"º ~ "+.@_nm$[.@_r]+" ~ "+.@_cki[.@_r]+" Kills");
+	close();
+	
+	oninterifinitonce:
+		query_sql("create table if not exists `cristais_by_mara` (`name` varchar(24) not null default '',`char_id` int(11) not null default '0',`kills` smallint(8) not null default '0',`first` int(11) not null default '0',key `char_id` (`char_id`),key `kills` (`kills`),key `first` (`first`))engine=myisam");
+		end();
+
+	onday0101:onday0201:onday0301:onday0401:onday0501:onday0601:onday0701:onday0801:onday0901:onday1001:onday1101:onday1201:
+		query_sql("select `char_id`,`name` from `cristais_by_mara` order by `kills` desc limit 1",.@_wcid,.@_nmdx$);
+		query_sql("truncate table `cristais_by_mara`");
+		query_sql("insert into `cristais_by_mara` (`first`) values ('"+.@_wcid+"')");
+		announce("[Sala dos Cristais]: O ranking foi resetado. O vencedor foi: "+.@_nmdx$,bc_all|bc_blue);
+		end();
+}

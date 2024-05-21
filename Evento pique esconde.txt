@@ -1,0 +1,89 @@
+//===== Cronus Scripter ======================================
+//= Pique Esconde
+//===== Criado por: ==========================================
+//= Makee e Neymar
+//===== Compatibilidade: =====================================
+//= Todas
+//===== Descrição: ===========================================
+//= O Player irá terque achar o mob que está escondido !
+//============================================================
+force_1-1,89,102,5	script	Pique Esconde	97,{
+//============================================================
+set .n$, "Pique Esconde";
+set .map$, "force_1-1";
+set .mapa$, "prontera";
+//============================================================
+mes .n$;
+mes "Olá "+strcharinfo(0)+"!";
+mes "Como vai você ?";
+next;
+mes .n$;
+mes "Você está afim de 1 evento ?";
+next;
+if(select("Sim:Não")==2) { end; }
+if($event_piq == 0) { mes .n$; mes "Agora o evento esta fechado volte mais tarde"; close; }
+if($event_piq == 1) {
+mes .n$;
+mes "Então ta bom , espero que tenha sorte va meu guerreiro";
+warp .map$,0,0;
+close;
+end;
+
+OnClock1000:
+OnClock1200:
+OnClock1400:
+OnClock1600:
+OnClock1800:
+OnClock2000:
+OnClock2200:
+OnClock0000:
+Announce "O Evento de Pique-Esconde ira comecar, Boa sorte a todos que participarao",8;
+monster "force_1-1",0,0,"Escondido",1002,1,"EventoPique::OnMobDeath";
+close;
+
+OnClock0955:
+OnClock1155:
+OnClock1355:
+OnClock1555:
+OnClock1755:
+OnClock1955:
+OnClock2155:
+OnClock2355:
+Announce "Faltam 5 Minutos para o evento pique-esconde comecar",8;
+close;
+
+OnClock0958:
+OnClock1158:
+OnClock1358:
+OnClock1558:
+OnClock1758:
+OnClock1958:
+OnClock2158:
+OnClock2358:
+Announce "Faltam 2 Minutos para o evento pique-esconde comecar",8;
+close;
+
+OnClock0959:
+OnClock1159:
+OnClock1359:
+OnClock1559:
+OnClock1759:
+OnClock1959:
+OnClock2159:
+OnClock2359:
+Announce "Faltam 1 Minuto para o evento pique-esconde comecar",8;
+set $event_piq,1;
+close;
+
+OnMobDeath:
+warp .mapa$,150,150;
+getitem 7037,5;
+Announce "O Evento pique-esconde foi um sucesso parabens ao campeao",8;
+}
+}
+
+//====================================================================
+force_1-1	mapflag	noteleport
+force_1-1	mapflag	nowarp
+force_1-1	mapflag	nowarpto
+}

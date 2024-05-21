@@ -1,0 +1,81 @@
+sec_in01,178,103,5	script	Bruxa Suspeita	859,{
+
+if (getgmlevel() < 1) {
+show "[Bruxa]";
+show "Infelizmente você não é VIP !";
+close2;
+warp "prontera",150,150;
+end;
+}
+
+// --- Disguise
+
+show "[Bruxa]";
+show "Lá estava eu contra todo o exército de RuneMidGard.";
+show "Eles estavam todos me olhando com raiva e me falando";
+show "para desistir e me entregar, mas eu estava confiante.";
+next;
+show "[Bruxa]";
+show "Eu disse a eles que nunca iria desistir, então...";
+show "Eles avançaram............";
+show "Vieram em minha direção com suas armas e poderes.";
+show "Mas eles não sabiam meu verdadeiro poder...";
+show "De repente..........";
+next;
+show "[Bruxa]";
+show "Eu transformei todos em fabres!!!";
+show "Muahahahahahahahaha !!!!";
+next;
+show "[Bruxa]";
+show "Hunh.... ?";
+show "Espere, mas o que ?";
+show "Você escutou tudo que eu disse ??";
+next;
+switch(select("- Você tem um poder especial ?","- Não, estou indo embora")){
+
+Case 1:
+show "[Bruxa]";
+show "Eu tenho sim idai ?? Não é da sua conta.";
+show "Vocês VIP's acham que são melhores do que eu.";
+show "Até parece !!";
+next;
+switch(select("- Você pode me transformar em alguem monstro ?","- Você é louca")){
+
+Case 1:
+show "[Bruxa]";
+show "... ¬¬";
+show "Você não tem medo de mim !!!???";
+show "..........";
+next;
+show "[Bruxa]";
+show "Muito bem, se eu te transformar em um monstro você vai embora ?";
+next;
+switch(select("- Sim !","- A vai se danar !")){
+
+case 1:
+show "[Bruxa]";
+show "OK, então digite o ID do monstro que você quer virar !";
+digit $ID$;
+next;
+show "[Bruxa]";
+show "Pronto !";
+show "agora saia daqui !!";
+disguise $ID$;
+close;
+
+case 2:
+close;
+}
+
+case 2:
+show "[Bruxa]";
+show "Sou louca e com muito orgulho !!";
+close;
+}
+
+case 2:
+show "[Bruxa]";
+show "Muahahahahahaha !!";
+close;
+}
+}

@@ -1,0 +1,146 @@
+sec_in02,32,183,5	script	de Um Resta	65, {
+
+	show "[Resta Um]";
+	show "Olá" + strcharinfo (0) + "";
+	show "Bem Vindo AO Evento Resta Um";
+	seguinte;
+	mostrar "entrar Deseja?";
+	switch (select ("entrar no Evento!", "Como Funciona?", "Acessar o Ranking!", "Nada, Só Quero Sair!")) {
+
+		case 1:
+	if ($ Aberto == 0) goto fechado;
+	deformar "rwc03", 0,0;
+	dispbottom "Voce This Dentro fazer Resta Um Boa Sorte!";
+	end;
+		
+		case 2:
+		show "[Resta Um]";
+		show "Em Horarios Definidos o Evento Sera Ligado";
+		show "Voce tera 5 Minutos Pará ENTRAR pingos de arena nd Que ELA feche.";
+		mostrar "Apos O PvP soros Ligado EO ultimo sobrevivente sera o Ganhador.";
+		fechar;
+		end;
+		
+		case 3:
+		show "Em Breve";
+		fechar;
+		end;
+		
+		case 4:
+	close2;
+	end;
+
+}
+
+	fechado:
+	show "Desculpe o Evento This Fechado.";
+	show "Volte Mais Tarde";
+	fechar;
+	end;
+
+
+}
+
+
+rwc03, 0,0,0 script de NoEvento -1, {
+OnWhisperGlobal:
+
+if (getgmlevel () == 99) {
+show "Deseja Ligar o Evento?";
+switch (select ("Ligar", "Sair")) {
+
+case 1:
+	dispbottom "Evento Ligado com Sucesso!";
+	callsub OnEventStart;
+	end;
+
+case 2:
+	fechar;
+	end;
+}
+}
+
+
+
+Onclock0500: callsub OnEventStart;
+Onclock1100: callsub OnEventStart;
+OnClock1700: callsub OnEventStart;
+OnClock2300: callsub OnEventStart;
+
+
+OnEventStart:
+set $ Aberto, 1;
+pvpoff "rwc03";
+atcommand "@ killmonster2";
+announce "[Resta Um]: O Evento Resta Um This Aberto Voce tem 5 Minutos parágrafo ENTRAR", 0;
+sleep2 60000;
+anunciar:, 0; "[Resta Um] Voce tem 4 Minutos parágrafo Entar No Evento!"
+sleep2 60000;
+anunciar:, 0; "[Resta Um] Voce tem 3 Minutos parágrafo Entar No Evento!"
+sleep2 60000;
+anunciar:, 0; "[Resta Um] Voce tem 2 Minutos parágrafo Entar No Evento!"
+sleep2 60000;
+anunciar:, 0; "[Resta Um] Voce tem um parágrafo Minutos Entar No Evento!"
+sleep2 60000;
+announce "[Resta UM]: Fechados O Evento Resta Um Começou Portais!", 0;
+set $ Aberto, 0;
+Ir à comecou;
+end;
+
+comecou:
+if (getmapusers ("rwc03") == 1) goto Cancelado;
+Mapannounce "rwc03", "[Resta Um]: O Evento tera Inicio in 1 Minuto Preparem-se!", 0;
+sleep2 57000;
+Mapannounce "rwc03", "Pronto?", 0;
+sleep2 1000;
+Mapannounce "rwc03", "Firme!", 0;
+sleep2 1000;
+Mapannounce "rwc03", "Go!", 0;
+pvpon "rwc03";
+atcommand "@ skillon";
+end;
+
+Cancelado:
+announce "[Resta UM]: o Quantcast Resta UM FOI CANCELADO YET Jogadores FALTA DE"., 0;
+sleep2 5000;
+mapwarp "rwc03", "prontera", 145.168;
+end;
+}
+
+
+- Script MortoVivo -1, {
+
+OnPCKillEvent:
+if (strcharinfo (3) = "rwc03!") end;
+		if (getmapusers ("rwc03")> 1) end;
+		monstro "rwc03", 50,50, "Baú de Guerra", 1732,1, "Entregador # func :: OnQuebrarBau";
+		end;
+
+	OnPCDieEvent:
+if (strcharinfo (3) = "rwc03!") end;
+		deformar "prontera", 150.150;
+	}
+
+- Script Entregador # func -1, {
+
+	OnQuebrarBau:
+	pvpoff "rwc03";
+	AddItem 30139,4;
+	anunciar "O Vencedor do do Evento resta UM FOI" + strcharinfo (0) +, bc_all "!";
+	deformar "prontera", 150.150;
+	end;
+}
+
+/ / MapFlags
+rwc03 mapflag nomemo
+rwc03 nopenalty mapflag
+rwc03 mapflag nobranch
+rwc03 mapflag pvp_noguild
+rwc03 mapflag noloot
+rwc03 mapflag noexp
+rwc03 mapflag noteleport
+rwc03 noreturn mapflag
+rwc03 mapflag nowarp
+rwc03 mapflag nowarpto
+rwc03 mapflag nosave
+rwc03 mapflag pvp

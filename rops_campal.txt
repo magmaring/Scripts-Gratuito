@@ -1,0 +1,91 @@
+
+prontera,157,147,3	script	Rops Campal	951,{
+	mes "[BG Stuff]";
+	mes "Olá ^FF0000"+strcharinfo(0)+"^000000, cansad"+(sex > 0 ? "o" : "a")+" de gastar items";
+	mes "consumíveis nas partidas de battleground ?";
+	mes "Eu tenho uma boa notícia para você,";
+	mes "eu posso vender itens consumíveis especiais,";
+	mes "que podem ser usados nas partidas de Battleground.";
+
+	next;
+
+	mes "[BG Stuff]";
+	mes "Assim você não precisará ficar usando seus";
+	mes "itens consumíveis nas partidas.";
+	mes "O preço aqui não é Zeny";
+	mes "mas sim emblemas de Bravura, Valor e de Guerra.";
+
+	next;
+
+	mes "[BG Stuff]";
+	mes "Você pode conseguí-los lutando dentro";
+	mes "das partidas de battlegroung, quando";
+	mes "você ganhar essese Emblemas você pode vir";
+	mes "aqui e trocá-las por items consumíveis";
+
+	next;
+
+	mes "[BG Stuff]";
+	mes "Lembrando que você pode pagar com";
+	mes "qualquer um dos três Emblemas.";
+
+	next;
+
+	mes "Qual item deseja adiquirir?";
+
+	next;
+
+	
+	switch(select("Boneca denise:Boneca lady solace:Boneca de Lif:Boneca de Deborah:Boneca de Sofia:Boneca de Marianne:Boneca Tatiana:Boneca Bianca:Olho de Ciclope:Legendárias asas de Demônio:Olho de mimir:Máscara de Fugitivo:boneca da lady branca")) {
+		case 1:		callsub S_Buy,5340,1,500;	// Boneca denise
+		case 2:		callsub S_Buy,5324,1,500;	// Boneca lady solace
+		case 3:		callsub S_Buy,5253,1,500;	// Boneca de Lif
+		case 4:		callsub S_Buy,5345,1,500;	// Boneca de Deborah
+		case 5:		callsub S_Buy,5341,1,500;	// Boneca de Sofia
+		case 6:		callsub S_Buy,5342,1,500;	// Boneca de Marianne
+		case 7:		callsub S_Buy,5343,1,500;	// Boneca Tatiana
+		case 8:		callsub S_Buy,5344,1,500;	// Boneca Bianca
+		case 9:		callsub S_Buy,5135,1,500;	// Olho de Ciclope
+		case 10:	callsub S_Buy,5376,1,500;	// Legendárias asas de Demônio
+		case 11:	callsub S_Buy,5470,1,500;	// Olho de mimir
+		case 12:	callsub S_Buy,5361,1,500;	// Máscara de Fugitivo
+		case 13:	callsub S_Buy,5464,1,500;	// boneca da lady branca
+	}
+	end;
+
+S_Buy:
+// getarg(0) = item_id
+// getarg(1) = Quantidade de item_id que você obtenha
+	mes "[BG Stuff]";
+	mes "Então você quer ^0000FF"+getarg(1)+" "+getitemname(getarg(0))+"s^000000...";
+	mes "Vai custar-lhe ^FF0000"+getarg(2)+" Emblemas...";
+	next;
+
+
+	 select("Emblema de Guerra:Emblema de Bravura:Emblema de Valor");
+
+	setarray .@medalid, 7773, 7828, 7829;
+
+	if(countitem(.@medalid[@menu-1]) >= getarg(2)) {
+
+		delitem .@medalid[@menu-1],getarg(2);
+		getitem getarg(0),getarg(1);
+
+
+
+	next;
+
+		mes "[BG Stuff]";
+		mes "Troca concluída, obrigado e volte sempre.";
+			close;
+	} else {
+
+		mes "[BG Stuff]";
+		mes "Me desculpe mas você não tem a ";
+		mes "quantidade necessária desse Emblema.";
+
+			close;
+	}
+
+	return;
+	}}

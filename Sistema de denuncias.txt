@@ -1,0 +1,151 @@
+// ========================================================
+// Sistema de Denuncias
+// =-=-=-= Visite =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// www.cronus-emulator.com/forum/index.php?showtopic=20822
+// =-=-=-= Versão Atual =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// v1.0
+// =-=-=-= Npc By =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Rafael
+// =-=-=-= Descrição =-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=
+// NPC para os players postarem denuncias.
+// ========================================================
+prontera,147,166,5	script	Denuncia	871,{
+set @DEN$, "^ff0000Denúncia^000000";
+
+	setarray @TIPO$[1], "Bot","Bug","Ks","Looter","Outro";
+	setarray @CHARS[1], 1, 0, 1, 1, 0;
+	show @DEN$;
+	show "O que deseja fazer?";
+	next;
+	set @TYPE, 1; set @CHAR$, "---"; set @MSG1$, "---"; set @SCREEN$, "---";
+	if(getgmlevel() <= 10) menu "- ^008000Fazer Denúncia^000000!",DENUNCIA,"- ^008000Nada^000000...",NADA;
+	menu "- ^008000Fazer Denúncia^000000!",DENUNCIA,"- ^008000Ver Denúncias^000000!",SEE_DENUNCIA,"- ^008000Nada^000000...",NADA;
+
+DENUNCIA:
+	next;
+	show @DEN$;
+	show "Tipo de Denúncia: ^ff8000"+@TIPO$[@TYPE]+"^000000";
+	if(@CHARS[@TYPE]) show "Char denunciado: ^ff8000"+@CHAR$+"^000000";
+	show "^008000========================^000000";
+	show "Screenshot Link: ^ff8000"+@SCREEN$+"^000000";
+	show "^008000========================^000000";
+	show "Mensagem: ^ff8000"+@MSG1$+@MSG2$+"^000000";
+	show "^525252Enviado por: "+ strcharinfo(0) +"^000000";
+	menu "- ^008000Tipo de Denuncia^000000!",TIPO,"- ^008000Char denunciado^000000!",CHAR,"- ^008000Screenshot^000000!",SCREEN,"- ^008000Mensagem^000000!",MENSAGEM,"- ^008000Enviar^000000!",SEND;
+TIPO:
+	next;
+	set @NUM, 0;
+	while(@NUM < 50) {
+	if(@TIPO$[@NUM] != "") show @NUM+". ^0000ff"+@TIPO$[@NUM]+"^000000";
+	set @NUM, @NUM +1;
+	}
+	digit @TYPE;
+	goto DENUNCIA;
+
+CHAR:
+	if(!@CHARS[@TYPE]) { show "Para este tipo de denuncia: "+@TIPO$[@NUM]+" não há char a ser denunciado!";
+	goto DENUNCIA;
+	}
+	digit @CHAR$;
+	goto DENUNCIA;
+
+SCREEN:
+	digit @SCREEN$;
+	goto DENUNCIA;
+
+MENSAGEM:
+	menu "- ^008000Parte[1]^000000",PARTE1,"- ^008000Parte[2]^000000",PARTE2,"- ^008000Voltar^000000!",DENUNCIA;
+PARTE1:
+	digit @MSG1$;
+	goto MENSAGEM;
+PARTE2:
+	digit @MSG2$;
+	goto MENSAGEM;
+
+SEND:
+	if(@MSG1$=="") || (!@TYPE) || (@CHAR$=="" && @CHARS[@TYPE]) || (@TIPO$[@TYPE]=="") {
+	show @DEN$;
+	show "Mensagem Parte[1] ou Tipo de denuncia ou Char a ser denunciado ( apenas se necessário ) vazio!";
+	goto DENUNCIA;
+	}
+	if($DENUNCE<1000) {
+	set $DENUNCE, $DENUNCE +1;
+	setd "$MSG1_"+$DENUNCE+"$", @MSG1$;
+	setd "$MSG2_"+$DENUNCE+"$", @MSG2$;
+	setd "$SCREEN_"+$DENUNCE+"$", @SCREEN$;
+	setd "$CHAR_"+$DENUNCE+"$", @CHAR$;
+	setd "$TIPO_"+$DENUNCE+"$", @TIPO$[@TYPE];
+	setd "$AUTOR_"+$DENUNCE+"$", strcharinfo(0);
+	show "Enviado com sucesso!";
+	}else{
+	show "Os GMs devem apagar as denuncias atuais!";
+	}
+	close;
+
+SEE_DENUNCIA:
+	next;
+	show @DEN$;
+	set @NUM, 0;
+	set @VAZIO, 0;
+	while(@NUM <= $DENUNCE) {
+	if(getd("$MSG1_"+@NUM+"$")!="") {
+	show "Mensagem Numero "+@NUM;
+	show "Tipo de Denúncia: ^ff8000"+getd("$TIPO_"+@NUM+"$")+"^000000";
+	if(@CHARS[@TYPE]) show "Char denunciado: ^ff8000"+getd("$CHAR_"+@NUM+"$")+"^000000";
+	show "^008000=========================^000000";
+	show "Screenshot Link: ^ff8000"+getd("$SCREEN_"+@NUM+"$")+"^000000";
+	show "^008000=========================^000000";
+	show "Mensagem: ^ff8000"+getd("$MSG1_"+@NUM+"$")+getd("$MSG2_"+@NUM+"$")+"^000000";
+	show "^525252Enviado por: "+ getd("$AUTOR_"+@NUM+"$") +"^000000";
+	show "^ff0000=-=-=-=-=-=-=-=-=-=-=-=-=^000000";
+	}else{
+	if(@NUM>0) set @VAZIO, @VAZIO +1;
+	}
+	set @NUM, @NUM +1;
+	}
+	if(@VAZIO == $DENUNCE) {
+	show "Não tem nenhuma PM";
+	set $DENUNCE, 0;
+	close;
+	}
+	menu "- ^008000Deletar Uma Denuncia^000000!",DELONE,"- ^008000Deletar Todas Denúncias^000000!",DELALL,"- ^008000Quit^000000!",NADA;
+DELONE:
+	next;
+	show @DEN$;
+	show "Digite o numero da PM que deseja deletar!";
+	menu "- ^008000Digitar^000000!",-,"- ^008000Voltar^000000!",SEE_DENUNCIA;
+	digit @NUM;
+	if(getd("$MSG1_"+@NUM+"$") == "") {
+	show "PM Inexistente!";
+	goto SEE_DENUNCIA;
+	}
+	show "PM Deletada com sucesso!";
+	setd "$MSG1_"+@NUM+"$", "";
+	setd "$MSG2_"+@NUM+"$", "";
+	setd "$SCREEN_"+@NUM+"$", "";
+	setd "$CHAR_"+@NUM+"$", "";
+	setd "$TIPO_"+@NUM+"$", "";
+	setd "$AUTOR_"+@NUM+"$", "";
+	goto SEE_DENUNCIA;
+DELALL:
+	next;
+	show @DEN$;
+	show "Tem certeza que deseja deletar todas?";
+	menu "- ^008000Sim^000000!",-,"- ^008000Voltar^000000!",SEE_DENUNCIA;
+	show "PMs Deletadas com sucesso!";
+	set @NUM, 0;
+	while(@NUM < 1000) {
+	set @NUM, @NUM +1;
+	setd "$MSG1_"+@NUM+"$", "";
+	setd "$MSG2_"+@NUM+"$", "";
+	setd "$SCREEN_"+@NUM+"$", "";
+	setd "$CHAR_"+@NUM+"$", "";
+	setd "$TIPO_"+@NUM+"$", "";
+	setd "$AUTOR_"+@NUM+"$", "";
+	set $DENUNCE, 0;
+	}
+	goto SEE_DENUNCIA;
+
+NADA:
+	close;
+}

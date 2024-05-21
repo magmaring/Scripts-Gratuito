@@ -1,0 +1,8 @@
+-	script	checkmap	-1,{
+OnPCLoadMapEvent:
+if(strcharinfo(3) == "sec_in01" && getgmlevel() == 0)
+warp "prontera",150,150;
+close;
+}
+
+sec_in01	mapflag	loadevent

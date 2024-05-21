@@ -1,0 +1,226 @@
+prontera.gat,165,195,3	script	Anúncio	-1,{
+
+OnClock0015:
+announce "[Ragna TEN] Doe, Ajude nosso servidor !",8;
+end;
+OnClock0030:
+announce "[Ragna TEN] Visite o nosso Fórum e fique por dentro das novidades!",8;
+end;
+OnClock0045:
+announce "[Ragna TEN] Ajude o servidor a crescer, traga seus amigos agora mesmo !",8;
+end;
+OnClock0115:
+announce "[Ragna TEN] Nunca se esqueça, você é especial para nós !",8;
+end;
+OnClock0130:
+announce "[Ragna TEN] Vote diariamente no servidor !",8;
+end;
+OnClock0145:
+announce "[Ragna TEN] O Ganhador do mês no Ranking PvP Será Premiado com 10k de Rop's",8;
+end;
+OnClock0215:
+announce "[Ragna TEN] A Staff agradeçe a todos players por jogarem em nosso servidor !",8;
+end;
+OnClock0230:
+announce "[Ragna TEN] Ajude o servidor a crescer, traga seus amigos agora mesmo !",8;
+end;
+OnClock0245:
+announce "[Ragna TEN] Visite o nosso Fórum e fique por dentro das novidades! ",8;
+end;
+OnClock0315:
+announce "[Ragna TEN] Não Somos os melhores, Mas fazemos a diferença !!! ",8;
+end;
+OnClock0330:
+announce "[Ragna TEN] Vote, Ajude o servidor, não leva nem um minutinho !!!",8;
+end;
+OnClock0345:
+announce "[Ragna TEN] Visite o Fórum e Fique por Dentro das Novidades!",8;
+end;
+OnClock0415:
+announce "[Ragna TEN] Nunca se esqueça, você é especial para nós !",8;
+end;
+OnClock0430:
+announce "[Ragna TEN] Eventos estarão ocorrendo e sendo anunciados no site e fórum então fiquem ligados !",8;
+end;
+OnClock0445:
+announce "[Ragna TEN] Participe das enquetes no fórum e no servidor !!",8;
+end;
+OnClock0515:
+announce "[Ragna TEN] Obrigado a todos por jogar em nosso servidor !",8;
+end;
+OnClock0530:
+announce "[Ragna TEN] Um servidor que faz a diferença !!!",8;
+end;
+OnClock0545:
+announce "[Ragna TEN] Visitem o nosso fórum e fiquem ligados nos eventos que irão ocorrer.",8;
+end;
+OnClock0615:
+announce "[Ragna TEN] Traga seus amigos e ajude o Servidor a crescer !",8;
+end;
+OnClock0630:
+announce "[Ragna TEN] Doe, Ajude o servidor !!!",8;
+end;
+OnClock0645:
+announce "[Ragna TEN] Um servidor desçente com uma Staff copetente",8;
+end;
+OnClock0715:
+announce "[Ragna TEN] Visite o Fórum e Fique por Dentro das Novidades!",8;
+end;
+OnClock0730:
+announce "[Ragna TEN] O Ganhador do mês no Ranking PvP Será Premiado com 30k de Rop's",8;
+end;
+OnClock0745:
+announce "[Ragna TEN] Chamem seus amigos agora mesmo para jogar em nosso Servidor",8;
+end;
+OnClock0815:
+announce "[Ragna TEN] Participe dos eventos e ganhe prêmios incríveis",8;
+end;
+OnClock0830:
+announce "[Ragna TEN] A Staff Jamais irá pedir sua Senha ou Login, Então não passe-a para ninguém",8;
+end;
+OnClock0845:
+announce "[Ragna TEN] Se sentiu ofendido? Alguem lhe chingou? foi hackiado? Acesse o fórum e denuncie",8;
+end;
+OnClock0915:
+announce "[Ragna TEN] Vote diariamente no servidor, não leva nem um minutinho !",8;
+end;
+OnClock0930:
+announce "[Ragna TEN] Participe dos eventos e ganhe prêmios incríveis",8;
+end;
+OnClock0945:
+announce "[Ragna TEN] O Ganhador do mês no Ranking PvP Será Premiado com 30k de Rop's",8;
+end;
+OnClock1015:
+announce "[Ragna TEN] Fiquem ligados nas promoções em nosso site !!!",8;
+end;
+OnClock1030:
+announce "[Ragna TEN] Visite o Fórum e fiquem por dentro das novidades!",8;
+end;
+OnClock1045:
+announce "[Ragna TEN] Encontrou algum bug no servidor? Reporte à Staff",8;
+end;
+OnClock1115:
+announce "[Ragna TEN] Confira no Fórum os eventos que irão ocorrer Diariamente!",8;
+end;
+OnClock1130:
+announce "[Ragna TEN] Crie sua guild e detone na woe !!! Você e os membros podem ser premiados com ROP's no final de cada mês",8;
+end;
+OnClock1145:
+announce "[Ragna TEN] Por questão de segurança nunca passe sua conta para ninguém.",8;
+end;
+OnClock1215:
+announce "[Ragna TEN] Se Alguém tentar se passar por um membro da Staff , Favor denunciar no forúm",8;
+end;
+OnClock1230:
+announce "[Ragna TEN] Doe, Ajude o servidor a se manter Online !",8;
+end;
+OnClock1245:
+announce "[Ragna TEN] Ajude o servidor, traga novos player para jogar !",8;
+end;
+OnClock1315:
+announce "[Ragna TEN] Confira as novidades do servidor no fórum. !",8;
+end;
+OnClock1330:
+announce "[Ragna TEN] Não somos o melhor, mas fazemos a diferença !!!",8;
+end;
+OnClock1345:
+announce "[Ragna TEN] Vote diariamente no servidor, não leva nem um minutinho",8;
+end;
+OnClock1415:
+announce "[Ragna TEN] Nunca ofenda ninguém, além de ser ridículo, você pode ser punido !!!",8;
+end;
+OnClock1430:
+announce "[Ragna TEN] O Vencedor do Rank PVP, Ganhará 5k de Rop's, não fique fora dessa !!",8;
+end;
+OnClock1445:
+announce "[Ragna TEN] Ajude o servidor, traga seus amigos para jogar !",8;
+end;
+OnClock1515:
+announce "[Ragna TEN] Servidor Totalmente Amigável !",8;
+end;
+OnClock1530:
+announce "[Ragna TEN] Visite o Fórum e fique por dentro das Novidades!",8;
+end;
+OnClock1545:
+announce "[Ragna TEN] Sempre inovando",8;
+end;
+OnClock1615:
+announce "[Ragna TEN] Onde quem faz nosso história são vocês!",8;
+end;
+OnClock1630:
+announce "[Ragna TEN] Doe, ajude nosso servidor !!!",8;
+end;
+OnClock1645:
+announce "[Ragna TEN] Ajude nosso servidor, vote diariamente",8;
+end;
+OnClock1715:
+announce "[Ragna TEN] Visite o Fórum e fique por dentro das novidades!",8;
+end;
+OnClock1730:
+announce "[Ragna TEN] Nós da Staff Nunca pediremos seu login ou senha, fique atento !",8;
+end;
+OnClock1745:
+announce "[Ragna TEN] Onde você tem valor !!!",8;
+end;
+OnClock1815:
+announce "[Ragna TEN] Sempre inovando",8;
+end;
+OnClock1830:
+announce "[Ragna TEN] Acesse o fórum e fique por dentro das novidades !!!",8;
+end;
+OnClock1845:
+announce "[Ragna TEN] Vote diariamente no servidor !!!",8;
+end;
+OnClock1915:
+announce "[Ragna TEN] Traga seus amigos agora mesmo para jogar em nosso servidor",8;
+end;
+OnClock1930:
+announce "[Ragna TEN] O Clã que mais se destacar a cada mês, será premiado com 5k de ROP's para CADA MEMBRO",8;
+end;
+OnClock1945:
+announce "[Ragna TEN] Denuncie aqueles que nao seguem as regras do jogo faça do Nosso servidor um lugar melhor",8;
+end;
+OnClock2015:
+announce "[Ragna TEN] Onde você tem valor !!!",8;
+end;
+OnClock2030:
+announce "[Ragna TEN] Visite o Fórum e fique por dentro das Novidades!",8;
+end;
+OnClock2045:
+announce "[Ragna TEN] Doe, ajude nosso servidor",8;
+end;
+OnClock2115:
+announce "[Ragna TEN] Denuncie o uso de Qualquer tipo de Hack/bot, Ajude a staff !",8;
+end;
+OnClock2130:
+announce "[Ragna TEN] Participe dos eventos e ganhe prêmios incríveis",8;
+end;
+OnClock2145:
+announce "[Ragna TEN] Vote diariamente no servidor !",8;
+end;
+OnClock2215:
+announce "[Ragna TEN] Mantenha o espírito amigável !",8;
+end;
+OnClock2230:
+announce "[Ragna TEN] Sempre inovando",8;
+end;
+OnClock2245:
+announce "[Ragna TEN] Dúvidas? os gms sempre estárão por perto para resolvê-las",8;
+end;
+OnClock2315:
+announce "[Ragna TEN] Denuncie aqueles que nao seguem as regras do jogo !",8;
+end;
+OnClock2330:
+announce "[Ragna TEN] Aqui você é encontra um servidor de qualidade !",8;
+end;
+OnClock2345:
+announce "[Ragna TEN] Está muito feliz por ter vocês com a gente!",8;
+end;
+OnClock2345:
+announce "[Ragna TEN] Para dropar Cupons de Quest procure pelo monstro Deviruchi e partecipe dos eventos",8;
+end;
+OnClock2345:
+announce "[Ragna TEN] Para ganahar vale montaria procure pelo monstro Poring e participe dos eventos!",8;
+end;
+}
+}

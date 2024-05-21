@@ -1,0 +1,522 @@
+force_1-1,109,102,4	script	Arena de Caça	763,{
+
+show "[Arena de Caça]";
+show "Olá sou o guardião da arena";
+next;
+show "[Arena de Caça]";
+show "Quanto mais monstro você mata mais ponto você ganha";
+show "E você pode trocar estes pontos por items";
+if(getgmlevel()>98){ menu "Desejo entrar na Arena",GoArena,"Trocar Pontos",GoPontos,"Mudar Items da Loja",GoMudar,"Ver items selecionados",Checagem;}
+show "[Arena de Caça]";
+menu "Desejo entrar na Arena",GoArena,"Trocar Pontos",GoPontos;
+
+GoArena:
+if($WarpLiberado == 1){
+next;
+show "[Arena de Caça]";
+show "Boa sorte, tente sobreviver";
+warp "ordeal_1-2.gat",154,153;
+close;
+}
+next;
+show "[Arena de Caça]";
+show "Desculpe estamos fechados";
+close;
+
+GoMudar:
+next;
+show "[Arena de Caça]";
+show "Digite os items que serão vendidos e o preço";
+next;
+show "[Arena de Caça]";
+show "Digite a ID do Primeiro item";
+digit $Item1;
+next;
+show "[Arena de Caça]";
+show "Digite aqui o preço em pontos";
+digit $Pontos1;
+next;
+show "[Arena de Caça]";
+show "Digite a ID do Segundo item";
+digit $Item2;
+next;
+show "[Arena de Caça]";
+show "Digite aqui o preço em pontos";
+digit $Pontos2;
+next;
+show "[Arena de Caça]";
+show "Digite a ID do Terceiro item";
+digit $Item3;
+next;
+show "[Arena de Caça]";
+show "Digite aqui o preço em pontos";
+digit $Pontos3;
+next;
+show "[Arena de Caça]";
+show "Digite a ID do Quarto item";
+digit $Item4;
+next;
+show "[Arena de Caça]";
+show "Digite aqui o preço em pontos";
+digit $Pontos4;
+next;
+show "[Arena de Caça]";
+show "Digite a ID do Quinto item";
+digit $Item5;
+next;
+show "[Arena de Caça]";
+show "Digite aqui o preço em pontos";
+digit $Pontos5;
+next;
+show "[Arena de Caça]";
+show "Digite a ID do Sexto item";
+digit $Item6;
+next;
+show "[Arena de Caça]";
+show "Digite aqui o preço em pontos";
+digit $Pontos6;
+goto Checagem;
+
+Checagem:
+next;
+show "[Arena de Caça]";
+show "Bem os items que você escolheu são:";
+next;
+show "[Arena de Caça]";
+show ""+getitemname($Item1)+" "+$Pontos1+" pontos";
+show ""+getitemname($Item2)+" "+$Pontos2+" pontos";
+show ""+getitemname($Item3)+" "+$Pontos3+" pontos";
+show ""+getitemname($Item4)+" "+$Pontos4+" pontos";
+show ""+getitemname($Item5)+" "+$Pontos5+" pontos";
+show ""+getitemname($Item6)+" "+$Pontos6+" pontos";
+show "Deseja modificar algo?";
+menu "Não",Nem,"Sim",GoMudar;
+
+Nem:
+next;
+show "[Arena de Caça]";
+show "Volte sempre que precisar";
+close;
+
+GoPontos:
+next;
+show "[Arena de Caça]";
+show "Escolha aqui os items que serão vendidos";
+show "Você tem "+Ponto+" pontos";
+next;
+show "[Arena de Caça]";
+show "Se algum item estiver escrito NULL, não tente compra-lo, pois irá perder seus pontos";
+switch (select(""+getitemname($Item1)+" == "+$Pontos1+"",""+getitemname($Item2)+" == "+$Pontos2+"",""+getitemname($Item3)+" == "+$Pontos3+"",""+getitemname($Item4)+" == "+$Pontos4+"",""+getitemname($Item5)+" == "+$Pontos5+"",""+getitemname($Item6)+" == "+$Pontos6+"")){
+
+case 1:
+next;
+show "[Arena de Caça]";
+show "Você está certo que deseja comprar o "+$Item1+" por "+$Pontos1+" pontos?";
+menu "Sim",R_SimM1,"Não",Nem;
+
+R_SimM1:
+next;
+show "[Arena de Caça]";
+show "Digite a quantia de items que você deseja:";
+digit @Quantia;
+next;
+if(Ponto < $Pontos1*@Quantia){
+show "Você não tem pontos para comprar essa quantia deste item.";
+close;
+}
+show "[Arena de Caça]";
+show "Muito Bem aqui estão seus items!";
+set Ponto,Ponto-$Pontos1*@Quantia;
+additem $Item1,@Quantia;
+close;
+
+
+case 2:
+next;
+show "[Arena de Caça]";
+show "Você está certo que deseja comprar o "+$Item2+" por "+$Pontos2+" pontos?";
+menu "Sim",R_SimM2,"Não",Nem;
+
+R_SimM2:
+next;
+show "[Arena de Caça]";
+show "Digite a quantia de items que você deseja:";
+digit @Quantia;
+next;
+if(Ponto < $Pontos2*@Quantia){
+show "Você não tem pontos para comprar essa quantia deste item.";
+close;
+}
+show "[Arena de Caça]";
+show "Muito Bem aqui estão seus items!";
+set Ponto,Ponto-$Pontos2*@Quantia;
+additem $Item2,@Quantia;
+close;
+
+case 3:
+next;
+show "[Arena de Caça]";
+show "Você está certo que deseja comprar o "+$Item3+" por "+$Pontos3+" pontos?";
+menu "Sim",R_SimM3,"Não",Nem;
+
+R_SimM3:
+next;
+show "[Arena de Caça]";
+show "Digite a quantia de items que você deseja:";
+digit @Quantia;
+next;
+if(Ponto < $Pontos3*@Quantia){
+show "Você não tem pontos para comprar essa quantia deste item.";
+close;
+}
+show "[Arena de Caça]";
+show "Muito Bem aqui estão seus items!";
+set Ponto,Ponto-$Pontos3*@Quantia;
+additem $Item3,@Quantia;
+close;
+
+case 4:
+next;
+show "[Arena de Caça]";
+show "Você está certo que deseja comprar o "+$Item4+" por "+$Pontos4+" pontos?";
+menu "Sim",R_SimM4,"Não",Nem;
+
+R_SimM4:
+next;
+show "[Arena de Caça]";
+show "Digite a quantia de items que você deseja:";
+digit @Quantia;
+next;
+if(Ponto < $Pontos4*@Quantia){
+show "Você não tem pontos para comprar essa quantia deste item.";
+close;
+}
+show "[Arena de Caça]";
+show "Muito Bem aqui estão seus items!";
+set Ponto,Ponto-$Pontos4*@Quantia;
+additem $Item4,@Quantia;
+close;
+
+case 5:
+next;
+show "[Arena de Caça]";
+show "Você está certo que deseja comprar o "+$Item5+" por "+$Pontos5+" pontos?";
+menu "Sim",R_SimM5,"Não",Nem;
+
+R_SimM5:
+next;
+show "[Arena de Caça]";
+show "Digite a quantia de items que você deseja:";
+digit @Quantia;
+next;
+if(Ponto < $Pontos5*@Quantia){
+show "Você não tem pontos para comprar essa quantia deste item.";
+close;
+}
+show "[Arena de Caça]";
+show "Muito Bem aqui estão seus items!";
+set Ponto,Ponto-$Pontos5*@Quantia;
+additem $Item5,@Quantia;
+close;
+
+case 6:
+next;
+show "[Arena de Caça]";
+show "Você está certo que deseja comprar o "+$Item6+" por "+$Pontos6+" pontos?";
+menu "Sim",R_SimM6,"Não",Nem;
+
+R_SimM6:
+next;
+show "[Arena de Caça]";
+show "Digite a quantia de items que você deseja:";
+digit @Quantia;
+next;
+if(Ponto < $Pontos6*@Quantia){
+show "Você não tem pontos para comprar essa quantia deste item.";
+close;
+}
+show "[Arena de Caça]";
+show "Muito Bem aqui estão seus items!";
+set Ponto,Ponto-$Pontos6*@Quantia;
+additem $Item6,@Quantia;
+close;
+
+}
+}
+-	script	MobArena	-1,{
+
+OnHour00:
+killmonsterall "ordeal_1-2.gat";
+Announce "Arena de Caça Está Aberta em 5minutos os Warps estarão fechados, quer participar? corra!",8;
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1002,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1002,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1229,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1229,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1054,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1054,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1034,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1034,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1111,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1111,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1152,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1152,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1177,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1177,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1499,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1499,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1412,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1412,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1410,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1410,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1194,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1194,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1211,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1211,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1382,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1382,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1295,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1295,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1039,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1039,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1159,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1159,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1583,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1583,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1272,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1272,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1373,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1373,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 10.000 Pontos",1708,1,"MobArena::OnVale10000";
+set $WarpLiberado,1;
+end;
+
+OnClock0005:
+set $WarpLiberado,0;
+Announce "Warps Fechados, não está na arena ? tente na próxima",8;
+end;
+
+OnHour06:
+killmonsterall "ordeal_1-2.gat";
+Announce "Arena de Caça Está Aberta em 5minutos os Warps estarão fechados, quer participar? corra!",8;
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1002,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1002,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1229,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1229,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1054,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1054,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1034,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1034,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1111,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1111,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1152,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1152,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1177,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1177,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1499,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1499,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1412,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1412,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1410,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1410,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1194,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1194,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1211,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1211,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1382,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1382,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1295,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1295,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1039,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1039,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1159,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1159,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1583,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1583,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1272,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1272,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1373,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1373,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 10.000 Pontos",1708,1,"MobArena::OnVale10000";
+set $WarpLiberado,1;
+end;
+
+OnClock0605:
+set $WarpLiberado,0;
+Announce "Warps Fechados, não está na arena ? tente na próxima",8;
+end;
+
+OnHour12:
+killmonsterall "ordeal_1-2.gat";
+Announce "Arena de Caça Está Aberta em 5minutos os Warps estarão fechados, quer participar? corra!",8;
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1002,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1002,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1229,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1229,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1054,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1054,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1034,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1034,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1111,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1111,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1152,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1152,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1177,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1177,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1499,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1499,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1412,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1412,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1410,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1410,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1194,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1194,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1211,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1211,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1382,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1382,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1295,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1295,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1039,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1039,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1159,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1159,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1583,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1583,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1272,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1272,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1373,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1373,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 10.000 Pontos",1708,1,"MobArena::OnVale10000";
+set $WarpLiberado,1;
+end;
+
+OnClock1205:
+set $WarpLiberado,0;
+Announce "Warps Fechados, não está na arena ? tente na próxima",8;
+end;
+
+OnHour18:
+killmonsterall "ordeal_1-2.gat";
+Announce "Arena de Caça Está Aberta em 5minutos os Warps estarão fechados, quer participar? corra!",8;
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1002,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1002,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1229,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 1 Ponto",1229,20,"MobArena::OnVale1";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1054,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1054,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1034,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 10 Pontos",1034,20,"MobArena::OnVale10";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1111,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1111,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1152,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 15 Pontos",1152,20,"MobArena::OnVale15";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1177,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1177,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1499,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 20 Pontos",1499,20,"MobArena::OnVale20";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1412,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1412,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1410,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 30 Pontos",1410,20,"MobArena::OnVale30";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1194,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1194,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1211,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 50 Pontos",1211,20,"MobArena::OnVale50";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1382,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1382,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1295,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 100 Pontos",1295,20,"MobArena::OnVale100";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1039,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1039,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1159,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1159,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1583,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1583,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1272,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1272,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1373,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 1.000 Pontos",1373,1,"MobArena::OnVale1000";
+monster "ordeal_1-2",0,0,"Vale 10.000 Pontos",1708,1,"MobArena::OnVale10000";
+set $WarpLiberado,1;
+end;
+
+OnClock1805:
+set $WarpLiberado,0;
+Announce "Warps Fechados, não está na arena ? tente na próxima",8;
+end;
+
+OnVale1:
+set Ponto,Ponto+1;
+end;
+
+
+
+OnVale10:
+set Ponto,Ponto+10;
+end;
+
+
+
+OnVale15:
+set Ponto,Ponto+15;
+end;
+
+
+OnVale20:
+set Ponto,Ponto+20;
+end;
+
+
+
+OnVale30:
+set Ponto,Ponto+30;
+end;
+
+
+
+OnVale50:
+set Ponto,Ponto+50;
+end;
+
+
+OnVale100:
+set Ponto,Ponto+100;
+end;
+
+OnVale1000:
+set Ponto,Ponto+1000;
+end;
+
+OnVale10000:
+set Ponto,Ponto+10000;
+end;
+
+}
+
+ordeal_1-2.gat,0,0,0	script	MatadorMVP	-1,{
+
+OnClock2350:
+atcommand "@killmonster";
+end;
+
+OnClock0550:
+atcommand "@killmonster";
+end;
+
+OnClock1150:
+atcommand "@killmonster";
+end;
+
+OnClock1750:
+atcommand "@killmonster";
+end;
+
+}
+
+
+ordeal_1-2	mapflag	nomemo
+ordeal_1-2	mapflag	nowarp
+ordeal_1-2	mapflag	nowarpto
+ordeal_1-2	mapflag	noicewall
+ordeal_1-2	mapflag	nomemo
+ordeal_1-2	mapflag	noreturn

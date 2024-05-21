@@ -1,0 +1,68 @@
+//   _    _ _____     _____           _       _                 //
+//  | |  | |  __ \   / ____|         (_)     | |                //
+//  | |__| | |  | | | (___   ___ _ __ _ _ __ | |_ ___           //
+//  |  __  | |  | |  \___ \ / __| '__| | '_ \| __/ __|          //
+//  | |  | | |__| |  ____) | (__| |  | | |_) | |_\__ \          //
+//  |_|  |_|_____/  |_____/ \___|_|  |_| .__/ \__|___/          //
+//   Hurican Dooders Script's ™       | |                       //
+//                                    |_|                       //
+//                                                              //
+// Ativa/Desativa sistema de Manutenção/NPC                     //
+// Versão 1.2b                                                  //
+// Compatibilidade: Cronus & brAthena                           //
+//==============================================================//
+
+-	script	manut	-1,{
+OnWhisperGlobal:
+
+        if ( getgmlevel() < 10 ) end;
+        mes "[Manutenção]";
+        mes "Quer deixar o servidor em manutenção?";
+        switch(select("- Ligar Manutenção:- Liberar Servidor:- Nada")){
+case 1:
+        next;
+        mes "[Manutenção]";
+        mes "Digite o nível(de GM) mínimo que poderá logar mesmo com a Manutenção ativada:";
+        input $level;
+        next;
+        mes "[Manutenção]";
+        mes "Está correto?";
+        mes "Nível mínimo: ^0000EE"+$level+"^000000";
+        if(select("- Sim:- Não") == 2) close;
+        next;
+        mes "[Manutenção]";
+        mes "Manutenção: ^0000EEAtivado!^000000";
+        close2;
+        initnpctimer;
+        announce "[Manutenção]: O servidor entrará em Manutenção em 5 minutos.",bc_blue; end;
+        OnTimer240000:
+        announce "[Manutenção]: A Manutenção será ativada em 1 minuto.",bc_blue; end;
+        OnTimer300000:
+        announce "[Manutenção]: Manutenção ativada, retornaremos em breve!",bc_blue;
+        sleep2 5000;
+        atcommand "@kickall";
+        set $main,1;
+case 2:
+        next;
+        mes "[Manutenção]";
+        mes "Manutenção: ^0000CCDesativado!^000000";
+        announce "[Manutenção]: Manutenção desativada, bom jogo a todos!",bc_blue;
+        set $main,0;
+        stopnpctimer;
+        close;
+case 3:
+        close;
+}
+
+OnPcLoginEvent:
+if(getgmlevel() >= $level) end;
+if(getgmlevel() <= 2){
+if($main == 0) end;
+mes "[Manutenção]";
+mes "Servidor em manutenção!";
+mes "Volte mais tarde.";
+sleep2 4000;
+atcommand "@kick "+strcharinfo(0)+"";
+end;
+}
+}

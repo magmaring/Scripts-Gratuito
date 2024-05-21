@@ -1,0 +1,6 @@
+-	script	NoVip	-1,{
+OnPCLoadMapEvent:
+if(getgmlevel() < 1){ warp "que_temsky",50,137; }
+end;
+}
+sala_vip<TAB>mapflag<TAB>loadevent

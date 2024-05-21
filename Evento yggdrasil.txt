@@ -1,0 +1,103 @@
+//= ADM Hefesto -> Corrigido por Ian Kawanami
+//===== Versão Atual: ========================================
+//= 1.1
+//===== Compatibilidade: =====================================
+//= All
+//===== Descrição: ===========================================
+//= Em Certo Horário Invoca Porings com Premios Diferentes
+//===== Comentários Adicionais: ==============================
+//= NÃO RETIRAR OS CREDITOS!!
+//============================================================
+job3_war01,21,23,4	script	Evento Yggdrasil	408s,{
+
+//ID DO PREMIO RUIM
+set @premioruim,607;
+//ID DO PREMIO MEDIO
+set @premiomedio,607;
+//ID DO PREMIO BOM
+set @premiobom,607;
+//QUANTIDADE DO PREMIO RUIM
+set @quantidaderuim,1;
+//QUANTIDADE DO PREMIO MEDIO
+set @quantidademedio,5;
+//QUANTIDADE DO PREMIO BOM
+set @quantidadebom,10;
+
+if(getgmlevel() < 50) {
+	if(!.evento) {
+			mes "[Evento Yggdrasil]";
+			mes "Não tem evento por enquanto.";
+			close;
+		}
+		mes "[Evento Yggdrasil]";
+		mes "Olá "+strcharinfo(0)+" o que posso fazer por você?";
+		next;
+		menu "Ir no evento",go,"Nada",fim;
+	}
+	mes "[Evento Poring]";
+	mes "Olá "+strcharinfo(0)+" o que posso fazer por você?";
+	next;
+	menu "Ligar evento",inicio,"Entrar no evento",go,"Nada",fim;
+
+go:
+mes "Teletransportanto";
+warp "prt_fild08", 0, 0;
+end;
+
+Onclock1100: callsub onstart;
+Onclock1315: callsub onstart;
+OnClock2230: callsub onstart;
+OnClock2330: callsub onstart;
+
+inicio:
+onstart:
+announce "[ Evento Yggdrasil ] Pessoal o Evento Yggdrasil Começou Vão Para prt_fild08 Matar Porings Alguns Podem Conter Até "+@quantidadebom+" "+getitemname(@premiobom)+"",bc_yellow;
+announce "[ Evento Yggdrasil ] Corram Vocês Tem 5 Minutos Para Matar Todos",bc_yellow;
+initnpctimer;  
+monster "prt_fild08",0,0,"Poring",1002,50,strnpcinfo(0)+"::OnBom";
+monster "prt_fild08",0,0,"Poring",1002,200,strnpcinfo(0)+"::OnRuim";
+monster "prt_fild08",0,0,"Poring",1002,100,strnpcinfo(0)+"::OnMedio";
+monster "prt_fild08",0,0,"Poring",1002,200,strnpcinfo(0)+"::OnPessimo";
+set .evento,1;
+close;
+
+OnTimer600000:
+stopnpctimer;
+announce "[ Evento Yggdrasil ]: O Tempo Acabou Todos os Porings do Evento Foram Mortos!",0;
+killmonsterall "prt_fild08";
+set .evento,0;
+end;
+
+OnPessimo:
+dispbottom "Você Matou um Poring Péssimo";
+dispbottom "Premio : Morte HAHAHA";
+percentheal -100,-100;
+End;
+
+OnRuim:
+dispbottom "Você Matou um Poring Ruim";
+dispbottom "Premio : "+@quantidaderuim+" "+getitemname(@premioruim)+"";
+percentheal -50,-50;
+getitem @premioruim,@quantidaderuim;
+End;
+
+OnMedio:
+dispbottom "Você Matou um Poring Médio";
+dispbottom "Premio: "+@quantidademedio+" "+getitemname(@premiomedio)+"";
+percentheal -30,-30;
+getitem @premiomedio,@quantidademedio;
+End;
+
+OnBom:
+dispbottom "Você Matou um Poring Bom Parabéns";
+dispbottom "Premio: "+@quantidadebom+" "+getitemname(@premiobom)+"";
+percentheal 100,100;
+getitem @premiobom,@quantidadebom;
+End;
+
+fim:
+mes "[Evento Yggdrasil]";
+mes "Volte quando quiser participar do evento!";
+close;
+end;
+}

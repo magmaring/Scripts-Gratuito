@@ -1,0 +1,50 @@
+//by pwnage92 - jukebox_rock@live.com
+//favor não retirar os créditos
+
+guild_base,54,31,5	script	Sala do Clã	728,{
+
+if (getgmlevel() > 98) goto entre;
+
+	set .@GID, GetCastleData("prtg_cas01",1);
+	if (.@GID == 0) {
+		mes "[Decreto do Reino de Rune-Midgard]";
+		mes "Se o seu Clã conseguir";
+		mes "passar por todos os desafios";
+		mes "e destruír o Emperium do castelo Kriemhild,";
+		mes "você terá acesso a sala do clã.";
+close;
+	}
+	else {
+		if (getcharid(2) == .@GID) {
+			mes "Olá mestre!";
+			mes "Deseja visitar a sala do clã?";
+			next;
+			if (select("Visitar a sala do clã:") == 1) {
+				if (getcharid(2) == GetCastleData("prtg_cas01",1)) {
+					warp "sec_in01",175,99;
+					end;
+				}
+			}
+			close;
+		}
+		mes "Lamento, somente os membros do clã";
+		mes "^ff0000" + GetGuildName(.@GID) + "^000000.";
+		mes "Tem direito de acessar a sala do clã. ";
+		mes "Se você deseja ter acesso a sala,";
+		mes "conquiste Kriemhild e faça seu nome ser lembrado!";
+	}
+			close;
+entre:
+			if (select("Visitar a sala do clã") == 1)
+					warp "sec_in01",175,99;
+					end;
+	close; }
+
+
+//mapflags, TROQUE TODOS caso mude a localização da sala.
+sec_in01	mapflag	nobranch
+sec_in01	mapflag	nomemo
+sec_in01	mapflag	nosave	SavePoint
+sec_in01	mapflag	noteleport
+sec_in01	mapflag	nowarp
+sec_in01	mapflag	nowarpto

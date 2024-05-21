@@ -1,0 +1,5 @@
+-	script	Anuncioaologar	-1,{
+OnPCLogInEvent:
+Announce " "+StrCharInfo(0)+" Traga sua Guild  E Agende Agora Mesmo Seu [PackTEN] Exclusivo no Nosso Fórum Acesse: www.ragnaten.com/forum",bc_self;
+end;
+}

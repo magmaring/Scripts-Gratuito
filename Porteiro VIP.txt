@@ -1,0 +1,40 @@
+prontera,149,193,5	script	Porteiro ViP	874,{
+
+if (getgmlevel() < 1) goto r3;
+
+show "[^cc0000Sala VIP^000000]";
+show "Ola "+strcharinfo(0)+" !";
+show "Deseja ir para a Sala Vip do Eterno-RO?";
+menu "Sim",Sim,"Nao",Nao;
+next;
+Sim:
+next;
+show "[^cc0000Sala VIP^000000]";
+show "Vamos ver se você e um player Vip!";
+next;
+show "[^cc0000Sala VIP^000000]";
+show "Hmm... você é Vip intao esta liberado a entrada!";
+next;
+warp "sec_in01",85,167;
+
+r3:
+show "[^cc0000Sala VIP^000000]";
+show "Desculpe, você não é VIP!!! Para ser vip confira no site do servidor e veja os preços dos planos VIP!";
+next;
+close;
+
+Nao:
+show "[^cc0000Sala VIP^000000]";
+show "Você que sabe !";
+next;
+close;
+
+}
+sec_in01,96,171,5	script	Retorno	967,{
+warp "prontera",154,178;
+}
+sec_in01	mapflag	nomemo
+sec_in01	mapflag	nobranch
+sec_in01	mapflag	nowarpto
+sec_in01	mapflag	nowarp
+sec_in01	mapflag	noteleport
