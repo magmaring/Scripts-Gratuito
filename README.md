@@ -1,0 +1,1 @@
+Olá meus nobres muitos dos scripts aqui contido não sei quem foi o abençoado que criou porém disponibilizo para aqueles que não tem nada é tipo a luz para o cego e a direção para o perdido em caso se dúvidas não me procure !
