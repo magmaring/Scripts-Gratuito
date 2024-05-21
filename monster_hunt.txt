@@ -1,0 +1,496 @@
+-	script	Gate#disable	-1,{
+OnInit:
+set $@mh_ongoing,0;
+set $@mh_occupied,0;
+set $@mh_died,0;
+mapwarp "pvp_n_1-3","prontera",156,191;
+disablenpc "Gate";
+end;
+}
+
+-	script	MH Announcer	-1,{
+OnClock0100:
+OnClock0400:
+OnClock0700:
+OnClock1000:
+OnClock1300:
+OnClock1600:
+OnClock1900:
+OnClock1448:
+	sleep2 500;
+	if ($@woe_ongoing == 1) {
+		end;
+	}
+	set $@mh_died,0;
+	set $@mh_ongoing,0;
+	set $@mh_occupied,0;
+	announce "Monster Hunt: A Monster Hunt Gate está agora aberta para registo em prontera 155 178!",0;
+	enablenpc "Gate";
+	initnpctimer;
+	end;
+
+
+OnTimer3600000:
+	disablenpc "Gate";
+	stopnpctimer;
+	end;
+
+}
+
+prontera,155,178,3	script	Gate	628,{
+	set @npc$, "[ ^0000FFGate^000000 ]";	
+	mes @npc$;
+	if ($@mh_occupied == 1) {
+	mes "Desculpa, A arena Monster Hunt está agora ocupada por ^FF0000"+$@EventCurrentParty$+"^000000 .";
+	mes "Tente mais tarde";
+	close;
+	}
+	mes "Bem vindo "+strcharinfo(0)+", Isso  o Monster Hunt.";
+	mes "Monster Hunt requer que você tenha uma party com 3 membros";
+	mes "Você acha que você e seus amigos são fortes o suficiente?";
+	menu "Info",L_info,"Não",L_cancel,"Sim",MH_yes;
+
+MH_yes:
+	next;
+	mes @npc$;
+	mes "Deseja registrar seu grupo?";
+	menu "Sim",mh_register,"Não",L_cancel;
+
+
+mh_register:
+	if ($@mh_ongoing == 1) {
+	mes @npc$;
+	mes "Desculpe, a arena de Monster Hunt está agora ocupada por ^FF0000"+$@EventCurrentParty$+"^000000.";
+	mes "Tente mais tarde";
+	close;
+	}
+	if ( getcharid(1) == 0 ) {
+	mes "Você deve ter um grupo para participar.";
+	close;
+	}
+	mes " ";
+	mes "Registrado com sucesso!";
+	next;
+	mes @npc$;
+	mes "Você quer entrar Monster Hunt?";
+	menu "Cancelar",L_cancel,"Sim",mh_warp;
+
+mh_warp:
+	getpartymember getcharid(1),1;
+	getpartymember getcharid(1),2;
+	for ( set .@i, 0; .@i < $@partymembercount; set .@i, .@i +1 ) {
+	if ( isloggedin( $@partymemberaid[.@i], $@partymembercid[.@i] ) ) {
+	set .@islogin,.@islogin+1;
+	}
+	}
+	if (.@islogin < 3 ) {
+	set .@islogin,0;
+ 	next;
+	mes @npc$;
+	mes "Desculpe, seu grupo precisa de pelo menos ^0000FF10^000000 membros online.";
+	close;
+	}
+	if (.@islogin > 3 ) {
+	set .@islogin,0;
+	next;
+	mes @npc$;
+	mes "Desculpe, seu grupo tem muitos membros.";
+	close;
+	}
+	if ($@mh_ongoing == 1) {
+	mes @npc$;
+	mes "Desculpe, a Arena Monster Hunt está agora ocupada by ^FF0000"+$@EventCurrentParty$+"^000000 .";
+	mes "Tente mais Tarde";
+	close;
+	}
+	getpartymember getcharid(1),0;
+	if ( getmapusers("pvp_n_1-3") > 0 ) goto L_toomany;
+	getmapxy .@npc_map$, .@npc_x, .@npc_y, 1;
+	for( set .@i, 0; .@i<$@partymembercount; set .@i, .@i + 1 ) {
+    	set .@count, .@count + ( getmapxy(.@map$, .@x, .@y, 0, $@partymembername$[.@i]) == 0 && .@map$ == .@npc_map$ && distance(.@npc_x,.@npc_y,.@x, .@y) < 14 );
+	}
+	if(.@count < .@islogin) {
+  	set .@count,0;
+	mes "Você não pode entrar se nem todos os membros do grupo estão perto do npc, por favor, certifique-se que todo mundo esteja perto do npc.";
+	close;
+	}
+	set $@mh_ongoing,1;
+	set $@mh_occupied,1;
+	mes "Tudo bem, eu vou te mover agora.";
+	mes "Boa Sorte!";
+	close2;
+	set $@EventCurrentParty$, strcharinfo(1);
+	announce "\""+$@EventCurrentParty$+"\" começou o Evento Monster Hunt ",0;
+	waitingroom "MH: "+$@EventCurrentParty$+" Grupo",0;
+	warpparty "pvp_n_1-3", 0,0, getcharid(1);
+	donpcevent "DS_HiddenNpc::OnStart";
+	end;
+
+L_toomany:
+	next;
+	mes @npc$;
+	mes "A arena de Monster Hunt está agora ocupada por ^FF0000"+$@EventCurrentParty$+"^000000.";
+	mes "Nos vemos novamente nas próximas";
+	close;
+
+L_info:
+	next;
+	mes @npc$;
+	mes "Há 15 rodadas de monstros que você encontrará";
+	mes "A Cada rodada os monstros ficaram mais fortes";
+	mes "Se você conseguir vencer todas as rodadas, você receberá uma recompensa!";
+	close;
+
+L_cancel:
+	next;
+	mes @npc$;
+	mes "Ok, Volte novamente quando estiver forte o suficiente.";
+	close;
+}
+
+pvp_n_1-3,0,0,0	script	DS_HiddenNpc	-1,{
+
+OnStart:
+	gvgon "pvp_n_1-3";
+	sleep2 5000;
+	killmonsterall "pvp_n_1-3";
+	initnpctimer;
+	mapannounce "pvp_n_1-3","Monster Hunt Tempo Limite: 00:30:00",0;
+	sleep2 5000;
+	mapannounce "pvp_n_1-3","A rodada 1 começará em 5 segundos.",0;
+	sleep2 5000;
+	disablenpc "Gate";
+	delwaitingroom "Gate";
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Baphomet",1039,1,"DS_HiddenNpc::Onmhdead";
+	monster "pvp_n_1-3",0,0,"Mistress",1059,1,"DS_HiddenNpc::Onmhdead";
+	end;
+
+Onmhdead:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima onda!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A rodada 2 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave2;
+
+	}
+	end;
+
+Onmh_wave2:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Golden Thief Bug",1086,1,"DS_HiddenNpc::Onmhdead2";
+	monster "pvp_n_1-3",0,0,"Orc Hero",1087,1,"DS_HiddenNpc::Onmhdead2";
+	end;
+
+Onmhdead2:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima onda!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 3 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave3;
+	}
+	end;
+
+Onmh_wave3:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Orc Lord",1190,1,"DS_HiddenNpc::Onmhdead3";
+	monster "pvp_n_1-3",0,0,"Dark Lord",1272,1,"DS_HiddenNpc::Onmhdead3";
+	end;
+
+Onmhdead3:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima rodada!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 4 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave4;
+	}
+	end;
+
+Onmh_wave4:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Lord of Death",1373,1,"DS_HiddenNpc::Onmhdead4";
+	monster "pvp_n_1-3",0,0,"Turtle General",1312,1,"DS_HiddenNpc::Onmhdead4";
+	end;
+
+
+Onmhdead4:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima rodada!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 5 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave5;
+	}
+	end;
+
+
+Onmh_wave5:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Evil Snake Lord",1418,1,"DS_HiddenNpc::Onmhdead5";
+	monster "pvp_n_1-3",0,0,"Amon Ra",1511,1,"DS_HiddenNpc::Onmhdead5";
+	end;
+
+
+Onmhdead5:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima rodada!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 6 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave6;
+	}
+	end;
+
+Onmh_wave6:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Tao Gunka",1583,1,"DS_HiddenNpc::Onmhdead6";
+	monster "pvp_n_1-3",0,0,"RSX-0806",1623,1,"DS_HiddenNpc::Onmhdead6";
+	end;
+
+Onmhdead6:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima rodada!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 7 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave7;
+	}
+	end;
+
+Onmh_wave7:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Kiel D-01",1734,1,"DS_HiddenNpc::Onmhdead7";
+	monster "pvp_n_1-3",0,0,"GLoom Under Night",1768,1,"DS_HiddenNpc::Onmhdead7";
+	end;
+
+Onmhdead7:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima rodada!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 8 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave8;
+	}
+	end;
+
+Onmh_wave8:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Ktullanux",1779,1,"DS_HiddenNpc::Onmhdead8";
+	monster "pvp_n_1-3",0,0,"Ifrit",1832,1,"DS_HiddenNpc::Onmhdead8";
+	end;
+
+Onmhdead8:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima rodada!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 9 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave9;
+	}
+	end;
+
+Onmh_wave9:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Beelzebub",1873,1,"DS_HiddenNpc::Onmhdead9";
+	monster "pvp_n_1-3",0,0,"Fallen Bishop Hibram",1871,1,"DS_HiddenNpc::Onmhdead9";
+	end;
+
+Onmhdead9:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima rodada!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 10 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_wave10;
+	}
+	end;
+
+Onmh_wave10:
+	set $@mobmh,2;
+	monster "pvp_n_1-3",0,0,"Thanatos",1708,1,"DS_HiddenNpc::Onmhdead10";
+	monster "pvp_n_1-3",0,0,"Valkyrie Randgris",1751,1,"DS_HiddenNpc::Onmhdead10";
+	end;
+
+Onmhdead10:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a próxima rodada!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","A Rodada 11 começará em 5 segundos.",0;
+		sleep2 5000;
+		goto Onmh_randomround;
+	}
+	end;
+
+Onmh_randomround:
+	set .@i,rand(3531,3536);
+	if (.@i == 3531) {
+		set $@mobmh,1;
+		monster "pvp_n_1-3",0,0,"Lord Knight",1646,1,"DS_HiddenNpc::Onmhdeadboss";
+		end;
+		}
+	if (.@i == 3532) {
+		set $@mobmh,1;
+		monster "pvp_n_1-3",0,0,"Assassin Cross",1647,1,"DS_HiddenNpc::Onmhdeadboss";
+		end;
+		}
+	if (.@i == 3533) {
+		set $@mobmh,1;
+		monster "pvp_n_1-3",0,0,"Whitesmith Harword",1648,1,"DS_HiddenNpc::Onmhdeadboss";
+		end;
+		}
+	if (.@i == 3534) {
+		set $@mobmh,1;
+		monster "pvp_n_1-3",0,0,"High Priest Magaleta",1649,1,"DS_HiddenNpc::Onmhdeadboss";
+		end;
+		}
+	if (.@i == 3535) {
+		set $@mobmh,1;
+		monster "pvp_n_1-3",0,0,"Sniper Shecil",1650,1,"DS_HiddenNpc::Onmhdeadboss";
+		end;
+		}
+	if (.@i == 3536) {
+		set $@mobmh,1;
+		monster "pvp_n_1-3",0,0,"High Wizard Katrinn",1651,1,"DS_HiddenNpc::Onmhdeadboss";
+		end;
+		}
+	end;
+	
+
+
+
+Onmhdeadboss:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		mapannounce "pvp_n_1-3","Prepare-se para a rodada final!",0;
+		sleep2 5000;
+		mapannounce "pvp_n_1-3","Rodada final em 5 Seconds.",0;
+    		soundeffectall "s_nydhog_die.wav",0,"pvp_n_1-3";
+		sleep2 2000;
+    		soundeffectall "detale_die2.wav",0,"pvp_n_1-3";
+		sleep2 3000;
+    		soundeffectall "s_nydhog_move.wav",0,"pvp_n_1-3";
+		sleep2 500;
+    		soundeffectall "s_nydhog_move.wav",0,"pvp_n_1-3";
+		sleep2 500;
+    		soundeffectall "s_nydhog_move.wav",0,"pvp_n_1-3";
+		sleep2 500;
+    		soundeffectall "s_nydhog_move.wav",0,"pvp_n_1-3";
+		sleep2 500;
+    		soundeffectall "s_nydhog_move.wav",0,"pvp_n_1-3";
+		sleep2 500;
+    		soundeffectall "s_nydhog_move.wav",0,"pvp_n_1-3";
+		goto Onmh_waveboss;
+	}
+	end;
+
+Onmh_waveboss:
+	set $@mobmh,1;
+	monster "pvp_n_1-3",0,0,"poring",1002,1,"DS_HiddenNpc::Onmhdeadfinal";
+	end;
+
+Onmhdeadfinal:
+	set $@mobmh,$@mobmh - 1;
+	if($@mobmh < 1) {
+		stopnpctimer;
+        	set .MhTime,getnpctimer(0);
+		set .@m, .MhTime / 60000;
+        	set .MhTime,.MhTime - (.@m * 60000);
+		set .@s, .MhTime / 1000;
+		set .MhTime,.MhTime - (.@s * 1000);
+		set .@mh_time_finish, .@m+.@s;
+		mapannounce "pvp_n_1-3","Você Venceu a rodada Final!",0;
+		sleep2 5000;
+		getpartymember(getcharid(1),2);
+		sleep2 1000;
+		set .@PartyAmount,$@partymembercount;
+		copyarray .@PartyRIDs[0],$@partymemberaid[0],.@PartyAmount;
+		for ( set .@i, 0; .@i < .@PartyAmount; set .@i, .@i +1 ) {
+		if(attachrid (.@PartyRIDs[.@i])) {
+        	getmapxy(.@map$, .@x, .@y, 0);
+        	if(.@map$ == "pvp_n_1-3")
+           	getitem 7227,1;
+   		}
+		}
+		announce "\""+$@EventCurrentParty$+"\" terminou o Evento Monster Hunt!",0;
+		sleep2 3000;
+	mapannounce "pvp_n_1-3","\""+$@EventCurrentParty$+"\" Registro de tempo: 00:"+(.@m < 10 ? "0":"")+""+.@m+":"+(.@s < 10 ? "0":"")+""+.@s+"",0;
+	sleep2 5000;
+	mapwarp "pvp_n_1-3","prontera",116,73;
+	set $@mh_ongoing,0;
+	set $@mh_occupied,0;
+	}
+	end;
+OnTimer1800000:
+	stopnpctimer;
+	killmonsterall "pvp_n_1-3";
+	mapannounce "pvp_n_1-3","Acabou o tempo!",0;
+	sleep2 5000;
+	mapannounce "pvp_n_1-3","Desculpe, Você não conseguiu terminar o evento a tempo",0;
+	sleep2 3000;
+	mapwarp "pvp_n_1-3","prontera",156,191;
+	announce "\"" +$@EventCurrentParty$+"\" não conseguiu terminar o evento Monster Hunt",0;
+	set $@mh_ongoing,0;
+	set $@mh_occupied,0;
+	end;
+
+OnPCLogoutEvent:
+	if ($@mh_died == 0) {
+	if ($@mh_ongoing == 1) {
+		sleep2 2000;
+		if (getmapusers("pvp_n_1-3") < 1) {
+			stopnpctimer;
+			announce "\"" +$@EventCurrentParty$+"\" não conseguiu terminar o evento Monster Hunt",0;
+			killmonsterall "pvp_n_1-3";
+			set $@mh_ongoing,0;
+			set $@mh_occupied,0;
+			}
+			}
+			}
+			end;
+
+OnPCDieEvent:
+	sleep2 1;
+	getmapxy .@map$,.@x,.@y,0;
+	if(.@map$ == "pvp_n_1-3"){
+		warp "prontera",156,191;
+		if ($@mh_died == 0) {
+		if ($@mh_ongoing == 1) {
+			sleep2 2000;
+			if (getmapusers("pvp_n_1-3") < 1) {
+				stopnpctimer;
+				announce "\""+$@EventCurrentParty$+"\" não conseguiu terminar o evento Monster Hunt",0;
+				killmonsterall "pvp_n_1-3";
+				set $@mh_ongoing,0;
+				set $@mh_occupied,0;
+				set $@mh_died,1;
+		}
+		}
+		}
+		}
+		end;
+		
+}
+
+// -- Mapflags
+pvp_n_1-3	mapflag	nowarp
+pvp_n_1-3	mapflag	nowarpto
+pvp_n_1-3	mapflag	noteleport
+pvp_n_1-3	mapflag	nosave	SavePoint
+pvp_n_1-3	mapflag	nomemo
+pvp_n_1-3	mapflag	nobranch
+pvp_n_1-3	mapflag	nopenalty
+pvp_n_1-3	mapflag	noloot
+pvp_n_1-3	mapflag	partylock

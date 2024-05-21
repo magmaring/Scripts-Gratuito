@@ -1,0 +1,58 @@
+//  _______________________________________________________
+// /                                                       \
+// |      _           _   _   _                            |
+// |     | |__  _ __ / \ | |_| |__   ___ _ __   __ _       |
+// |     | '_ \| '__/ _ \| __| '_ \ / _ \ '_ \ / _` |      |
+// |     | |_) | | / ___ \ |_| | | |  __/ | | | (_| |      |
+// |     |_.__/|_|/_/   \_\__|_| |_|\___|_| |_|\__,_|      |
+// |                                                       |
+// |                    brAthena Script                    |
+// |-------------------------------------------------------|
+// | Nome do Script: @Buff - Buffador por Distância        |
+// |-------------------------------------------------------|
+// | Criado por: Tidus/Gaspar                              |
+// |-------------------------------------------------------|
+// | Versões rA/brA 2015 ~                                 |
+// |-------------------------------------------------------|
+// | Descrição: Comando que faz com que o jogador receba   |
+// | buffs a ditância, o comando foi criado com a função de|
+// | script bindatcmd, e só é compatível com emuladores de |
+// | 2013 para frente.                                     |                                               
+// \_______________________________________________________/
+
+-	script	Buffer	-1,{
+	OnInit:
+		bindatcmd("buffs",strnpcinfo(0)+"::OnBuff",0,99);
+		end;
+	OnBuff:
+		setarray .@maps$[0],"prt_gld", "prtg_cas01"; //Mapas onde o comando é bloqueado.							
+		for( set .@i, 0; .@i < getarraysize(.@maps$); set .@i, .@i + 1 ) {
+			if( strcharinfo(3) == .@maps$[.@i] ) {
+			dispbottom ""+strcharinfo(0)+" você não pode utilizar o comando @buff neste mapa.";
+			end;
+			}
+		}
+		
+		if( getgroupid() < 1) { //Nível de GM necessário para utilizar o comando.
+			end;
+		}
+		//Abaixo adicione os Buffs que deseja acrescentar no comando.
+		sc_start SC_INCREASEAGI, 240000, 5;
+		sc_start 32, 360000,10;
+		sc_start 30, 360000,10;
+		sc_start 29, 360000,10;
+		sc_start 21, 250000,10;
+		sc_start 35, 250000,10;
+		sc_start 40, 250000,10;
+		sc_start 41, 150000,10;
+		//sc_start 39, 250000,10;
+		sc_start SC_BLESSING, 240000, 5;
+		sc_start SC_STRFood, 1200000, 10;
+		sc_start SC_DEXFood, 1200000, 10;	
+		sc_start SC_AGIFood, 1200000, 10;
+		sc_start SC_LUKFood, 1200000, 10;
+		sc_start SC_VITFood, 1200000, 10;
+		sc_start SC_INTFood, 1200000, 10;
+		sc_start SC_SECRAMENT,360000,3;
+		end;
+}

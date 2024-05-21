@@ -1,0 +1,196 @@
+-	script	devil_contr	-1,{
+
+OnInit:
+	/* Inicio das Configurações */
+	$@DevilSquare = 0;					// Variável de evento (Não mexer).
+	$@DevilSquareEnter = 0;				// Variável de entrada do evento (Não mexer).
+	.anuncio = 3;						// Tempo de espera para iniciar evento (Padrão = [ 3 Minutos ] ).
+	.mapa$ = "guild_vs5";					// Mapa onde acontecerá o evento.
+	.EA_Rounds = 10;					// Numero de Rounds (Padrão 10).
+	.EA_WaitTime = 3;					// Tempo de Respaw entre um Round do outro.
+	.EA_NoSkill = 1;					// Desabilita Skills quando surgirem os baús ( 0 = Não / 1 = Sim).
+	setarray .EA_Item,607;					// Prêmio ao quebrar Baú.
+	setarray .EA_ItemRaro,608;				// Prêmio raro ao quebrar Baú.
+	
+	// 1ª Orda de Monstros
+	setarray .EA_Monstros1, 1623, 1872, 2068, 1285, 1295;
+	setarray .EA_MonQuan1,    1,   15,   1,   10,    5;
+	.EA_Mensagem1$ = "Rodada 1";
+	// 2ª Orda de Monstros
+	setarray .EA_Monstros2, 1059, 1896, 1707, 1515, 1551;
+	setarray .EA_MonQuan2,    1,   10,   20,   15,    1;
+	.EA_Mensagem2$ = "Rodada 2";
+	// 3ª Orda de Monstros
+	setarray .EA_Monstros3, 1719, 1386, 1112, 1656, 1643;
+	setarray .EA_MonQuan3,    1,   2,   1,   25,    1;
+	.EA_Mensagem3$ = "Rodada 3";
+	// 4ª Orda de Monstros
+	setarray .EA_Monstros4, 1583, 1920, 1634, 1642, 1765;
+	setarray .EA_MonQuan4,    1,   15,   1,   1,    5;
+	.EA_Mensagem4$ = "Rodada 4";
+	// 5ª Orda de Monstros
+	setarray .EA_Monstros5, 1921, 1918, 1920, 1919, 1916;
+	setarray .EA_MonQuan5,    20,   20,   15,   15,    1;
+	.EA_Mensagem5$ = "Rodada 5";
+	// 6ª Orda de Monstros
+	setarray .EA_Monstros6, 2022, 1734, 1639, 2016, 1115;
+	setarray .EA_MonQuan6,    2,   2,   2,   15,    1;
+	.EA_Mensagem6$ = "Rodada 6";
+	// 7ª Orda de Monstros
+	setarray .EA_Monstros7, 1159, 1087, 1829, 1205, 1518;
+	setarray .EA_MonQuan7,    3,   3,   20,   20,    2;
+	.EA_Mensagem7$ = "Round 7";
+	// 8ª Orda de Monstros
+	setarray .EA_Monstros8, 1873, 1871, 1657, 1991, 1492;
+	setarray .EA_MonQuan8,    1,   1,   15,   3,    1;
+	.EA_Mensagem8$ = "Rodada 8";
+	// 9ª Orda de Monstros
+	setarray .EA_Monstros9, 1582, 1069, 1090, 1388, 1894;
+	setarray .EA_MonQuan9,    1,   1,   1,   15,    20;
+	.EA_Mensagem9$ = "Rodada 9";
+	// 10ª Orda de Monstros
+	setarray .EA_Monstros10,1930, 2022, 1751, 1957, 1641, 1502;
+	setarray .EA_MonQuan10,   1,   1,   1,   1,    1,	1;
+	.EA_Mensagem10$ = "Rodada Final";
+	end;
+	/* Fim das Configurações */
+
+OnStartEvent:
+
+	$@DevilSquare = 1;
+	$@DevilSquareEnter = 1;
+	.time = .anuncio;
+	for(.@i = 0; .@i < .time; .@i++) {
+		if ($@DevilSquareEnter != 1) end;
+		announce "[Devil Square]: O evento irá começar em "+.anuncio+" minuto"+((.anuncio == 1)?"":"s")+". Use @evento para participar!",8;
+		.anuncio--;
+		sleep2 (60 * 1000);
+	}
+	announce "[Devil Square]: O evento começou!",8;
+	.anuncio = .time;
+	$@DevilSquareEnter = 0;
+	donpcevent strnpcinfo(0)+"::OnBeginEvent";
+	end;	
+
+OnBeginEvent:
+	$@DevilSquare = 2;
+	sleep 3000;
+	if (getmapusers(.mapa$) == 0) {
+		announce "[Devil Square]: Nenhum jogador compareceu ao evento, o mal prevaleceu...",0;
+		$@DevilSquare = 0;
+		end;
+	}
+	mapannounce .mapa$,"[Guardião da Devil Square]: Vamos ver como vocês lidam com meus monstros!",bc_map,0xFF0000;
+	sleep 3000;
+	initnpctimer;
+	donpcevent strnpcinfo(0)+"::OnMob";
+	end;
+	
+OnMob:
+	.@round = $@DevilSquare-1;
+	
+	copyarray .@MobL, getd(".EA_Monstros" + .@round),getarraysize(getd(".EA_Monstros" + .@round));
+	copyarray .@MobQ, getd(".EA_MonQuan" + .@round),getarraysize(getd(".EA_MonQuan" + .@round));
+	if(getd(".EA_Mensagem" + .@round + "$") != "") .@Message$ = getd(".EA_Mensagem" + .@round + "$");	
+	
+	if (.@Message$ != "")
+		mapannounce .mapa$,.@Message$,bc_map,0xFF0000;
+	else
+		mapannounce .mapa$,"[Arena Elemental]: A " + .@round + "º orda de monstros apareceu!",0;
+	for (.@i3 = 0; .@i3 < getarraysize(.@MobL); .@i3++ ) {
+		.EA_MobTotal = .EA_MobTotal+.@MobQ[.@i3];
+	}
+	for (.@i1 = 0; .@i1 < getarraysize(.@MobL); .@i1++ ) {
+		for (.@i2 = 0; .@i2 < .@MobQ[.@i1]; .@i2++ ) {
+			.@mobGID = areamonster (.mapa$,30,69,69,30,"[EA] " + strmobinfo(1,.@MobL[.@i1]),.@MobL[.@i1],1,strnpcinfo(0)+"::OnMyMobDead");
+		}
+	}
+	end;
+
+OnMyMobDead:
+	.EA_MobTotal--;
+	if(.EA_MobTotal == 75) mapannounce .mapa$,"[Devil Square]: Restam 75 monstros vivos!",0;
+	if(.EA_MobTotal == 50) mapannounce .mapa$,"[Devil Square]: Restam 50 monstros vivos!",0;
+	if(.EA_MobTotal == 25) mapannounce .mapa$,"[Devil Square]: Restam 25 monstros vivos!",0;
+	if(.EA_MobTotal == 5) mapannounce .mapa$,"[Devil Square]: Restam apenas 5 monstros vivos!",0;
+	if(.EA_MobTotal == 4) mapannounce .mapa$,"[Devil Square]: Restam apenas 4 monstros vivos!",0;
+	if(.EA_MobTotal == 3) mapannounce .mapa$,"[Devil Square]: Restam apenas 3 monstros vivos!",0;
+	if(.EA_MobTotal == 2) mapannounce .mapa$,"[Devil Square]: Restam apenas 2 monstros vivos!",0;
+	if(.EA_MobTotal == 1) mapannounce .mapa$,"[Devil Square]: Resta apenas 1 monstro vivo!",0;
+	if(.EA_MobTotal == 0) {
+		$@DevilSquare++;
+		if ($@DevilSquare-2 == .EA_Rounds) {
+			donpcevent strnpcinfo(0)+"::OnBox";
+			end;
+		}
+		.@round = $@DevilSquare-1;
+		if (.EA_WaitTime != 0) {
+			mapannounce .mapa$,"[Devil Square]: Todos os monstros foram derrotados! A " + .@round + "º orda de monstros aparecerá logo!",0;
+			sleep .EA_WaitTime*1000;
+		}
+		donpcevent strnpcinfo(0)+"::OnMob";
+	}
+	end;
+
+OnEnd:
+	if (.DS_NoSkill) removemapflag .mapa$,mf_noskill;
+	stopnpctimer;
+	$@DevilSquare = 0;
+	killmonsterall .mapa$;
+	sleep 500;
+	mapwarp .mapa$,"prontera",156,191;
+	end;
+	
+OnBox:
+	$@DevilSquare++;
+	if (.EA_NoSkill) setmapflag .mapa$,mf_noskill;
+	if (.EA_Tesouro > 1)
+		mapannounce .mapa$,"[Devil Square]: Parabéns!! " + .EA_Tesouro + " Báus do Tesouro apareceram como recompensa!",0;
+	else
+		mapannounce .mapa$,"[Devil Square]: Parabéns!! 1 Báu do Tesouro apareceu como recompensa!",0;
+	.EA_Tesouro = getmapusers(.mapa$);
+	.EA_MobTotal = .EA_Tesouro;
+	areamonster .mapa$,30,69,69,30,"Báu do Tesouro",1324,.EA_Tesouro,strnpcinfo(0)+"::OnMyBoxDead";
+	end;
+
+OnMyBoxDead:
+	@id = rand(getarraysize(.EA_Item));
+	getitem .EA_Item[@id],10;
+	warp "prontera",156,191;
+	
+	.EA_MobTotal--;
+	for (.@i = 0; .@i <getarraysize(.EA_ItemRaro); .@i++ ) {
+		if (getelementofarray(.EA_ItemRaro,.@i) == .EA_Item[@id]) .@rare = 1;
+	}
+	if (.@rare == 1)
+		announce "[Devil Square]: "+ strcharinfo(0) +" abriu um Báu do Tesouro na arena e ganhou 1 incrível " + getitemname(.EA_Item[@id]) + "!!",0;
+	else
+		announce "[Devil Square]: "+ strcharinfo(0) +" abriu um Báu do Tesouro na arena!",0;
+	if (.EA_MobTotal == 0) {
+		$@DevilSquare = 0;
+		removemapflag .mapa$,mf_noloot;
+		removemapflag .mapa$,mf_nomobloot;
+		if (.EA_NoSkill) removemapflag .mapa$,mf_noskill;
+		sleep 1000;
+	announce "[Devil Square]: O Evento chegou ao fim. Obrigado a todos que participaram!",8;
+	}
+	end;
+
+OnTimer60000:
+	if($@DevilSquare < 2 || $@DevilSquare-2 > .EA_Rounds) {
+		stopnpctimer;
+		end;
+	}
+	if (getmapusers(.mapa$) == 0) {
+		announce "[Devil Square] Todos os jogadores falharam em sobreviver na arena!",0;
+		donpcevent strnpcinfo(0)+"::OnEnd";
+		end;
+	} else {
+		if (getmapusers(.mapa$) == 1)
+			announce "[Devil Square]: 1 jogador ainda está lutando bravamente na arena!",0;
+		else
+			announce "[Devil Square]: "+ getmapusers(.mapa$) +" jogadores ainda lutam bravamanete na arena!",0;
+		initnpctimer;
+		end;
+	}	
+}

@@ -1,0 +1,130 @@
+// http://ragnarok.levelupgames.ph/main/10-years-of-pro-kill-the-king-poring-event-guide/
+ 
+// mob_db.txt ( duplicate poring as example )
+// drop 10 poring coin at 100%
+// 3000,PORING_KING,Poring_KING,Poring KING,1,60,1,27,20,1,8,9,2,5,6,1,1,0,6,5,10,12,1,3,21,0x83,400,1872,672,480,0,0,0,0,0,0,0,7539,1000,7539,1000,7539,1000,7539,1000,7539,1000,7539,1000,7539,1000,7539,1000,7539,1000,7539,1000
+
+
+
+
+-	script	poring_king_event	-1,{
+
+	OnKilled:
+		announce "poring king died, alot of poring coin fall from the sky.",bc_all;
+		for ( set .@i,0; .@i < 100; set .@i,.@i + 1 ) {
+			set .@x,rand( 1,400 );
+			set .@y,rand( 1,400 );
+			makeitem 7539,1,"prt_fild08",.@x,.@y;
+		}
+
+		detachrid;
+		sleep ( 30 * 60000 );
+
+	OnInit:
+		announce "poring king appeared in prt_fild08, hunt it to get Poring Coin.",bc_all;
+		monster "prt_fild08",0,0,"--ja--",3000,1,strnpcinfo(3)+"::OnKilled";
+		end;
+
+}
+
+ 
+prontera,155,175,5	script	Anniversary Exchanger	757,{
+// item required to exchange.
+set .@itemid,7539;
+
+mes "If you bring me "+getitemname( .@itemid )+", I will exchange it with proper item by the amount of coins.";
+switch( select( 
+		"Exchange with 10 of "+getitemname( .@itemid ), 
+		"Exchange with 25 of "+getitemname( .@itemid ), 
+		"Exchange with 50 of "+getitemname( .@itemid ) 
+)){
+	Case 1:
+		// amount + item lists
+		set .@amount,10;
+		setarray .@itemlist,607,608;
+		setarray .@itemlist_qty,1,2;
+		break;
+	Case 2:
+		// amount + item lists
+		set .@amount,25;
+		setarray .@itemlist,607,608;
+		setarray .@itemlist_qty,1,2;
+		break;
+	Case 3:
+		// amount + item lists
+		set .@amount,50;
+		setarray .@itemlist,607,608;
+		setarray .@itemlist_qty,1,2;
+	default: break;
+}
+if( countitem( .@itemid ) < .@amount ){
+	mes "You dont have enough items.";
+}else{
+	mes "What items you want ?";
+	set .@size,getarraysize( .@itemlist );
+	for( set .@i,0; .@i < .@size; set .@i,.@i + 1 )
+		set .@menu$,.@menu$ + .@itemlist_qty[.@i]+ " x " +getitemname( .@itemlist[.@i] ) +":";
+	set .@i,select( .@menu$ ) - 1;
+	mes "Exchange to "+.@itemlist_qty[.@i]+" x "+getitemname( .@itemlist[.@i] )+" ??";
+	if( select( "Yes","No" ) == 1 ){
+		delitem .@itemid,.@amount;
+		getitem .@itemlist[.@i],.@itemlist_qty[.@i];
+		mes "Done";
+	}
+}
+close;
+}
+
+
+
+
+
+prontera,155,173,5	script	BigHairPinRX75	563,{
+mes "^0055FF[ BigHairPinRX75 ]^000000";
+mes "If you're looking for giving strong power to Poring Hairpin,you're in the right place.";
+mes "It's RX75!";
+next;
+switch( select( "What is success rate ?","Give stats to hairpin" ) ){
+	Case 1:
+		mes "^0055FF[ BigHairPinRX75 ]^000000";
+		mes "^FF0000Around 30% chances^000000, if failed the item will be destroyed.";
+		break;
+	Case 2:
+		mes "^0055FF[ BigHairPinRX75 ]^000000";
+		if( getequipcardid( EQI_HEAD_TOP,3 ) ){
+			mes "This headgear has been enchanted already.";
+		}
+		set .@hairpin,getequipid( EQI_HEAD_TOP );
+		for( set .@i,0; .@i < .hairpin_size; set .@i,.@i + 1 )
+			if( .@hairpin == .hairpin[.@i] ){
+				mes "If you upgrade it, equipped card will be destroyed upon failed.";
+				mes "Would you like to proceed ?";
+				if( select( "I will come back later","Please proceed" ) == 2 ){
+					failedrefitem EQI_HEAD_TOP;
+					if( rand(100) < 30 ){
+						mes "Failed.";
+					}
+					else{
+						specialeffect2 154;
+						mes "Congratz, you success.";
+						set .@rune,4700 + ( rand(6) * 10 ) + rand(3);
+						getitem2 .@hairpin,1,1,0,0,0,0,0,.@rune;
+						equip .@hairpin;
+					}
+				}
+				close;
+			}
+		mes "You didnt wear any hairpin.";
+	default: break;
+}
+close;
+
+OnInit:
+setarray .hairpin,
+	18632,
+	18633,
+	18634,
+	18635;
+set .hairpin_size,getarraysize( .hairpin );
+end;
+}

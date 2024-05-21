@@ -1,0 +1,235 @@
+//===== rAthena Script =======================================
+//= Devil Square
+//===== By: ==================================================
+//= Kirlein, Stillhard (translation), AnnieRuru (rewrite)
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Devil Square, based on the event in MU Online.
+//= Defeat three waves of monsters for treasure.
+//===== Additional Comments: =================================
+//= 1.0 First version, edited. [Euphy]
+//============================================================
+
+quiz_02,350,384,3	script	Devil Square Guardian#1	512,{
+	set .@gm_level, 99; // GM level required to start/stop the event
+
+	mes "[Guardião da Devil Square]";
+	mes "Essa é a entrada para a ^FF0000Devil Square^000000.";
+	mes "Se você falhar ou morrer, a porta fechará, e você deverá esperar até o evento começar novamente para entrar de novo.";
+	next;
+	switch(select("Enter.:Information.:" + ((getgmlevel() >= .@gm_level) ? "GM Menu." : "") + ":Cancel.")) {
+	case 1:
+		if (.start != 1) { // registration period
+			mes "[Guardião da Devil Square]";
+			mes "A Devil Square está fechada.";
+			mes "Ela abrirá nesses horários:";
+			mes "00:00 , 02:00 , 04:00 , 06:00"; // display your times here
+			mes "08:00 , 10:00 , 12:00 , 14:00";
+			mes "16:00 , 18:00 , 20:00 , 22:00";
+			close;
+		}
+		if (BaseLevel < 70 || Zeny < 20000) { // requirements
+			mes "[Guardião da Devil Square]";
+			mes "Você não preencheu os pré-requisitos para entrar.";
+			mes " ";
+			mes "Pré-requisitos:";
+			mes " - Nível base: 70";
+			mes " - Preço de inscrição: 20,000z";
+			close;
+		}
+		Zeny -= 20000;
+		announce strcharinfo(0)+" entrou na devil square.", bc_npc;
+		percentheal 100,100;
+		warp "ordeal_1-1",183,182;
+		close;
+	case 2:
+		mes "[Guardião da Devil Square]";
+		mes "Dentro você encontrará três ondas de monstros. Os monstros serão mais fortes a cada onda.";
+		next;
+		mes "[Guardião da Devil Square]";
+		mes "Se você derrotar todos eles, você ganhará a oportunidade de abrir 10 baús do tesouro com itens, equipamentos e cartas raras dentro!";
+		close;
+	case 3:
+		mes "[Guardião da Devil Square]";
+		switch (.start) { // event states
+			case 0: mes "A Devil Square ainda não começou."; break;
+			case 1: mes "A Devil Square está, neste momento, aceitando inscrições."; break;
+			case 2: mes "A Devil Square está em andamento na fase "+ .round +" com "+ .mob +" monstros restantes."; break;
+		}
+		next;
+		switch(select("Start event.:Stop event.:Cancel.")) {
+		case 1:
+			mes "[Guardião da Devil Square]";
+			if (.start)
+				mes "A Devil Square já começou.";
+			else {
+				mes "Começando a Devil Square...";
+				donpcevent strnpcinfo(0)+"::OnStartEvent";
+			}
+			close;
+		case 2:
+			mes "[Guardião da Devil Square]";
+			if (!.start)
+				mes "Devil Square ainda não começou.";
+			else {
+				mes "Parando a Devil Square...";
+				donpcevent strnpcinfo(0)+"::OnStopEvent";
+			}
+			close;
+		case 3:
+			break;
+		}
+		break;
+	case 4:
+		break;
+	}
+	mes "[Devil Square Guardian]";
+	mes "Farewell.";
+	close;
+
+OnStartEvent:
+OnClock0000:
+OnClock0200:
+OnClock0400:
+OnClock0600:
+OnClock0800:
+OnClock1000:
+OnClock1200:
+OnClock1400:
+OnClock1600:
+OnClock1800:
+OnClock2000:
+OnClock2200:
+	.start = 1;
+	disablenpc "ord11-12"; //from npc/warps/pvp.txt
+	disablenpc "Devil Square Guardian#2";
+	mapannounce "ordeal_1-1","Devil square está fechada.", bc_map;
+	getmapxy .@map$, .@x, .@y, UNITTYPE_NPC;
+	mapwarp "ordeal_1-1", .@map$, .@x, .@y;
+	killmonsterall "ordeal_1-1";
+	announce "Devil Square está aberta. O evento começará em 5 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square começará em 4 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square começará em 3 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square começará em 2 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square começará em 1 minuto.", bc_all;
+	sleep 60000;
+	announce "Devil Square começou!", bc_all;
+	if ( !getmapusers("ordeal_1-1") )
+		goto OnStopEvent;
+	.start = 2;
+	.round = 1;
+	.mob = 75;
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] SOLDIER SKELETON",1028,10,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ORC ARCHER",1189,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] SANDMAN",1165,10,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ARCHER SKELETON",1016,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] MINOROUS",1149,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] REQUIEM",1164,10,strnpcinfo(0)+"::OnDevilDead";
+	end;
+
+OnDevilDead:
+	.mob--;
+	if ( .mob == 25 || .mob == 5 )
+		announce "Devil Square : "+ .mob +" monstros restantes na primeira fase.", bc_map;
+	else if ( .mob <= 0 ) {
+		announce "Devil Square está entrando em sua segunda fase...", bc_map;
+		goto OnDevil2;
+	}
+	end;
+
+OnDevil2:
+	.round = 2;
+	.mob = 70;
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] GARGOYLE",1253,15,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ALARM",1193,10,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] HIGH ORC",1213,10,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] INJUSTICE",1257,10,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] MIMIC",1191,15,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] WRAITH",1192,10,strnpcinfo(0)+"::OnDevilDead2";
+	end;
+
+OnDevilDead2:
+	.mob--;
+	if ( .mob == 25 || .mob == 5 )
+		announce "Devil Square : "+ .mob +" monstros restantes na segunda fase.", bc_map;
+	else if ( .mob <= 0 ) {
+		announce "Devil Square está entrando em sua última fase...", bc_map;
+		goto OnDevil3;
+	}
+	end;
+
+OnDevil3:
+	.round = 3;
+	.mob = 58;
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ANOLIAN",1206,15,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] WANDERER",1208,15,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] DEVIRUCHI",1109,10,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] JOKER",1131,15,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] MOONLIGHT",1150,2,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] DARK ILLUSION",1302,1,strnpcinfo(0)+"::OnDevilDead3";
+	end;
+
+OnDevilDead3:
+	.mob--;
+	if ( .mob == 25 || .mob == 5 )
+		announce "Devil Square : "+ .mob +" monstros restantes na última fase.", bc_map;
+	else if ( .mob <= 0 ) {
+		announce "Devil Square : Parabéns! Esses 10 Baús do Tesouro são seus!", bc_map;
+		goto OnDevil4;
+	}
+	end;
+
+OnDevil4:
+	.round = 4;
+	.mob = 10;
+	monster "ordeal_1-1",231,250,"Treasure Chest",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",234,247,"Treasure Chest",1328,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",237,244,"Treasure Chest",1332,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",240,241,"Treasure Chest",1336,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",243,238,"Treasure Chest",1340,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",246,235,"Treasure Chest",1344,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",249,232,"Treasure Chest",1348,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",252,229,"Treasure Chest",1352,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",249,241,"Treasure Chest",1356,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",240,249,"Treasure Chest",1360,1,strnpcinfo(0)+"::OnTreasureDead";
+	end;
+
+OnTreasureDead:
+	.mob--;
+	announce "Devil Square : "+ strcharinfo(0) +" abriu um baú do tesouro na Devil Square!", bc_all;
+	if ( .mob <= 0 )
+		goto OnStopEvent;
+	end;
+
+OnStopEvent:
+	killmonsterall "ordeal_1-1";
+	enablenpc "ord11-12"; //from npc/warps/pvp.txt
+	enablenpc "Devil Square Guardian#2";
+	.start = .round = .mob = 0;
+	end;
+}
+
+ordeal_1-1,246,245,7	script	Devil Square Guardian#2	406,{
+	mes "[Exit]";
+	mes "Farewell.";
+	close2;
+	warp "SavePoint",0,0;
+	end;
+}
+
+ordeal_1-1	mapflag	nowarp
+ordeal_1-1	mapflag	nowarpto
+ordeal_1-1	mapflag	noteleport
+ordeal_1-1	mapflag	monster_noteleport
+ordeal_1-1	mapflag	nosave	SavePoint
+ordeal_1-1	mapflag	nomemo
+ordeal_1-1	mapflag	nobranch
+ordeal_1-1	mapflag	nopenalty
+ordeal_1-1	mapflag	noicewall

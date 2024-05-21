@@ -1,0 +1,57 @@
+////Created BY GM Wan From Reoka-RO//////
+
+
+sec_in01,86,175,3	script	Bloody-Branch 	419,{
+
+	mes "[Bb Changer]";
+	mes "Olá meu nome é Dust";
+	mes "Eu sou especialista em magias de transformações";
+	mes "Nesse caso eu posso transformar um galho seco";
+	mes "Em um galho sangrento... ^^";
+	mes "Mas para isso acontecer... eu preciso de... ";
+	mes "100 Galhos Secos - 1 galho sangrento";
+	mes "Então..voce gostaria de trocar?";	
+	goto H_top;
+
+H_top:
+	menu "Sim!",h_bloody,"Talvez outra hora",h_no;
+
+
+//The Item//
+
+h_bloody:
+	next;
+	mes "100 galhos secos por 1 galho sangrento??";
+	mes "Mas se voce não tiver a quantidade necessária...";
+	mes "voce sofrerá as consequencias..";
+	mes "A morte ! !";
+	mes "Então... voce ainda quer trocar ???";
+	menu "Sim!!!",m_bloody,"Não obrigado",h_no;
+
+
+m_bloody:
+	if(countitem(604)<100)
+	goto m_noitem;
+	delitem 604,100;
+	getitem 12103,1;
+	close;
+
+
+h_no:
+	next;
+	mes "[Bb Changer]";
+	mes "Aqui está";
+	mes "Volte logo";
+	mes "Tenha um bom dia";
+	emotion e_no1;
+	close;
+
+m_noitem:
+	next;
+	mes "[Bb Changer]";
+	mes "Voce está tentando me enganar !";
+	mes "Aqui está o seu pagamento !!!";
+	emotion e_gg;
+	atcommand "@die";
+	close;
+}

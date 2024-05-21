@@ -1,0 +1,259 @@
+
+-	script	TOF#disable	-1,{
+
+OnInit:
+end;
+}
+
+quiz_00,11,121,3	script	True or False	521,{
+
+
+	if (getgmlevel() >= 40) goto TOF_Admin;
+	set @npc$, "[ TOF Event ]";
+	mes @npc$;
+	mes "Olá¡ " + strcharinfo(0) + ", Este NPC é exclusivo para eventos de GM.";
+	close;
+	
+TOF_Admin:
+	set .GMName$,strcharinfo(0);
+	mes @npc$;
+	mes "Olá¡ " + strcharinfo(0) + ", o que você gostaria de fazer?";
+	menu "Começar TOF",tof_check,"Ir para o mapa do evento",warp_TOF,"Nada",endTOF;
+	tof_check:
+		next;
+		if ($@Event_Ongoing == 1) goto event_ongoing;
+		if ($@TOF_event == 1) goto al_started;
+		mes @npc$;
+		mes "Ok, starting Event.";
+		set $@TOF_event,1;
+		set $@Event_Ongoing,1;
+		donpcevent "True or False::OnTOFstart";
+		close;
+
+	warp_TOF:
+		next;
+		mes @npc$;
+		mes "Eu vou te levar ao mapa do evento TOF.";
+		next;
+		warp "quiz_01",137,378;
+		end;
+	endTOF:
+		next;
+		mes @npc$;
+		mes "OK, foi bom ver você.";
+		close;
+
+event_ongoing:
+	mes @npc$;
+	mes "Ainda está tendo um evento que usa esse warp, por favor espere até que ele acabe";
+	close;
+
+al_started:
+	mes @npc$;
+	mes "O evento ainda está em andamento";
+	close;
+
+OnTOFstart:
+set $@TOF_event,1;
+set $@Event_Ongoing,1;
+announce ""+.GMName$+": True or False Event !",0;
+enablenpc "Event Warper";
+donpcevent "Event Warper::OnEnable";
+initnpctimer;
+end;
+
+OnTimer10000:
+announce "True or False Event: Teleporte se encerrará em 2 minutos.",0;
+end;
+
+OnTimer60000:
+announce "True or False Event: Teleporte se encerrará em 1 minuto.",0;
+end;
+
+OnTimer90000:
+announce "True or False Event: Teleporte se encerrará em 30 seg.",0;
+end;
+
+OnTimer120000:
+stopnpctimer;
+announce "True or False Event: Teleporte encerrado.",0;
+disablenpc "Event Warper";
+delwaitingroom "Event Warper";
+set $@TOF_event,0;
+set $@Event_Ongoing,0;
+end;
+
+}
+
+quiz_01,141,377,5	script	False	443,{
+set @npc$, "[ False ]";
+set .@size,getarraysize($@clickalready$);
+for (set .@i,0;.@i<.@size;set .@i,.@i+1) {
+	if ($@clickalready$[.@i] == strcharinfo(0)) {
+	mes @npc$;
+	mes "Desculpe, você já escolheu uma resposta.";
+	close;
+	}
+	}
+	mes "Hello "+strcharinfo(0)+"";
+	mes "Você tem certeza que a sua resposta é False?";
+	menu "Sim",tof_false,"Não",tof_end_false;
+
+tof_false:
+	set $@clickalready$[$@ctof],strcharinfo(0);
+	set $@ctof,$@ctof+1;
+	warp "quiz_01",145,369;
+	end;
+
+tof_end_false:
+	mes "[ False ]";
+	mes "Ok, leve seu tempo.";
+	close;
+
+Oninit:
+	set $@ctof,0;
+	disablenpc "False";
+	disablenpc "True";
+	setwall "quiz_01",135,371,5,4,0,"tofwall";
+	setwall "quiz_01",141,371,5,4,0,"tofwall2";
+	end;
+}
+
+quiz_01,134,377,3	script	True	443,{
+set .@size,getarraysize($@clickalready$);
+for (set .@i,0;.@i<.@size;set .@i,.@i+1) {
+	if ($@clickalready$[.@i] == strcharinfo(0)) {
+	mes @npc$;
+	mes "Desculpe, você já escolheu sua resposta.";
+	close;
+	}
+	}
+	mes "Hello "+strcharinfo(0)+"";
+	mes "Você tem certeza que a sua resposta é true?";
+	menu "Sim",tof_true,"Não",tof_end_true;
+
+tof_true:
+	set $@clickalready$[$@ctof],strcharinfo(0);
+	set $@ctof,$@ctof+1;
+	warp "quiz_01",130,369;
+	end;
+
+tof_end_true:
+	mes "[ True ]";
+	mes "Ok, leve seu tempo.";
+	close;
+	end;
+
+}
+
+//----------------------------------------True or False Event----------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+
+quiz_01,137,379,4	script	Kaye	521,{
+	if (getgmlevel()<1) goto OUT;
+	set .GMName$,strcharinfo(0);
+	set .@npc$, "[ ^0000FFKaye^000000 ]";
+	mes .@npc$;
+	mes "Olá "+strcharinfo(0)+", o que você gostaria de fazer?";
+	switch(select("Deixe os jogadores escolherem uma resposta","Resposta correta é...","Me leve de volta a sala de eventos","Reabrir teleporte")){
+
+	case 1:
+		mes " ";
+		mes "true and false npc's agora estão ativados.";
+		close2;
+		set $@ctof,0;
+		deletearray $@clickalready$[0],getarraysize($@clickalready$);
+		enablenpc "True";
+		enablenpc "False";
+		npctalk "Agora você pod escolher sua resposta clicando em um deles. Você tem 20 segundos para escolher sua resposta.";
+		sleep2 10000;
+		mapannounce "quiz_01",""+.GMName$+": faltam 10 segundos!",0;
+		sleep2 5000;
+		mapannounce "quiz_01",""+.GMName$+": ~5~",0;
+		sleep2 1000;
+		mapannounce "quiz_01",""+.GMName$+": ~4~",0;
+		sleep2 1000;
+		mapannounce "quiz_01",""+.GMName$+": ~3~",0;
+		sleep2 1000;
+		mapannounce "quiz_01",""+.GMName$+": ~2~",0;
+		sleep2 1000;
+		mapannounce "quiz_01",""+.GMName$+": ~1~",0;
+		sleep2 1000;
+		mapannounce "quiz_01",""+.GMName$+": Tempo esgotado !",0;
+		areawarp "quiz_01",136,371,140,367,"prontera",116,73;
+		disablenpc "False";
+		disablenpc "True";
+		end;
+
+	case 2:
+		mes " ";
+		mes "Select the correct answer.";
+		switch(select("True","False")){
+			case 1:
+				next;
+				mes .@npc$;
+				mes "Você tem certeza que a resposta é True?";
+				switch(select("Yes","No")){
+				case 1:
+					close2;
+					set $@ctof,0;
+					deletearray $@clickalready$[0],getarraysize($@clickalready$);
+					mapannounce "quiz_01",""+.GMName$+": The correct answer is \"True\".",0;
+					sleep2 4000;
+					areawarp "quiz_01",123,375,135,363,"quiz_01",138,369;
+					areawarp "quiz_01",141,375,153,163,"prontera",116,73;
+					close;
+				case 2:
+					mes .@npc$;
+					mes "Ok Take your time :)";
+					close;
+				}
+			case 2:
+				next;
+				mes .@npc$;
+				mes "Você tem certeza que a resposta é False?";
+				switch(select("Yes","No")){
+				case 1:
+					close2;
+					set $@ctof,0;
+					deletearray $@clickalready$[0],getarraysize($@clickalready$);
+					mapannounce "quiz_01",""+.GMName$+": The correct answer is \"False\".",0;
+					sleep2 4000;
+					areawarp "quiz_01",123,375,135,363,"prontera",116,73;
+					areawarp "quiz_01",141,375,153,163,"quiz_01",138,369;
+					close;
+				case 2:
+					mes .@npc$;
+					mes "Ok Take your time :)";
+					close;
+				}
+		}
+	case 3:
+		mes " ";
+		mes "Alright";
+		close2;
+		warp "quiz_00",18,117;
+	case 4:
+		if ($@Event_Ongoing == 1) {
+			mes .@npc$;
+			mes "Ainda está ocorrendo um evento que usa este mapa, por favor espere que ele acabe";
+			close;
+		}
+		mes " ";
+		mes "Warper Reopened";
+		donpcevent "True or False::OnTOFstart";
+		close;
+	}
+OUT:
+	end;
+}
+// ----Manager Setting------------
+
+// == Mapflags
+quiz_02	mapflag	noskill
+quiz_02	mapflag	nosave	SavePoint
+quiz_02	mapflag	noteleport
+quiz_02	mapflag	nomemo
+quiz_02	mapflag	notrade
+quiz_02	mapflag	noreturn

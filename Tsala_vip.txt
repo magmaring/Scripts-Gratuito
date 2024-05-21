@@ -1,0 +1,51 @@
+prontera,147,174,6	script	Sala VIP	478,{
+	if (getgmlevel() >= 40) {
+	goto sala_vip;
+	} else {
+	mes "[Sala VIP]";
+	mes "Olá " +strcharinfo(0)+ ", Este NPC é para o uso somente de jogadores Vips.";
+	mes "Para se tornar um jogador basta votar diariamente em nosso site, e trocar seus votos por cartões VIP.";
+	close;
+	}
+
+sala_vip:
+	mes "[Sala VIP]";
+	mes "Olá "+strcharinfo(0)+",";
+	mes "Você gostaria de ir a Sala VIP?";
+	menu "Sim",warp_vip,"Não",cancel_vip;
+	
+warp_vip:
+	warp "sec_in01",85,167;
+	end;
+
+cancel_vip:
+	mes "[Mall Warper]";
+	mes "Ok, tenha um bom dia";
+	close;
+	
+     
+}
+sec_in01,86,159,1	script	#Saída	478,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Deseja voltar para Prontera?";
+	next;
+	switch(select("Sim")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "prontera",150,150;
+			end;
+	}
+}
+sec_in01,78,175,6	script	Sala Minerador	848,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Deseja ir para o evento Minerador?";
+	next;
+	switch(select("Sim")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "manuk",0,0;
+			end;
+	}
+}

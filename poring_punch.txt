@@ -1,0 +1,437 @@
+quiz_00,11,109,5	script	Poring Punch Event	1002,{
+
+	set @npc$, "[ Poring Punch Event ]";
+	if (getgmlevel() >= 40) goto ppe_Admin;
+	mes @npc$;
+	mes "Olá "+strcharinfo(0)+", esse NPC é de uso exclusivo de GMs.";
+	close;
+	
+ppe_Admin:
+	mes @npc$;
+	mes "Olá "+strcharinfo(0)+", o que você gostaria de fazer?";
+	menu "Começar Poring Punch Event",ppe_start,"Nada",endppe;
+	ppe_start:
+		if ($@PoringEventChecker == 1) goto ppe_started;
+		mes " ";
+		mes "Ok, começando Poring Punch event.";
+		close2;
+		donpcevent "Poring Puncher::OnStartPPE";
+		end;
+
+	endppe:
+		next;
+		mes @npc$;
+		mes "Ok, foi bom ver você.";
+		close;
+
+ppe_started:
+	mes @npc$;
+	mes "Esse evento ainda está em andamento";
+	close;
+
+
+
+}
+
+
+
+-	script	PPE_inital	-1,{
+	OnInit:
+	set $@PoringEventChecker, 0;
+	end;
+}
+
+quiz_02,361,371,1	script	Poring Puncher	909,{
+
+	mes "[ Poring Punch Event ]";
+	mes "Olá, Eu sou o gerento do evento Poring Punch. O que você gostaria de fazer?";
+	mes " ";
+	menu "Entrar no evento",PPE_Join,"Criar uma partida",PPE_Host,"Como funciona esse evento?",PPE_HowTo,"Nevermind",PPE_nvm;
+
+	PPE_HowTo:
+		next;
+		mes "[ Poring Punch Event ]";
+		mes "Este é um evento onde todos podem participar. tudo que você tem que fazer é acertar o poring certo e evitar os errados. Cada poring da uma certa quantia de potos. Você tem apenas 5 minutos. A pontuação mais alto ao final do evento determinará o vencedor.";
+		mes " ";
+		mes "Regras: Não são permitidos armas, carrinhos,homuns e pets nesse evento.";
+		next;
+		mes "[ Poring Punch Event ]";
+		mes "Valor dos porings:";
+		mes "Poring certo:  ^FF0000+1^000000 a ^FF0000+3^000000  pontos.";
+		mes "Poring errado: ^FF0000-3^000000 a ^FF0000-5^000000 pontos.";
+		close;
+
+	PPE_Host:
+		next;
+		if ( $@PoringEventChecker != 0 ){
+			mes "[ Poring Punch Event ]";
+			mes " Evento Poring Punch ainda está em andamento.";
+			mes " ";
+			close;
+		}else{
+			mes "[ Poring Punch Event ]";
+			mes "Você tem que pagar ^FF0000800,000,000z^000000 para hostiar esse evento. Você gostaria de pagar para hostiar?";
+			next;
+			menu "Sim",PPE_HostYes,"Não",-;
+			mes "[ Poring Punch Event ]";
+			mes "Okay. Talvez na próxima.";
+			mes " ";
+			close;
+				PPE_HostYes:
+					if ( Zeny >= 800000000 ){
+						mes "[ Poring Punch Event ]";
+						mes "Obrigado "+strcharinfo(0)+", por hostiar esse evento. Logo irá começar.";
+						mes " ";
+						set Zeny, Zeny-800000000;
+						close2;
+						announce ""+strcharinfo(0)+" pagou para hostiar um evento Poring Punch!",0;
+						killmonsterall "pvp_n_1-2";
+						sleep2 10000;
+						donpcevent "Poring Puncher::OnStartPPE";
+						end;
+					}else{
+						mes "[ Poring Punch Event ]";
+						mes "Desculpe "+strcharinfo(0)+", você não possui zenys suficientes para hostiar um evento.";
+						mes " ";
+						close;
+					}end;
+		}end;
+
+	PPE_Join:
+		if (getgmlevel() > 0) {
+		next;
+			mes "[ Poring Punch Event ]";
+		mes "Desculpe, GMs não podem entrar neste evento.";
+		close;
+		}
+		if ( $@PoringEventChecker != 0 ){
+			if (gethominfo(2) != "null")	{
+				mes "[ Poring Punch Event ]";
+				mes "Homunculos não são permitidos neste evento! Desculpe "+strcharinfo(0)+" mas você não pode entrar neste evento!";
+				close;
+			}
+			if (getpetinfo(2) != "null")	{
+				mes "[ Poring Punch Event ]";
+				mes "Pets não são permitidos neste evento! Desculpe "+strcharinfo(0)+" mas você não pode se juntar a este evento!";
+				close;
+			}
+			if (checkcart())	{
+				mes "[ Poring Punch Event ]";
+				mes "Carrinhos não são permitidos neste evento! Desculpe "+strcharinfo(0)+" mas você não pode entrar neste evento!";
+				close;
+			}
+			if (checkfalcon())	{
+				mes "[ Poring Punch Event ]";
+				mes "Falcões não são permitidos neste evento! Desculpe "+strcharinfo(0)+" mas você não pode entrar neste evento!";
+				close;
+			}
+			if (checkriding())	{
+				mes "[ Poring Punch Event ]";
+				mes "Montarias não são permitidas neste evento! Desculpe "+strcharinfo(0)+" mas você não pode entrar neste evento!";
+				close;
+			}
+			mes "Good luck "+strcharinfo(0)+".";
+			mes " ";
+			close2;
+			set @PoringPoints,0;
+			warp "pvp_n_1-2",0,0;
+			end;
+		}else{
+			mes "Desculpe. O evento Poring Punch não está em andamento.";
+			mes " ";
+			close;
+		}end;
+
+	PPE_nvm:
+		mes "Okay. Talvez na próxima.";
+		close;
+
+OnPoringKill:
+	set $@mobppe,-1;
+	if (getequipweaponlv(4)>0) {
+			sleep2 1;
+			dispbottom "Você tem que bater no monstro sem nenhuma arma.";
+			warp "prontera",162,173;
+			end;
+		}
+	if (getequipweaponlv(3)>0) {
+			sleep2 1;
+			dispbottom "Você tem que bater no monstro sem nenhuma arma.";
+			warp "prontera",162,173;
+			end;
+		}
+		set @PoringPoints,@PoringPoints+1;
+			if (@PoringPoints == $@HighestPoringPoints) {
+				set .@size,getarraysize($@HighestPoringPointsName$);
+				for (set .@i,0;.@i<.@size;set .@i,.@i+1) {
+					if ($@HighestPoringPointsName$[.@i] == strcharinfo(0)) {
+						end;
+					}
+				}
+				set $@ppewinners,$@ppewinners+1;
+				set $@HighestPoringPointsName$[$@ppewinners],strcharinfo(0);
+				end;
+			}
+			if (@PoringPoints > $@HighestPoringPoints) {
+				deletearray $@HighestPoringPointsName$[0],getarraysize($@HighestPoringPointsName$);
+				set $@ppewinners,0;
+				set $@HighestPoringPointsName$[$@ppewinners],strcharinfo(0);
+				set $@HighestPoringPoints,@PoringPoints;
+			}	
+			dispbottom "Você tem "+@PoringPoints+" "+(@PoringPoints > 1 ? "pontos":"ponto")+"";
+			end;
+
+OnPoringKill2:
+	set $@mobppe,-1;
+	if (getequipweaponlv(4)>0) {
+			sleep2 1;
+			dispbottom "Você tem que bater no monstro sem nenhuma arma.";
+			warp "prontera",162,173;
+			end;
+		}
+	if (getequipweaponlv(3)>0) {
+			sleep2 1;
+			dispbottom "Você tem que bater no monstro sem nenhuma arma.";
+			warp "prontera",162,173;
+			end;
+		}
+		set @PoringPoints,@PoringPoints+3;
+			if (@PoringPoints == $@HighestPoringPoints) {
+				set .@size,getarraysize($@HighestPoringPointsName$);
+				for (set .@i,0;.@i<.@size;set .@i,.@i+1) {
+					if ($@HighestPoringPointsName$[.@i] == strcharinfo(0)) {
+						end;
+					}
+				}
+				set $@ppewinners,$@ppewinners+1;
+				set $@HighestPoringPointsName$[$@ppewinners],strcharinfo(0);
+				dispbottom "You have "+@PoringPoints+" "+(@PoringPoints > 1 ? "pointos":"ponto")+"";
+				end;
+			}
+			if (@PoringPoints > $@HighestPoringPoints) {
+				deletearray $@HighestPoringPointsName$[0],getarraysize($@HighestPoringPointsName$);
+				set $@HighestPoringPointsName$[0],strcharinfo(0);
+				set $@HighestPoringPoints,@PoringPoints;
+			}
+			dispbottom "You have "+@PoringPoints+" "+(@PoringPoints > 1 ? "pontos":"ponto")+"";
+			end;
+
+OnPoporingKill:
+		set $@mobppe,-1;
+	if (getequipweaponlv(4)>0) {
+			sleep2 1;
+			dispbottom "Você tem que bater no monstro sem nenhuma arma.";
+			warp "prontera",162,173;
+			end;
+		}
+	if (getequipweaponlv(3)>0) {
+			sleep2 1;
+			dispbottom "Você tem que bater no monstro sem nenhuma arma.";
+			warp "prontera",162,173;
+			end;
+		}
+				set @PoringPoints,@PoringPoints-2;
+				if (@PoringPoints < 0 ) { set @PoringPoints,0;}
+				dispbottom "You have "+@PoringPoints+" "+(@PoringPoints > 1 ? "pontos":"ponto")+"";
+				end;
+
+OnPoporing2Kill:
+		set $@mobppe,-1;
+	if (getequipweaponlv(4)>0) {
+			sleep2 1;
+			dispbottom "Você tem que bater no monstro sem nenhuma arma.";
+			warp "prontera",162,173;
+			end;
+		}
+	if (getequipweaponlv(3)>0) {
+			sleep2 1;
+			dispbottom "Você tem que bater no monstro sem nenhuma arma.";
+			warp "prontera",162,173;
+			end;
+		}
+				set @PoringPoints,@PoringPoints-5;
+				if (@PoringPoints < 0 ) { set @PoringPoints,0;}
+				dispbottom "You have "+@PoringPoints+" "+(@PoringPoints > 1 ? "pontos":"ponto")+"";
+				end;
+
+
+OnClock0230:
+OnClock0530:
+OnClock0830:
+OnClock1130:
+OnClock1430:
+OnClock1735:
+OnClock2030:
+OnClock2330:
+	if ($@woe_ongoing == 1) {
+		end;
+		}
+    	if ( $@PoringEventChecker == 0 ) {
+        	set $@PoringEventChecker, 1;
+        	donpcevent "Poring Puncher::OnStartPPE";
+        	end;
+    		}
+	end;
+
+OnStartPPE:
+        set $@PoringEventChecker, 1;
+        initnpctimer;
+	waitingroom "Event: On",0;
+	announce "Poring Punch Event: Começará em 1 minuto, teleporte aberto na Sala de jogos.",0;
+	deletearray $@HighestPoringPointsName$[0],getarraysize($@HighestPoringPointsName$);
+	set $@ppewinners,0;
+	set $@HighestPoringPointsName$," ";
+	set $@HighestPoringPoints,0;
+	end;
+
+OnTimer30000:
+	mapannounce "pvp_n_1-2","Note: Se você sair deste mapa seus pontos serão resetados.",0;
+	end;
+
+OnTimer55000:
+	mapannounce "pvp_n_1-2","Evento Poring Punch está começará em 5.",0;
+	end;
+
+OnTimer56000:
+	mapannounce "pvp_n_1-2","Evento Poring Punch está começará em 4.",0;
+	end;
+
+OnTimer57000:
+	mapannounce "pvp_n_1-2","Evento Poring Punch está começará em 3.",0;
+	end;
+
+OnTimer58000:
+	mapannounce "pvp_n_1-2","Evento Poring Punch está começará em 2.",0;
+	end;
+
+OnTimer59000:
+	mapannounce "pvp_n_1-2","Evento Poring Punch está começará em 1.",0;
+	end;
+
+OnTimer60000:
+	set $@mobppe,315;
+	announce "O evento Poring Punch começou.",0;
+	monster "pvp_n_1-2",0,0,"Poring",1002,60,"Poring Puncher::OnPoringKill";
+	monster "pvp_n_1-2",0,0,"Poring",1002,30,"Poring Puncher::OnPoringKill2";
+	monster "pvp_n_1-2",0,0,"Pouring",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Proing",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Poing",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"I am not Poring",1002,20,"Poring Puncher::OnPoporing2Kill";
+	monster "pvp_n_1-2",0,0,"P0ring",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Por1ng",1002,5,"Poring Puncher::OnPoporingKill";
+	end;
+
+OnTimer120000:
+	mapannounce "pvp_n_1-2","Poring Punch Event: faltam 2 mintuos.",0;
+	monster "pvp_n_1-2",0,0,"Poring",1002,60,"Poring Puncher::OnPoringKill";
+	monster "pvp_n_1-2",0,0,"Poring",1002,30,"Poring Puncher::OnPoringKill2";
+	monster "pvp_n_1-2",0,0,"Pouring",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Proing",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Poing",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"I am not Poring",1002,20,"Poring Puncher::OnPoporing2Kill";
+	monster "pvp_n_1-2",0,0,"P0ring",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Por1ng",1002,5,"Poring Puncher::OnPoporingKill";
+	end;
+
+OnTimer180000:
+	mapannounce "pvp_n_1-2","Poring Punch Event: falta 1 minuto.",0;
+	monster "pvp_n_1-2",0,0,"Poring",1002,60,"Poring Puncher::OnPoringKill";
+	monster "pvp_n_1-2",0,0,"Poring",1002,30,"Poring Puncher::OnPoringKill2";
+	monster "pvp_n_1-2",0,0,"Pouring",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Proing",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Poing",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"I am not Poring",1002,20,"Poring Puncher::OnPoporing2Kill";
+	monster "pvp_n_1-2",0,0,"P0ring",1002,5,"Poring Puncher::OnPoporingKill";
+	monster "pvp_n_1-2",0,0,"Por1ng",1002,5,"Poring Puncher::OnPoporingKill";
+	end;
+
+OnTimer240000:
+	delwaitingroom "Poring Puncher";
+	stopnpctimer;
+	killmonsterall "pvp_n_1-2";
+	if ( getmapusers("pvp_n_1-2") < 1 )	{
+	announce "Não há nenhum jogador dentro do mapa do evento...então ele se auto encerrará.",0;
+	mapwarp "pvp_n_1-2","prontera",162,173;
+	set $@PoringEventChecker, 0;
+	end;
+	}
+	if ($@mobppe == 315) {
+	mapannounce "pvp_n_1-2","Ninguém ganhou! Você tem que matar pelo menos um poring para ganhar este evento.",0;
+	killmonsterall "pvp_n_1-2";
+	sleep2 3000;
+	mapannounce "pvp_n_1-2","Em breve você será teleportado para Prontera.",16;
+	sleep2 5000;
+	mapwarp "pvp_n_1-2","prontera",162,173;
+	set $@PoringEventChecker, 0;
+	end;
+	}
+	if ($@HighestPoringPointsName$ == " ") || ($@HighestPoringPoints == 0) {
+	mapannounce "pvp_n_1-2","Ninguém ganhou! Você tem que matar pelo menos um poring para ganhar este evento.",0;
+	killmonsterall "pvp_n_1-2";
+	sleep2 3000;
+	mapannounce "pvp_n_1-2","Em breve você será teleportado para Prontera.",16;
+	sleep2 5000;
+	mapwarp "pvp_n_1-2","prontera",162,173;
+	set $@PoringEventChecker, 0;
+	end;
+	}
+	if ($@ppewinners > 1) {
+	set .@size,getarraysize($@HighestPoringPointsName$);
+	for (set .@i,0;.@i < .@size;set .@i,.@i+1) {
+        announce " Evento Poring Punch  terminou e o vencedor é \""+$@HighestPoringPointsName$[.@i]+"\" com "+$@HighestPoringPoints+" "+($@HighestPoringPoints > 1 ? "pontos":"ponto")+"",0;
+        getitem 673,1,getcharid(3,$@HighestPoringPointsName$[.@i]);
+	sleep2 1;
+	}
+		sleep2 5000;
+		mapannounce "pvp_n_1-2","Em breve você será teleportado para Prontera.",16;
+		sleep2 5000;
+		mapwarp "pvp_n_1-2","prontera",116,73;
+		set $@PoringEventChecker,0;
+		end;
+	}
+	if ($@ppewinners == 1) {
+	set .@size,getarraysize($@HighestPoringPointsName$);
+	for (set .@i,0;.@i < .@size;set .@i,.@i+1) {
+        getitem 675,1,getcharid(3,$@HighestPoringPointsName$[.@i]);
+        announce "Evento Poring Punch  terminou e o vencedor é \""+$@HighestPoringPointsName$[.@i]+"\" com "+$@HighestPoringPoints+" "+($@HighestPoringPoints > 1 ? "pontos":"ponto")+"",0;
+	sleep2 1;
+	}
+	sleep2 5000;
+	mapannounce "pvp_n_1-2","You will be warp at prontera in a short while.",16;
+	sleep2 5000;
+	mapwarp "pvp_n_1-2","prontera",116,73;
+	set $@PoringEventChecker,0;
+	end;
+	}
+	set .@size,getarraysize($@HighestPoringPointsName$);
+	for (set .@i,0;.@i < .@size;set .@i,.@i+1) {
+        announce "Evento Poring Punch  terminou e o vencedor é \""+$@HighestPoringPointsName$[.@i]+"\" com "+$@HighestPoringPoints+" poring "+($@HighestPoringPoints > 1 ? "pontos":"ponto")+"",0;
+        getitem 7227,1,getcharid(3,$@HighestPoringPointsName$[.@i]);
+	sleep2 1;
+	}		
+		sleep2 5000;
+		mapannounce "pvp_n_1-2","Em breve você será teleportado para Prontera.",16;
+		sleep2 5000;
+		mapwarp "pvp_n_1-2","prontera",116,73;
+		set $@PoringEventChecker,0;
+		end;
+
+}
+
+
+
+// MAPFLAGS
+pvp_n_1-2	mapflag	nobranch
+pvp_n_1-2	mapflag	noexp
+pvp_n_1-2	mapflag	noskill
+pvp_n_1-2	mapflag	nomemo
+pvp_n_1-2	mapflag	nopenalty
+pvp_n_1-2	mapflag	pvp	off
+pvp_n_1-2	mapflag	nosave	SavePoint
+pvp_n_1-2	mapflag	noskill
+pvp_n_1-2	mapflag	noteleport
+pvp_n_1-2	mapflag	nowarp
+pvp_n_1-2	mapflag	nowarpto
+pvp_n_1-2	mapflag	notrade
+pvp_n_1-2	mapflag	noloot
+pvp_n_1-2	mapflag	nodrop

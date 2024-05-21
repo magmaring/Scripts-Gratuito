@@ -1,0 +1,137 @@
+quiz_00,25,106,3	script	Guess the Word Event	494,{
+	if (getgmlevel() < 40) 	end;
+	set @npc$, "[ Evento Guess the word ]";
+	set .GMName$,strcharinfo(0);
+	mes @npc$;
+	mes "Olá " + strcharinfo(0) + ", o que você gostaria de fazer?";
+	menu "Ativar Guess the word ",gtw_start,"Ir para o mapa do evento",warp_gtw;
+	gtw_start:
+		next;
+		if ($@gtw_event == 1) goto gtw_started;
+		mes @npc$;
+		mes "Evento Adivinhe a Palavra Está agora ativado na Sala de Jogos.";
+		//enablenpc "Guess the word";
+		announce ""+.GMName$+": Evento Adivinhe a Palavra começando na sala de jogos !",0;
+		set $@gtw_event,1;
+		set $@gtwpassword$," ";
+		set $@prizewon,0;
+		set $@gtw_set, 0;
+		close;
+
+	warp_gtw:
+		next;
+		mes @npc$;
+		mes "Eu agora te levarei para o mapa do Evento.";
+		warp "prontera",155,154;
+		end;
+
+gtw_started:
+	mes @npc$;
+	mes "O evento ainda está em execução";
+	close;
+
+}
+
+quiz_02,364,345,1	script	Guess the word	494,{
+	set @npc$,"[ ^0000FFGuess the word^000000 ]";
+if (getgmlevel() >= 40) goto gtw_gm;
+
+	if($@gtw_set == 0) {
+	mes @npc$;
+	mes "Aguarde que o GM defina uma nova palavra.";
+	close;
+	}
+	mes @npc$;
+	mes "Vá em frente, adivinhe.";
+	input @word$;
+	if ( $@prizewon == 0 ) {
+	mes "Tarde demais, alguém já adivinhou a palavra certa!";
+	close;
+	} 
+	if (@word$ == $@gtwpassword$) goto gtw_win;
+	if (@word$ != $@gtwpassword$) goto gtw_wrong;
+
+gtw_wrong:
+	npctalk "\""+strcharinfo(0)+"\" Entrou \""+@word$+"\". Errado!";
+	mes " ";
+	mes "Errado! Tente novamente.";
+	close;
+
+gtw_win:
+	mes " ";
+	mes "Parabéns!! Você adivinhou a palavra certa!";
+	mapannounce "quiz_02","\""+strcharinfo(0)+"\" adivinhou! A palavra certa é \""+$@gtwpassword$+"\".",0;
+	getitem $@gtw_prize,1;
+	set $@prizewon,0;
+	set $@gtw_set, 0;
+	set $@gtwpassword$," ";
+	close;
+
+gtw_gm:
+	mes @npc$;
+	set .GMName$,strcharinfo(0);
+	mes "Hello GM " +.GMName$+ ", O que você gostaria de fazer?";
+	if($@gtw_set == 1) {
+	mes "Word to guess: ^0000FF"+$@gtwpassword$+"^000000";
+	mes "Prize: ^0000FF1^000000 "+getitemname($cluck_item_id)+"";
+	}
+	switch(select("Definir nova palavra:Finalizar")) {
+	case 1:
+		next;
+		mes @npc$;
+		mes "Então, qual palavra você usaria desta vez?";
+		input $@gtwpassword$;
+		next;
+		mes @npc$;
+		mes "Selecione um prêmio para o vencedor.";
+		switch (select("^0000FF1^000000 Silver Coin")) {
+			case 1: 
+				set $@gtw_prize,675;
+				goto gtw_set;
+
+				
+			
+			}
+
+	case 2:
+				next;
+		mes @npc$;
+		mes "Fim do Evento ";
+		//disablenpc "Guess the word";
+		set $@gtw_event,0;
+		set $@prizewon,0;
+		set $@gtw_set, 0;
+		close;
+
+	}
+
+gtw_set:
+	next;
+	mes @npc$;
+	mes "Tem certeza de que deseja que a palavra seja \"^0000FF"+$@gtwpassword$+"^000000\"?";
+	switch (select("Yes:No")) {
+			case 1:
+				announce ""+.GMName$+" definiu uma nova palavra, venha na sala de jogos e tente adivinhar!",0;
+				set $@gtw_set, 1;
+				set $@prizewon,1;
+				close;
+			case 2:
+				mes @npc$;
+				mes "Ok não tenha pressa.";
+				close;
+			}
+
+OnInit:
+	set $@prizewon,0;
+	set $@gtw_set, 0;
+	set $@gtwpassword$," ";
+	//disablenpc "Guess the word";
+	//setwall quiz_02,365,346,4,4,0,"gtwwall1";
+	//setwall quiz_02,365,344,4,6,0,"gtwwall2";
+	//setwall quiz_02,364,346,4,2,0,"gtwwall3";
+	//setwall quiz_02,364,344,4,4,0,"gtwwall4";
+	//setwall quiz_02,363,344,2,2,0,"gtwwall5";
+	//setwall quiz_02,363,345,2,4,0,"gtwwall6";
+	end; 
+
+}

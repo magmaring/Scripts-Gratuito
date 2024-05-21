@@ -1,0 +1,174 @@
+//========================================================================================
+//Title: Asiong Salonga | Russian Roulette
+//Version: 1.0
+//Author: Ghost
+//Created: 12/24/2011
+//Released: 12/24/2011
+//Compatibility: rAthena | eAthena
+//rAthena Topic: http://rathena.org/board/topic/58222-ghosts-scripts/
+//Required File: http://www.mediafire.com/?ry9k4uolxlmj4kv
+//Reference: http://en.wikipedia.org/wiki/Russian_roulette
+//Note: Thanks to Z3R0, Arcenciel, and `KeiKun for helping me on making this script.
+//Â©2011-2012 Ghost
+//========================================================================================
+quiz_02,350,368,1,	script	Roleta Russa	731,{
+//--Configuration
+goto Asiong;
+OnInit:
+set .NPC$, "[Roleta Russa]"; //What is the NPC name?
+set .GMLevel, 80; //What is the minimum gm level to activate the event?
+set .GetSkull, 1; //Do you want to get the skulls of the dead after winning? 1: Enabled | 0:Disable
+set .Zeny, 0; //How much zeny you want the winner to get? | 0:Disable
+setarray .ItemID[0], 7179; //What is the Item ID of the prize? | 0:Disable
+setarray .ItemAmount[0],100; //How many pieces of the prize?
+setarray .DeathDialog$[0], "Sayonara!", "Hasta la vista, baby!", "Die!"; //What do you want the NPC will say when someone dies?
+setarray .AliveDialog$[0], "Sortudo desgraçado!", "Bloody hell!", "Por que você não morre!"; //What do you want the NPC will say when someone lives?
+end;
+//--End
+Asiong:
+mes .NPC$;
+mes "Rolete russa é um jogo  um letal, onde uma única bala é colocada na arma, o tambor é rodado, e coloca-se o cano da arma apontado da cabeça e por fim puxa-se o gatilho.";
+if(.play == 2){ close; }
+switch(select("Play:"+((getgmlevel() >= .GMLevel)?"Activate":"")+"")){
+case 1:
+	if((.play == 1) && (.pReg < .maxplayer)){
+		for(set .@i, 0; .@i < .maxplayer; set .@i, .@i + 1){
+			if(.playerlist$[.@i] == strcharinfo(0)){ 
+			next;
+			mes .NPC$;
+			mes "Você acabou de assinar sua sentença de morte!"; 
+			close;
+			}
+		}
+	set .playerlist$[.pReg], strcharinfo(0);
+	set .pReg, .pReg + 1;
+	announce "["+.pReg+"/"+.maxplayer+"] "+strcharinfo(0)+" está registrado.",bc_all;
+	if(.pReg == .maxplayer){ goto PlayRR; }
+	close;
+	}
+	else if((.pReg == .maxplayer) && (.play == 1)){
+	next;
+	mes .NPC$;
+	mes "Sem vagas restantes.";
+	close;
+	}
+	next;
+	mes .NPC$;
+	mes "Evento ainda não começou.";
+	close;
+case 2:
+	next;
+	mes .NPC$;
+	mes "Qual vai ser o limite de jogadores?";
+	input .maxplayer;
+	if(.maxplayer < 2){ dispbottom "Número maximo de jogadores deve ser maior que 1."; close; }
+	set .maxplayer, .maxplayer;
+	set .play, 1;
+	announce "[Russian Roulette]: Roleta russa irá começar na sala de jogos, total "+.maxplayer+" vagas!",bc_all;
+	close;
+}
+close;
+
+PlayRR:
+	close2;
+	detachrid;
+	copyarray .copiedplayer$[0], .playerlist$[0], 128;
+	set .play, 2;
+	announce "[Russian Roulette] O evento está prestes a começar!",bc_all;
+	announce "Listagem de Jogadores Ativos",bc_all,0xFFFFFF;
+	for(set .@i, 0; .@i < getarraysize(.playerlist$); set .@i, .@i + 1){
+		set .@j, .@j + 1;
+		announce ""+.@j+". "+.playerlist$[.@i]+"",bc_all,0xFFFFFF;
+		sleep2 1000;
+	}
+	announce "Não deslogue. Caso contrario será desqualificado!",bc_all,0xFFFFFF;
+	callsub OnSpin;
+close;
+
+OnSpin:
+	set .spin, rand(0, .pReg - 1);
+	attachrid(getcharid(3, .playerlist$[.spin]));
+	callsub OnCheck;
+	announce .NPC$ +" O revolver está rodando . . .",bc_all;
+	sleep2 3000;
+	announce .NPC$ +" O revolver para lentamente de girar . . .",bc_all;
+	sleep2 2000;
+	announce .NPC$ +" O revolver está apontado para o "+ strcharinfo(0) +" . . .",bc_all;
+	sleep2 3000;
+	announce .NPC$ +" Vou puxar o gatilho agora "+ strcharinfo(0),bc_all;
+	callsub OnCheck;
+	callsub OnShoot;
+	sleep2 3000;
+	callsub OnSpin;
+return;
+	
+OnShoot:
+if(rand(1, 3) == 1){
+	soundeffectall "Revolver.wav", 0;
+	sleep2 2300;
+	specialeffect2 669;
+	specialeffect2 531;
+	percentheal -100, -100;
+	deletearray .playerlist$[.spin], 1;
+	set .pReg, .pReg - 1;
+	announce "["+.pReg+"/"+.maxplayer+"] "+strcharinfo(0)+" is out!",bc_all,0xFF0000;
+	announce ""+.NPC$+" "+.deathdialog$[rand(1, getarraysize(.deathdialog))]+"", bc_all,0xFF0000;
+} else {
+	soundeffectall "Revolver.wav", 0;
+	sleep2 2300;
+	specialeffect2 675;
+	specialeffect2 522 + rand(1,14);
+	announce ""+.NPC$+" "+.alivedialog$[rand(1, getarraysize(.alivedialog))]+"", bc_all,0xFF0000;
+} return;
+
+OnCheck:
+if(.pReg <= 0){
+	announce .NPC$ +" Ninguém ganhou! Todos desapareceram!",bc_all;
+	callsub CleanUp;
+}
+else if((.pReg == 1) && (.maxplayer <= 2) && (getarraysize(.disqualified$))){
+	announce .NPC$ +" Ninguém ganhou! Um jogador foi desqualificado em um jogo de 2 participantes.",bc_all;
+	callsub CleanUp;
+}
+else if((.pReg == 1) && (.maxplayer >= 2)){
+	announce .NPC$ +" Nós temos um vencedor! Parabéns "+strcharinfo(0)+"!",bc_all;
+	if(.GetSkull){
+		for(set .@i, 0; .@i < .maxplayer; set .@i, .@i + 1){
+			if(strcharinfo(0) != .copiedplayer$[.@i]){
+			getnameditem 7420, .copiedplayer$[.@i];
+			}
+		}
+	}
+for(set .@i, 0; .@i < getarraysize(.ItemID); set .@i, .@i + 1){
+	if(.ItemID){ getitem .ItemID[.@i], .ItemAmount[.@i]; }
+}
+if(.Zeny){ set Zeny, Zeny + .Zeny; }
+callsub CleanUp;
+} return;
+
+OnPCLogoutEvent:
+if(.play){
+	setarray .disqualified$[.@l], strcharinfo(0);
+	set .@l, .@l + 1;
+	for(set .@i, 0; .@i < .maxplayer; set .@i, .@i + 1){
+		if(.playerlist$[.@i] == strcharinfo(0)){
+		deletearray .playerlist$[.@i], 1;
+		set .pReg, .pReg - 1;
+		announce "["+.pReg+"/"+.maxplayer+"] "+strcharinfo(0)+" has disqualified.",bc_all,0xFF0000;
+		break;
+		}
+	}
+}
+end;
+
+//--Clean Variables
+CleanUp:
+set .play, 0;
+set .pReg, 0;
+set .maxplayer, 0;
+deletearray .playerlist$, 128;
+deletearray .copiedplayer$, 128;
+deletearray .disqualified$, 128;
+end;
+//--End
+}

@@ -1,0 +1,114 @@
+/* conf/logs.conf
+
+// Log MVP Monster Drops (Note 1)
+// Desatualizado. Use Pick_Log em vez disso. Mas este log poderia ser útil para manter acompanhar pets MVPs(slaved MVP)
+log_mvpdrop: no
+
+*/
+
+
+prontera,158,177,4	script	MVP Rank	4_F_KAFRA9,{
+	.@cid = getcharid(0);
+	.@gm_level = getgmlevel();
+
+	mes "^0055FF[ ::: TOP MVP Rank ::: ]^000000";
+	query_sql( "SELECT COUNT(`monster_id`) AS `total`,`char`.`name`,`kill_char_id` FROM `"+.schema$[0]+"`.`mvplog` LEFT JOIN `"+.schema$[1]+"`.`char` ON `char`.`char_id` = `mvplog`.`kill_char_id` WHERE `kill_char_id` NOT IN ( "+.gm_char$+" ) GROUP BY `kill_char_id` ORDER BY `total` DESC LIMIT "+.top_rank,.@total,.@name$,.@kill_char_id );
+	.@size = getarraysize( .@name$ );
+	if( !.@size ){
+		mes "Registros não encontrados.";
+	}
+	else{
+		for( .@i = 0; .@i < .@size; .@i++ ){
+			mes ( .@i+1 )+". "+.@name$[.@i]+" ^FF0000["+.@total[.@i]+"]^000000";
+			.@player_menu$ = .@player_menu$ + ( .@i+1 )+". " + .@name$[.@i] + ":";
+			.@total_kill += .@total[.@i];
+		}
+	}
+	next;
+	switch( select( 
+		"Ver record pessoal",
+		"Filtrar por MVP ^FF0000["+F_InsertComma( .@total_kill )+"]^000000",
+		( .@gm_level < .gm_level )?"":"^FF0000[ GM ]^000000 Filtrar por TOP Player^000000",
+		"Information"
+	)){
+		case 3:
+			if( .@total_kill == 0 ) break;
+			.@i = select( .@player_menu$ ) - 1;
+			.@cid = .@kill_char_id[.@i];
+			next;
+		case 1:
+			mes "^0055FF[ ::: "+( ( @menu == 1 )?"Personal":.@name$[.@i]+"'s" )+" Record ::: ]^000000";
+			query_sql( "SELECT COUNT(`monster_id`) AS `total`,`monster_id` FROM `"+.schema$[0]+"`.`mvplog` WHERE `kill_char_id` = "+.@cid+" GROUP BY `monster_id` ORDER BY `total` DESC,`mvp_date` DESC",.@personal_total,.@personal_mvp_id );
+			.@personal_size = getarraysize( .@personal_total );
+			if( !.@personal_size ){
+				mes "Você não matou nenhum mvp até agora.";
+			}
+			else{
+				.@total_kill = 0;
+				for( .@i = 0; .@i < .@personal_size; .@i++ ){
+					mes ( .@i+1 )+". "+getmonsterinfo( .@personal_mvp_id[.@i],MOB_NAME )+" ^FF0000["+.@personal_total[.@i]+"]^000000";
+					.@total_kill += .@personal_total[.@i];
+				}
+				message strcharinfo(0),"Total "+F_InsertComma( .@total_kill )+" MVP(s)";
+			}
+			break;
+		case 2:
+			query_sql( "SELECT COUNT(`monster_id`) AS `total`,`monster_id` FROM `"+.schema$[0]+"`.`mvplog` WHERE `kill_char_id` NOT IN ( "+.gm_char$+" )  GROUP BY `monster_id` ORDER BY `total` DESC,`monster_id` ",.@mvp_total,.@mvp_id );
+			.@mvp_size = getarraysize( .@mvp_id );
+			if( !.@size ){
+				mes "^0055FF[ ::: Filter by MVP ::: ]^000000";
+				mes "Nínguem matou MVP até agora.";
+			}
+			else{
+				for( .@i = 0; .@i < .@mvp_size; .@i++ )
+					.@mvp_menu$ = .@mvp_menu$ + ( .@i+1 ) + ". " + getmonsterinfo( .@mvp_id[.@i],MOB_NAME ) + "^FF0000 ["+.@mvp_total[.@i]+"]^000000" + ":";
+				do{
+					.@i = select( .@mvp_menu$ ) - 1;
+					mes "^0055FF[ MVP - "+getmonsterinfo( .@mvp_id[.@i],MOB_NAME )+" ]^000000";
+					deletearray .@filter_name$;
+					query_sql( "SELECT COUNT(`monster_id`) AS `total`,`char`.`name` FROM `"+.schema$[0]+"`.`mvplog` LEFT JOIN `"+.schema$[1]+"`.`char` ON `char`.`char_id` = `mvplog`.`kill_char_id` WHERE `monster_id` = "+.@mvp_id[.@i]+" GROUP BY `kill_char_id` ORDER BY `total` DESC,`mvp_date` DESC LIMIT "+.top_rank,.@filter_total,.@filter_name$ );
+					.@filter_size = getarraysize( .@filter_name$ );
+					if( !.@size ){
+						mes "No record found.";
+					}
+					else{
+						for( .@i = 0; .@i < .@filter_size; .@i++ )
+							mes ( .@i+1 )+". "+.@filter_name$[.@i]+" ^FF0000["+.@filter_total[.@i]+"]^000000";
+					}
+					next;
+				}while( 1 );
+			}
+			break;
+		default: 
+			mes "^0055FF[ ::: Informações ::: ]^000000";
+			mes "Eu sou responsável por registrar todos aqueles que mataram algum MVP nesse server. O meu dever é mostrar a todos quantos MVPs foram mortos.";
+			next;
+			mes "^0055FF[ ::: Informações ::: ]^000000";
+			mes "Essas são as informações:";
+			mes "^777777  ~ Most killed MVP^000000";
+			mes "^777777  ~ Most MVP Slayer^000000";
+			mes "^777777  ~ Personal MVP Record^000000";
+			next;
+			mes "^0055FF[ ::: Information ::: ]^000000";
+			mes "Entretanto, A Staf ftem o  direito de retirar você do rank de MVPs em casos de atos ilicitos.";
+			mes " ";
+			mes "Ranking não são destinados a serem permanente também, eu poderia limpar o Ranking mensalmente. Tudo depende de mim.";
+			mes "Obrigado.";
+			break;
+	}
+	close2;
+	cutin "",255;
+	end;
+
+	OnInit:
+		setarray .schema$,
+			"log",
+			"hercules";
+		
+		.top_rank = 30;
+		.gm_level = 99;
+		.gm_char$ = "150000";
+		end;
+}
+
+

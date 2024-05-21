@@ -1,0 +1,168 @@
+/* Função responsável por entregar itens. Forma de usar:
+callfunc "Item_Get",Item_ID,Item_QNT,Item_ID,Item_QNT...;
+*/
+Function	Script	Item_Get	{
+	for(.@i = 0; .@i < getargcount(); .@i = .@i + 2){
+		.@id[.@i / 2] = getarg(.@i);
+		.@qnt[.@i / 2] = getarg(.@i + 1);
+	}
+	for(.@i = 0; .@i < getarraysize(.@id); .@i++){
+	getitem .@id[.@i],.@qnt[.@i];
+	}
+	return 1;
+}
+
+function	script	F_color	{
+	if(getarg(1) == "null")
+			return "";
+	setarray .@cores$[0], "amarelo", "^FFFF00", "azul", "^0000FF",
+						"branco", "^EEE9E9", "dourado", "^DAA520",
+						"cinza", "^696969", "laranja", "^FF7F00",
+						"marrom","^8B4726", "preto", "^000000",
+						"roxo", "^4527A0", "vermelho", "^FF0000", 
+						"verde", "^1B5E20";
+						 
+	.@cor$ = strtolower(getarg(1));
+	for(.@i = 0; .@i < getarraysize(.@cores$); set .@i, .@i + 2)
+		if(.@cores$[.@i] == getarg(1))
+			return .@cores$[.@i + 1]  + getarg(0) + "^000000";
+	return getarg(1) + getarg(0) + "^000000";
+}
+
+/*
+Modo de usar: Setar a váriavel
+.mapa$ = "SeuMapa";
+callfunc "enter_event",Level Min,Level Máx,Zeny Req,Máx de Players,"Nome do Evento","Mapa" / .mapa$,Cord x,Cord y;
+*/
+function	script	enter_event	{
+
+	.MinLevel = getarg( 0,0 );
+	.MaxLevel = getarg( 1,0 );
+	.Zeny = getarg( 2,0 );	
+	.MaxPlayers = getarg( 3,0 );
+	.evento$ = getarg( 4,0 );
+	.mapa$ = getarg( 5,0 );
+	.cordx = getarg( 6,0 );
+	.cordy = getarg( 7,0 );
+	.npc$ = callfunc("F_color", "["+.evento$+"]", "laranja");
+
+	if (BaseLevel < .MinLevel) {
+			mes .npc$;
+			mes "Desculpe, o nível mínimo para entrar é " + .MinLevel + ".";
+			close;
+	}
+	else if (BaseLevel > .MaxLevel) {
+			mes .npc$;
+			mes "Desculpe, o nível máximo para entrar é " + .MaxLevel + ".";
+			close;
+	}
+	else if (Zeny < .Zeny) {
+			mes .npc$;
+			mes "Para poder continuar, você precisa pagar uma taxa de: "+F_InsertComma( .Zeny )+"z.";
+			close;
+	}
+	else if (getmapusers(.mapa$) >= .MaxPlayers) {
+			mes .npc$;
+			mes "Desculpe, mas parece que o evento está cheio.";
+			mes "O número máximo de jogadores é " + .MaxPlayers + ".";
+			close;
+	}
+	else if ($@sortudoEnter != 0) {
+		setarray .@x[0],354,319,343,330;
+		setarray .@y[0], 35, 35, 35, 35;
+		.@i = rand(getarraysize(.@x));
+		Zeny -= .Zeny;
+		dispbottom "["+ .evento$ +"]: Você está dentro do Evento! Boa Sorte!";
+		announce "["+ .evento$ +"]: O jogador "+strcharinfo(0)+" entrou no Evento "+ .evento$ +"!",8;
+		warp .mapa$,.@x[.@i],.@y[.@i];
+		end;
+	}
+	else if ($@wotEnter != 0) {
+		if(!getcharid(2)) {
+			mes .npc$;
+			mes "Desculpe, você precisa ter estar em um clã para participar da War Of Treasure!";
+			close;
+		}
+		dispbottom "["+ .evento$ +"]: Você está dentro do Evento! Boa Sorte!";
+		announce "["+ .evento$ +"]: O jogador "+strcharinfo(0)+" entrou no Evento "+ .evento$ +"!",8;
+		warp .mapa$,.cordx,.cordy;
+		end;
+	}
+	else if ($tarot_status != 0) {
+		for (.@i = 0; .@i < getarraysize($@tarot_participantes$);.@i++) {
+			if ( $@tarot_participantes$[.@i] == strcharinfo(0) ) {
+				message strcharinfo(0), strnpcinfo(1)+" Você já está registrado. Aguarde!";
+				end;
+			}
+		}
+		$@tarot_participantes$[getarraysize($@tarot_participantes$)] = strcharinfo(0);
+		message strcharinfo(0), "["+ .evento$ +"]: Meus parabéns! Você se registrou com êxito para participar do evento.";
+		announce "["+ .evento$ +"]: <"+strcharinfo(0)+"> registrou-se para participar do evento!",bc_all;
+	
+	}
+	else {
+		Zeny -= .Zeny;
+		dispbottom "["+ .evento$ +"]: Você está dentro do Evento! Boa Sorte!";
+		announce "["+ .evento$ +"]: O jogador "+strcharinfo(0)+" entrou no Evento "+ .evento$ +"!",8;
+		warp .mapa$,.cordx,.cordy;
+		end;
+	}
+	return;
+}
+
+function	script	f_random	{
+/*
+Format:
+callfunc "f_random",0;	//To Get the Items Listed on function.
+callfunc "f_random",1,ItemID1,Quantity1,ItemID2,Quantity2,....;	// Unlimited ItemID's Supported.
+callfunc "f_random",2,"VARIABLE","Variable Name",Quantity,.....;	// Unlimited Variables Supported
+*/
+	freeloop(1);
+	switch(getarg(0)){
+		case 0:
+			setarray .@item_id[0],7227, 3,	//Set ItemID to Get if getarg(0)(first argument passed) is 0
+								  502 , 5,
+								  503 , 3;
+			break;
+			
+		case 1:
+			.@j=0;
+			for (.@i=1; .@i<getargcount(); .@i=.@i+2){
+				if (getitemname(getarg(.@i))!=""){
+					.@item_id$[.@j] = getarg(.@i);
+					.@item_id$[.@j+1] = getarg(.@i+1);
+					.@j=.@j+2;
+				}
+			}
+			break;
+			
+		case 2:
+			.@j=0;
+			for (.@i=1; .@i < getargcount(); .@i=.@i+3){
+				.@item_id$[.@j] = getarg(.@i);
+				.@item_id$[.@j+1] = getarg(.@i+1);
+				.@item_id$[.@j+2] = getarg(.@i+2);
+				.@j=.@j+3;
+			}
+			break;
+	}
+	do {
+		.@index = rand(0,(getarraysize(.@item_id$)-1));
+	} while ( (getarg(0)==2 && .@index%3) || (getarg(0)!=2 && (getitemname(.@item_id$[.@index])=="" || .@index%2)) );
+	freeloop(0);
+	if (getarg(0)==2){
+		.@cur = getd(.@item_id$[.@index]);
+		.@num = atoi(.@item_id$[.@index+2]);
+		.@total = .@cur + .@num;
+		.@temp = .@num;
+		if(.@total < 0) .@temp = -.@cur;
+			set getd(.@item_id$[.@index]),getd(.@item_id$[.@index]) + .@temp;
+			dispbottom "[Premiador]: Você recebeu "+ .@item_id$[.@index+2] +" "+ .@item_id$[.@index+1];
+	}else{
+		.@itemid = atoi(.@item_id$[.@index]);
+		.@qty = atoi(.@item_id$[.@index+1]);
+		getitem .@itemid, .@qty;
+		dispbottom "[Premiador]: Você recebeu "+ .@qty +" "+getitemname(.@itemid);
+	}
+	return;
+}

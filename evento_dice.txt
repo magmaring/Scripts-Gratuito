@@ -1,0 +1,254 @@
+//======Name========================================
+// Dice Event
+//======Version=====================================
+// 1.0
+//======Author(s)===================================
+// Sandbox
+//======Comments====================================
+// In loving memory of AstralRO
+//==================================================
+
+
+
+//Edit to where would you place the warper
+quiz_02,356,376,3	script	Dice Event Warper#dice	994,{
+
+mes "Você deseja participara do evento DICE?";
+menu "Sim",-;
+warp "quiz_02",55,87;
+close;
+
+}
+
+-	script	DiceTrigger	-1,{
+
+OnInit:
+disablenpc "Dice Event Warper#dice";
+disablenpc "Claim Your Prize!#dice";
+end;
+
+
+OnClock1426:
+if(agitcheck() == 1) end;
+enablenpc "Dice Event Warper#dice";
+announce "Dice Event: Evento Dice irá começar em instantes",bc_all,0x8A2BE2;
+sleep2 1000;
+announce "Dice Event: Aqueles que quiserem participar, me encontrem na Sala de Jogos!",bc_all,0x8A2BE2;
+sleep2 1000;
+announce "Dice Event: O portal ficará aberto por 1 minuto",bc_all,0x8A2BE2;
+sleep2 30000;
+announce "Dice Event: O portal para o evento Dice fechará em 30 segundos.",bc_all,0x8A2BE2;
+sleep2 30000;
+announce "Dice Event: Portal para o evento Dice fechado.",bc_all,0x8A2BE2;
+disablenpc "Dice Event Warper#dice";
+areawarp "ra_temsky",86,149,113,134,"ra_temsky",99,114;
+donpcevent "DiceEvent::OnDiceStart";
+end;
+
+}
+
+quiz_02,55,90,3	script	Got Stuck?#dice	779,{
+
+mes "[ Got Stuck? ]";
+mes "Você deseja voltar a prontera?";
+menu "Sim",-;
+warp "prontera",115,150;
+close;
+
+}
+
+
+quiz_02,37,80,3	script	Box 1	111,{
+
+warp "quiz_02",37,70;
+close;
+
+}
+
+quiz_02,49,80,3	script	Box 2	111,{
+
+warp "quiz_02",49,70;
+close;
+
+}
+
+quiz_02,61,80,3	script	Box 3	111,{
+
+warp "quiz_02",61,70;
+close;
+
+}
+
+
+quiz_02,73,80,3	script	Box 4	111,{
+
+warp "quiz_02",73,70;
+close;
+
+}
+
+quiz_02,37,64,3	script	Go Back#1	858,{
+
+warp "quiz_02",55,76;
+close;
+
+}
+
+
+quiz_02,49,64,3	script	Go Back#2	858,{
+
+warp "quiz_02",55,76;
+close;
+
+}
+
+quiz_02,61,64,3	script	Go Back#3	858,{
+
+warp "quiz_02",55,76;
+close;
+
+}
+
+quiz_02,73,64,3	script	Go Back#4	858,{
+
+warp "quiz_02",55,76;
+close;
+
+}
+
+
+-	script	DiceEvent	-1,{
+
+OnDiceStart:
+mapannounce "quiz_02","Nós iremos começar o evento Dice.",bc_blue;
+sleep2 1000;
+mapannounce "quiz_02","As regras são simples:",bc_blue;
+sleep2 1000;
+mapannounce "quiz_02","Eu irei escolher um número de 1 a 4. Mas antes disso  farei uma contagem regressiva de 5 a 0",bc_blue;
+sleep2 1000;
+mapannounce "quiz_02","Tudo o que vocês devem fazer é ir a arena com o número desejado",bc_blue;
+sleep2 1000;
+mapannounce "quiz_02","Exemplo, se eu pegar o número 4, todos os players nas arenas de 1 a 3 perderão.",bc_blue;
+sleep2 1000;
+mapannounce "quiz_02","Irei repetir o processo até sobrar apenas 1 jogador.",bc_blue;
+sleep2 2000;
+mapannounce "quiz_02","Antes que eu esqueça, você deve entrar dentro da arena! Se você for pego fora da arena será automaticamente eliminado!",bc_blue;
+sleep2 2000;
+mapannounce "quiz_02","Agora, vamos começar!",bc_blue;
+sleep2 3000;
+goto L_start;
+end;
+
+
+L_start:
+enablenpc "Go Back#1";
+enablenpc "Go Back#2";
+enablenpc "Go Back#3";
+enablenpc "Go Back#4";
+if(getmapusers("quiz_02") == 1) goto L_winner;
+enablenpc "Box 1";
+enablenpc "Box 2";
+enablenpc "Box 3";
+enablenpc "Box 4";
+if(getmapusers("quiz_02") == 0) goto L_noone;
+if(getmapusers("quiz_02") > 1) {
+set $@number,rand(1,4);
+sleep2 1000;
+mapannounce "quiz_02","Estou pronto para escolher um número. Por favor vá ate a arena desejada! Go go go!",bc_blue;
+sleep2 20000;
+mapannounce "quiz_02","5",bc_blue;
+sleep2 1500;
+mapannounce "quiz_02","4",bc_blue;
+sleep2 1500;
+mapannounce "quiz_02","3",bc_blue;
+sleep2 1500;
+mapannounce "quiz_02","2",bc_blue;
+sleep2 1500;
+mapannounce "quiz_02","1",bc_blue;
+disablenpc "Box 1";
+disablenpc "Box 2";
+disablenpc "Box 3";
+disablenpc "Box 4";
+disablenpc "Go Back#1";
+disablenpc "Go Back#2";
+disablenpc "Go Back#3";
+disablenpc "Go Back#4";
+areawarp "quiz_02",32,95,79,76,"prontera",115,150;
+areawarp "quiz_02",80,85,80,76,"prontera",115,150;
+areawarp "quiz_02",31,85,31,76,"prontera",115,150;
+if(getmapusers("quiz_02") == 0) goto L_noone;
+sleep2 1000;
+mapannounce "quiz_02","O tempo acabou. O número vencedor é "+$@number+"!",bc_blue;
+	if($@number == 4) goto L_Lose1;
+	if($@number == 3) goto L_Lose2;
+	if($@number == 2) goto L_Lose3;
+	if($@number == 1) goto L_Lose4;
+end;
+
+}
+
+L_Lose1:
+//Edit to where will you warp players that lost
+areawarp "quiz_02",33,73,41,52,"prontera",115,150;
+areawarp "quiz_02",45,73,53,52,"prontera",115,150;
+areawarp "quiz_02",57,73,65,52,"prontera",115,150;
+goto L_start;
+end;
+
+L_Lose2:
+//Edit to where will you warp players that lost
+areawarp "quiz_02",33,73,41,52,"prontera",115,150;
+areawarp "quiz_02",45,73,53,52,"prontera",115,150;
+areawarp "quiz_02",69,73,77,52,"prontera",115,150;
+goto L_start;
+end;
+
+L_Lose3:
+//Edit to where will you warp players that lost
+areawarp "quiz_02",33,73,41,52,"prontera",115,150;
+areawarp "quiz_02",57,73,65,52,"prontera",115,150;
+areawarp "quiz_02",69,73,77,52,"prontera",115,150;
+goto L_start;
+end;
+
+L_Lose4:
+//Edit to where will you warp players that lost
+areawarp "quiz_02",45,73,53,52,"prontera",115,150;
+areawarp "quiz_02",57,73,65,52,"prontera",115,150;
+areawarp "quiz_02",69,73,77,52,"prontera",115,150;
+goto L_start;
+end;
+
+L_noone:
+announce "Nínguem ganhou o evento Dice!",bc_all,0x8A2BE2;
+disablenpc "Claim Your Prize!#dice";
+disablenpc "Dice Event Warper#dice";
+end;
+
+L_winner:
+enablenpc "Claim Your Prize!#dice";
+disablenpc "Dice Event Warper#dice";
+end;
+
+}
+
+quiz_02,55,84,3	script	Claim Your Prize!#dice	904,{
+
+getitem 7227,1; //Edit on what prize would you give to the winner
+announce strcharinfo(0)+" ganhou o evento Dice!",bc_all,0x8A2BE2;
+disablenpc "Claim Your Prize!#dice";
+disablenpc "Dice Event Warper#dice";
+warp "prontera",115,150;
+close;
+end;
+
+}
+
+quiz_02	mapflag	nowarp
+quiz_02	mapflag	nowarpto
+quiz_02	mapflag	noskill
+quiz_02	mapflag	noteleport
+quiz_02	mapflag	nomemo
+quiz_02	mapflag	nosave	SavePoint
+quiz_02	mapflag	noicewall
+quiz_02	mapflag	noloot

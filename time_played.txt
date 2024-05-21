@@ -1,0 +1,100 @@
+prontera,146,162,3	script	Presença	553,{
+
+	
+
+	set @npc$, "[ ^0000FFSistema de Presença^000000 ]";
+	if (#started == 1) {
+	mes @npc$;
+	mes "Seu Sistema de presença está em andamento.";
+	mes "Você tem atualmente [^FF0000"+#EVENTPOINTS+"^000000] pontos de presença, para  troca-los ou saber mais informações basta relogar .";
+	close;
+	end;
+	}
+	if (BaseLevel < 99) || (JobLevel < 10) {
+	mes @npc$;
+	mes "Você deve ser nível ^FF0000255^000000 and job level ^FF0000120^000000 Para usar este npc.";
+	close;
+	}
+
+	mes @npc$;
+	mes "Bom Dia "+strcharinfo(0)+",";
+	mes "Você tem atualmente [^FF0000"+#EVENTPOINTS+"^000000] pontos Time Play .";
+	mes "O que você gostaria de fazer?";
+	menu "Começar a marcar",tp_start,"Recompensas",tp_reward,"O que são pontos de presença?",tp_info;
+
+tp_info:
+	next;
+	mes @npc$;
+	mes "Aqui você ganhará ^FF0000+5^000000 pontos de presença para cada ^FF000030^000000 Minutos que permanecer on-line excluindo Auto trading.";
+	mes "Diferentemente dos pontos de fidelidade você deve ficar online para recebe-los, e podera troca-los por itens de quest.";
+	mes "^0000FFNota^000000: Toda vez que você desconectar sua conta, o timer será redefinido para 0";
+	close;
+
+
+tp_reward:
+	menu "Mithril Coin - ^FF0000700^000000 TP pts",tp_tcg;
+
+tp_tcg:
+	if (#EVENTPOINTS >= 700) {
+		next;
+		mes @npc$;
+		mes "Aqui está o seu prêmio, Parabéns!";
+		getitem 674,1;
+		set .@total_points,-700;
+		set #EVENTPOINTS,(#EVENTPOINTS+.@total_points);
+		close;
+	}
+	else
+	next;
+	mes @npc$;
+	mes "Desculpe, você não tem pontos de presença suficientes.";
+	close;
+	end;
+
+tp_start:
+	next;
+	if (getgmlevel() > 99) {
+	mes @npc$;
+	mes "Hello "+strcharinfo(0)+", Este NPC é apenas para jogadores normais.";
+	close;
+	}
+	mes @npc$;
+	mes "Sistema de presença inciado.";
+	close2;
+	goto start_tp;
+
+start_tp:
+set #started, 1;
+attachnpctimer ""+strcharinfo(0)+"";
+initnpctimer;
+end;
+	
+OnTimer30000:
+if (checkvending() >= 1) {
+	dispbottom "Pontos de presença pararam de ser entregues, porque você estava afk. Fale comigo se quiser começar de novo.";
+	set #started, 0;
+	stopnpctimer;
+	end;
+}
+
+OnTimer60000:
+set @minute,@minute+1;
+if (@minute >= 30) {
+	set @minute,0;
+	set .@point_amt,5;
+	set .@total_points,+5;
+	set #EVENTPOINTS,(#EVENTPOINTS+.@total_points);
+	dispbottom "Pontos de presença: Você recebeu "+.@point_amt+" pontos por permanecer no jogo por 30 minutos";
+	set @consecutive_hour, @consecutive_hour+1;
+	}
+
+stopnpctimer;
+initnpctimer;
+end;
+
+OnPCLogoutEvent:
+	If (#started == 1) {
+	set #started, 0;
+	}
+	end;
+}

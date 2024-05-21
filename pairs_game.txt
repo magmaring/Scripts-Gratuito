@@ -1,0 +1,248 @@
+quiz_02,335,355,4	script	Pairs	993,{
+
+	.@n$ = "^2b86b5Pairs^000000";
+	mes .@n$;
+	if ( .j1 && .j2 )
+	{
+		mes "Me desculpe, mas ainda há um jogo em andamento.";
+		close ;
+	}
+	mes "Olá, você quer jogar ^0f1ab1Pares^000000?";
+	mes "^0f1ab1NOTA^000000: Para este evento funcionar corretamente você deve apenas clicar em 2 quadros por vez.";
+	mes "Em caso de bug exploit entrar em contato com a Staff Ragnayum.";
+	setarray .@a[0], .j1_1, .j1_2, .j2_1, .j2_2;
+	for ( ; .@c < 3 ; .@c+= 2 )
+		if ( isloggedin ( .@a[.@c], .@a[.@c + 1] ) )
+			mes "Player "+ ( .@c / 2 + 1 ) +": "+ rid2name ( ( ( .@c == 0 ) ? .j1_1 : .j2_1 ) ) +".";
+		else
+		{
+			mes "Player "+ ( .@c / 2 + 1 ) +": Nào há.";
+			setd ( ( .@c == 0 ) ? ".j1_1" : ".j2_1" ), 0;
+			setd ( ( .@c == 0 ) ? ".j1_2" : ".j2_2" ), 0;
+		}
+	next ;
+	if ( select ( "SIm.", "Não, obrigado." ) == 2 )
+		close ;
+	mes .@n$;
+	if ( .j1_1 == getcharid ( 3 ) || .j2_1 == getcharid ( 3 ) )
+	{
+		mes "You are already registered.";
+		close ;
+	}
+	else if ( .j1_1 && .j2_1 )
+	{
+		mes "Me desculpe, mas alguém se registrou antes.";
+		close ;
+	}
+	else if ( ! .j1_1 && ! .j2_1 )
+	{
+		.@a = rand ( 2 ) + 1;
+		setd ".j"+ .@a +"_2", getcharid ( 0 );
+		setd ".j"+ .@a +"_1", getcharid ( 3 );
+	}
+	else
+	{
+		setd ( ( .j1_2 == 0 ) ? ".j1_2" : ".j2_2" ), getcharid ( 0 );
+		setd ( ( .j1_1 == 0  ) ? ".j1_1" : ".j2_1" ), getcharid ( 3 );
+	}
+	@p = 0;
+	mes "Você se registrou com sucesso.";
+	addtimer 40*60*1000, strnpcinfo ( 0 ) +"::OnDeletePlayer";
+	if ( .j1_1 && .j2_1 )
+		emotion 33 ;
+	close2 ;
+	
+	
+	if ( ! $@memo_t && .j1_1 && .j2_2 )
+	{
+		// Preparation.
+		//===========================
+		freeloop 1 ;
+		$@memo_t = rand ( 2 ) + 1;
+		.@mobs$  = "|";
+		for ( .@a = 0; .@a < 15 ; .@a++ )
+		{
+			do
+			{
+				setarray .@mobs[0], rand ( 1001, 1323 ), rand ( 1365, 1418 ), rand ( 1493, 1500 ), rand ( 1503, 1520 ), rand ( 1582, 1588 ), rand ( 1613, 1623 ), rand ( 1628, 1633 ), rand ( 1698, 1721 );
+				while ( getmonsterinfo ( set ( .@b, .@mobs[rand ( 8 )] ), MOB_LV ) < 1 || .@b == 1285 || .@b == 1286 || .@b == 1287 || .@b == 1288 || .@b == 1373 || .@b == 1623 || .@b == 1630 || .@b == 1719 )
+					setarray .@mobs[0], rand ( 1001, 1323 ), rand ( 1365, 1418 ), rand ( 1493, 1500 ), rand ( 1503, 1520 ), rand ( 1582, 1588 ), rand ( 1613, 1623 ), rand ( 1628, 1639 ), rand ( 1652, 1657 ), rand ( 1698, 1721 );
+				if ( ! compare ( .@mobs$, "|"+ .@b +"|" ) )
+					.@c = 1;
+			} while ( ! .@c ) ;
+			.@c             =  0;
+			.@mobs$         = .@mobs$ + .@b +"|";
+			.@memo_ids[.@a] = .@b;
+		}
+		.@a = 0;
+		copyarray .@memo_ids[15], .@memo_ids[0], 15 ;
+		for ( .@i = 1; .@i <= 30 ; .@i++ )
+		{
+			setnpcdisplay "#"+ .@i +"_memo", 857 ;
+			hideoffnpc "#"+ .@i +"_memo" ;
+			.@r             =  rand ( 30 - .@i - 1 );
+			$@memo_ids[.@i - 1] = .@memo_ids[.@r];
+			deletearray .@memo_ids[.@r], 1 ;
+		}
+		freeloop 0 ;
+		//===========================
+		//===========================
+		
+		
+		npctalk "O jogo pode começar, "+ strcharinfo ( 0 ) +" está registrado!";
+		npctalk "O primeiro round é do "+ ( ( $@memo_t == 1 ) ? rid2name ( .j1_1 ) : rid2name ( .j2_1 ) ) +".";
+		setnpctimer "Pairs", 0 ;
+		initnpctimer ;
+		hideonnpc strnpcinfo ( 0 ) ;
+	}
+	end ;
+
+OnDeletePlayer:
+
+	if ( .j1 && .j2 )
+		end ;
+	
+OnTimer500000:
+OnReset:
+
+	if ( .j1_1 && .j2_1 && isloggedin ( .j1_1, .j1_2 ) && isloggedin ( .j2_1, .j2_2 ) )
+	{
+		attachrid .j1_1 ;
+		.@p1 = @p;
+		 @p  = set ( @a_1, 0 ) + set ( @a_2, 0 );
+		attachrid .j2_1 ;
+		.@p2 = @p;
+		 @p   = set ( @a_1, 0 ) + set ( @a_2, 0 );
+		getmapxy .@m$, .@x, .@y, 1 ;
+		if ( .@p1 > .@p2 )
+			areaannounce .@m$, .@x - 15, .@y - 15, .@x + 15, .@y + 15, "[Pairs]: "+ rid2name ( .j1_1 ) +" ganhou o jogo contra "+ rid2name ( .j2_1 ) +".", bc_all, 0x34a0b0 ;
+		else if ( .@p1 < .@p2 )
+			areaannounce .@m$, .@x - 15, .@y - 15, .@x + 15, .@y + 15, "[Pairs]: "+ rid2name ( .j2_1 ) +" ganhou o jogo contra "+ rid2name ( .j1_1 ) +".", bc_all, 0x34a0b0 ;
+		else
+			areaannounce .@m$, .@x - 15, .@y - 15, .@x + 15, .@y + 15, "[Pairs]: Empate entre "+ rid2name ( .j1_1 ) +" e "+ rid2name ( .j2_1 ) +".", bc_all, 0x34a0b0 ;
+	}
+	$@memo_t =  set ( .j1_1, 0 ) + set ( .j2_1, 0 ) + set ( .j1_2, 0 ) + set ( .j2_2, 0 );
+	deletearray $@memo_dis ;
+	deletearray $@memo_ids ;
+	hideoffnpc strnpcinfo ( 0 ) ;
+	for ( .@i = 1; .@i <= 30 ; .@i++ )
+		hideonnpc "#"+ .@i +"_memo" ;
+	end ;
+
+}
+
+quiz_02,328,350,4	script	#1_memo	857,{
+
+	.@extra = 1;		// extra turn at guessing?
+
+	.@t = (getcharid ( 0 ) == getvariableofnpc ( .j1_2, "Pairs" )) + (getcharid ( 0 ) == getvariableofnpc ( .j2_2, "Pairs" )) + (getcharid ( 0 ) == getvariableofnpc ( .j2_2, "Pairs" ));
+	if ( ( @a_1 && atoi ( strnpcinfo ( 2 ) ) == @a_1 ) || $@memo_dis[( atoi ( strnpcinfo ( 2 ) ) - 1 )] )
+		end ;
+	if ( ! .@t )
+	{
+		dispbottom "You're not playing.";
+		end ;
+	}
+	else
+	{
+		if ( ( $@memo_t % 2 + 1 ) != .@t )
+		{
+			setnpctimer "Pairs", 0 ;
+			initnpctimer ;
+			setd "@a_"+ ( ( @a_1 ) ? 2 : 1 ), atoi ( strnpcinfo ( 2 ) );
+			setnpcdisplay strnpcinfo ( 0 ), $@memo_ids[atoi ( strnpcinfo ( 2 ) ) - 1];
+			if ( @a_2 )
+			{
+			
+				if ( $@memo_ids[(@a_1 - 1)] == $@memo_ids[(@a_2 - 1)] )
+				{
+					getmapxy .@m$, .@x, .@y, 0 ;
+					donpcevent "#"+ @a_1 +"_memo::OnSuccess" ;
+					donpcevent "#"+ @a_2 +"_memo::OnSuccess" ;
+					$@memo_dis[(@a_1 - 1)] = 1;
+					$@memo_dis[(@a_2 - 1)] = 1;
+					dispbottom set ( @p, @p + 1 ) +" point"+ ( ( @p > 1 ) ? "s": "" ) +".";
+					if ( getarraysize ( $@memo_dis ) == 30 )
+						donpcevent "Pairs::OnReset";
+					else if ( .@extra )
+						areaannounce .@m$, .@x - 15, .@y - 15, .@x + 15, .@y + 15, "[Pairs]: Rodada extra para "+ strcharinfo ( 0 ) +".", bc_area, 0x34a0b0 ;
+				}
+				
+				else
+				{
+					donpcevent "#"+ @a_1 +"_memo::OnFail" ;
+					donpcevent "#"+ @a_2 +"_memo::OnFail" ;
+					sleep2 1500 ;
+					setnpcdisplay "#"+ @a_1 +"_memo", 857 ;
+					setnpcdisplay "#"+ @a_2 +"_memo", 857 ;
+					sleep2 200 ;
+					$@memo_t++;
+				}
+				
+				@a_1 = set ( @a_2, 0 );
+			}
+		}
+		else
+			dispbottom "Não é sua vez.";
+	}
+	end ;
+	
+OnSuccess:
+
+	specialeffect 610 ;
+	emotion e_grat ;
+	end ;
+	
+OnFail:
+
+	specialeffect 611;
+	emotion e_sry ;
+	end ;
+	
+OnInit:
+
+	getmapxy .@m$, .@x, .@y, 1, "#1_memo" ;
+	sscanf strnpcinfo ( 0 ), "#%d_memo", .@i ;
+	.@x+= 3*((.@i - 1)%6);
+	.@y-= 3*((.@i - 1)/6);
+	movenpc strnpcinfo ( 0 ), .@x, .@y;
+	hideonnpc strnpcinfo ( 0 ) ;
+	/*
+	sleep 2000 * .@i ;
+	debugmes "i: "+ .@i +", x:"+ .@x +", y:"+ .@y;
+	*/
+}
+
+quiz_02,1,1,4	duplicate(#1_memo)	#2_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#3_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#4_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#5_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#6_memo	857
+
+quiz_02,1,1,4	duplicate(#1_memo)	#7_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#8_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#9_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#10_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#11_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#12_memo	857
+
+quiz_02,1,1,4	duplicate(#1_memo)	#13_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#14_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#15_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#16_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#17_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#18_memo	857
+
+quiz_02,1,1,4	duplicate(#1_memo)	#19_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#20_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#21_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#22_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#23_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#24_memo	857
+
+quiz_02,1,1,4	duplicate(#1_memo)	#25_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#26_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#27_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#28_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#29_memo	857
+quiz_02,1,1,4	duplicate(#1_memo)	#30_memo	857

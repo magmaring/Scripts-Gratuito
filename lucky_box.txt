@@ -1,0 +1,251 @@
+ -	script	LBEvent#disable	-1,{
+
+OnInit:
+disablenpc "box1";
+disablenpc "box2";
+disablenpc "box3";
+disablenpc "box4";
+disablenpc "Mr Dice";
+end;
+}
+
+
+quiz_00,20,127,3	script	Lucky Box	480,{
+
+	if (getgmlevel() >= 40) goto lb_Admin;
+	mes "[ Lucky Box Event ]";
+	mes "Olá " + strcharinfo(0) + ", este npc é de uso exclusivo de GMs.";
+	close;
+	
+lb_Admin:
+	mes "[ Lucky Box Event ]";
+	mes "Olá "+strcharinfo(0)+", o que você gostaria de fazer?";
+	menu "Começar Lucky Box",lb_warper,"Nada",endlb;
+	lb_warper:
+		next;
+		if ($@lb_event == 1) goto lb_started;
+		if ($@Event_Ongoing == 1) goto event_ongoing;
+		mes "[ Lucky Box Event ]";
+		mes "Ok, começando evento.";
+		close2;
+		goto startlbevent;
+
+	endlb:
+		next;
+		mes "[ Lucky Box Event ]";
+		mes "Ok, foi bom te ver.";
+		close;
+
+event_ongoing:
+	mes @npc$;
+	mes "Ainda está ocorrendo um evento que usa esse warp, por favor espere até que ele acabe";
+	close;
+
+
+lb_started:
+	mes "[ Lucky Box Event ]";
+	mes "O evento ainda está ocorrendo";
+	close;
+
+startlbevent:
+donpcevent "quiz_02pvpoff::Onquizpvpoff";
+set $@lb_event,1;
+set $@Event_Ongoing,1;
+gvgoff "quiz_02";
+set .GMName$,strcharinfo(0);
+disablenpc "Mr Dice";
+disablenpc "box1";
+disablenpc "box2";
+disablenpc "box3";
+disablenpc "box4";
+announce ""+.GMName$+": Lucky Box Event!",0;
+enablenpc "Event Warper";
+donpcevent "Event Warper::OnEnable";
+initnpctimer;
+end;
+
+OnTimer10000:
+announce "Lucky Box Event: O teleporte se encerrará em 1 minuto.",0;
+end;
+
+OnTimer45000:
+announce "Lucky Box Event: O teleporte se encerrará em 30 segundos.",0;
+sleep2 5000;
+mapannounce "quiz_02","Mr. Dice: Sejam bem vindos ao evento Lucky box",0;
+sleep2 5000;
+mapannounce "quiz_02","Mr. Dice: As regras são simples, tudo o que você deve fazer é ir até o box com o número que desejar.",0;
+sleep2 5000;
+mapannounce "quiz_02","Mr. Dice: Então eu irei rodar o meu dado. Se cair o número 4, todos os participantes dentro do box 4 perderão.",0;
+sleep2 5000;
+mapannounce "quiz_02","Mr. Dice: Eu continuarei jogando o dado até que reste apenas 1 participante.",0;
+sleep2 5000;
+mapannounce "quiz_02","Mr. Dice: Boa sorte !",0;
+end;
+
+OnTimer75000:
+stopnpctimer;
+announce "Lucky Box Event: Teleporte encerrado.",0;
+enablenpc "box1";
+enablenpc "box2";
+enablenpc "box3";
+enablenpc "box4";
+disablenpc "Event Warper";
+delwaitingroom "Event Warper";
+set $@Event_Ongoing,0;
+set $@lb_event,0;
+donpcevent "Lucky Box::OnStart";
+end;
+
+OnStart:
+	if (getareausers ("quiz_02",32,95,80,76) < 2) && (getareausers ("quiz_02",32,95,80,76) > 0) goto lb_winner;
+	if(getareausers ("quiz_02",32,95,80,76) < 1) goto lb_none;
+	enablenpc "box1";
+	enablenpc "box2";
+	enablenpc "box3";
+	enablenpc "box4";
+	mapannounce "quiz_02","Mr Dice: Estou pronto para jogar o dado. Por favor vá até o número desejado! Go go go!",0;
+	sleep2 20000;
+	mapannounce "quiz_02","Mr. Dice: 5",0;
+	sleep2 1000;
+	mapannounce "quiz_02","Mr. Dice: 4",0;
+	sleep2 1000;
+	mapannounce "quiz_02","Mr. Dice: 3",0;
+	sleep2 1000;
+	mapannounce "quiz_02","Mr. Dice: 2",0;
+	sleep2 1000;
+	mapannounce "quiz_02","Mr. Dice: 1",0;
+	sleep2 1000;
+	mapannounce "quiz_02","Mr. Dice: Tempo esgotado.",0;
+	disablenpc "box1";
+	disablenpc "box2";
+	disablenpc "box3";
+	disablenpc "box4";
+	areawarp "quiz_02",32,95,80,76,"prontera",116,73;
+	sleep2 5000;
+	goto lb_diceroll;
+
+
+lb_diceroll:
+	set .@diced,rand(5);
+	if (.@diced <= 0) goto lb_diceroll;
+	if (.@diced == 1) goto winner_box1;
+	if (.@diced == 2) goto winner_box2; 
+	if (.@diced == 3) goto winner_box3; 
+	if (.@diced == 4) goto winner_box4; 
+	end;
+
+lb_winner:
+	disablenpc "box1";
+	disablenpc "box2";
+	disablenpc "box3";
+	disablenpc "box4";
+	mapannounce "quiz_02","Mr. Dice: Diga me o seu nome jovem sortudo.",0;
+	enablenpc "Mr Dice";
+	end;
+
+lb_none:
+	disablenpc "box1";
+	disablenpc "box2";
+	disablenpc "box3";
+	disablenpc "box4";
+	disablenpc "Mr Dice";
+	mapannounce "quiz_02","Lucky Box Event: Infelizmente, ninguém ganhou..",0;
+	end;
+
+winner_box1:
+	mapannounce "quiz_02","Mr Dice: Eu tirei o número "+.@diced+"",0;
+	sleep2 3000;
+	mapannounce "quiz_02","Mr Dice: Todos os players dentro do arena 1 estão fora. Goodbye!",0;
+	sleep2 5000;
+	areawarp "quiz_02",33,73,41,52,"prontera",156,191;
+	areawarp "quiz_02",45,73,53,52,"quiz_02",55,82;
+	areawarp "quiz_02",57,73,65,52,"quiz_02",55,82;
+	areawarp "quiz_02",69,73,77,52,"quiz_02",55,82;
+	sleep2 5000;
+	goto OnStart;
+	end;
+
+winner_box2:
+	mapannounce "quiz_02","Mr Dice: I rolled number "+.@diced+"",0;
+	sleep2 3000;
+	mapannounce "quiz_02","Mr Dice: Todos os players dentro do arena 2 estão fora. Goodbye!",0;
+	sleep2 5000;
+	areawarp "quiz_02",33,73,41,52,"quiz_02",55,82;
+	areawarp "quiz_02",45,73,53,52,"prontera",156,191;
+	areawarp "quiz_02",57,73,65,52,"quiz_02",55,82;
+	areawarp "quiz_02",69,73,77,52,"quiz_02",55,82;
+	sleep2 5000;
+	goto OnStart;
+	end;
+
+winner_box3:
+	mapannounce "quiz_02","Mr Dice: I rolled number "+.@diced+"",0;
+	sleep2 3000;
+	mapannounce "quiz_02","Mr Dice: Todos os players dentro do arena 3 estão fora. Goodbye!",0;
+	sleep2 5000;
+	areawarp "quiz_02",33,73,41,52,"quiz_02",55,82;
+	areawarp "quiz_02",45,73,53,52,"quiz_02",55,82;
+	areawarp "quiz_02",57,73,65,52,"prontera",156,191;
+	areawarp "quiz_02",69,73,77,52,"quiz_02",55,82;
+	sleep2 5000;
+	goto OnStart;
+	end;
+
+winner_box4:
+	mapannounce "quiz_02","Mr Dice: I rolled number "+.@diced+"",0;
+	sleep2 3000;
+	mapannounce "quiz_02","Mr Dice: Todos os players dentro do arena 4 estão fora. Goodbye!",0;
+	sleep2 5000;
+	areawarp "quiz_02",33,73,41,52,"quiz_02",55,82;
+	areawarp "quiz_02",45,73,53,52,"quiz_02",55,82;
+	areawarp "quiz_02",57,73,65,52,"quiz_02",55,82;
+	areawarp "quiz_02",69,73,77,52,"prontera",156,191;			
+	sleep2 5000;
+	goto OnStart;
+	end;
+
+
+}
+
+quiz_02,25,51,4	script	quiz_02pvpoff	-1,{
+
+Onquizpvpoff:
+	pvpoff "quiz_02";
+	gvgoff "quiz_02";
+	end;
+
+}
+
+quiz_02,55,86,4	script	Mr Dice	480,{
+	set @npc$, "[ Mr. Dice ]";
+	mes @npc$;
+	mes "Por favor, diga-me o seu nome.";
+	next;
+	input @name$;
+	if(@name$ != strcharinfo(0)) {
+		mes @npc$;
+		mes "Você tem certeza que este é o seu nome?";
+		close;
+	}
+
+	mes @npc$;
+	mes "Parabéns. Você ganhou.";
+	announce "Lucky Box Event: Nós temos um vencedor! parabéns \""+@name$+"\".",0;
+	getitem 7227,1;
+	warp "prontera",116,73;
+	disablenpc "Mr Dice";
+	set $@lb_event,0;
+	close;
+}
+
+quiz_02,37,77,0	warp	box1	0,0,quiz_02,37,65
+quiz_02,49,77,0	warp	box2	0,0,quiz_02,49,65
+quiz_02,61,77,0	warp	box3	0,0,quiz_02,61,65
+quiz_02,73,77,0	warp	box4	0,0,quiz_02,73,65
+quiz_02	mapflag	noskill
+quiz_02	mapflag	nosave	SavePoint
+quiz_02	mapflag	noteleport
+quiz_02	mapflag	nomemo
+quiz_02	mapflag	notrade
+quiz_02	mapflag	noreturn
+quiz_02	mapflag	pvp	off

@@ -1,0 +1,75 @@
+-	script	event_timer	-1,{
+
+OnClock0000: // Inicia evento
+	donpcevent "bandei_contr::OnStartEvent";
+	end;
+OnClock0100: // Inicia evento
+	donpcevent "element_contr::OnStartEvent";
+	end;
+OnClock0200: // Inicia evento
+	donpcevent "pique_contr::OnStartEvent";
+	end;
+OnClock0300: // Inicia evento
+	donpcevent "restaum_controler::OnStartEvent";
+	end;
+OnClock0400: // Inicia evento
+	donpcevent "sort_controler::OnStartEvent";
+	end;
+OnClock0500: // Inicia evento
+	donpcevent "bandei_contr::OnStartEvent";
+	end;
+OnClock0600: // Inicia evento
+	donpcevent "element_contr::OnStartEvent";
+	end;
+OnClock0700: // Inicia evento
+	donpcevent "pique_contr::OnStartEvent";
+	end;
+OnClock0800: // Inicia evento
+	donpcevent "restaum_controler::OnStartEvent";
+	end;
+OnClock0900: // Inicia evento
+	donpcevent "sort_controler::OnStartEvent";
+	end;
+OnClock1000: // Inicia evento
+	donpcevent "bandei_contr::OnStartEvent";
+	end;
+OnClock1100: // Inicia evento
+	donpcevent "element_contr::OnStartEvent";
+	end;
+OnClock1200: // Inicia evento
+	donpcevent "pique_contr::OnStartEvent";
+	end;
+OnClock1300: // Inicia evento
+	donpcevent "restaum_controler::OnStartEvent";
+	end;
+OnClock1400: // Inicia evento
+	donpcevent "sort_controler::OnStartEvent";
+	end;
+OnClock1500: // Inicia evento
+	donpcevent "bandei_contr::OnStartEvent";
+	end;
+OnClock1600: // Inicia evento
+	donpcevent "element_contr::OnStartEvent";
+	end;
+OnClock1700: // Inicia evento
+	donpcevent "pique_contr::OnStartEvent";
+	end;
+OnClock1800: // Inicia evento
+	donpcevent "restaum_controler::OnStartEvent";
+	end;
+OnClock1900: // Inicia evento
+	donpcevent "sort_controler::OnStartEvent";
+	end;
+OnClock2000: // Inicia evento
+	donpcevent "bandei_contr::OnStartEvent";
+	end;
+OnClock2100: // Inicia evento
+	donpcevent "element_contr::OnStartEvent";
+	end;
+OnClock2200: // Inicia evento
+	donpcevent "pique_contr::OnStartEvent";
+	end;
+OnClock2300: // Inicia evento
+	donpcevent "restaum_controler::OnStartEvent";
+	end;
+}

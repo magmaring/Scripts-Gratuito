@@ -1,0 +1,107 @@
+quiz_00,23,127,3	script	Poring Catcher	909,{
+
+	set @npc$, "[ Poring Catcher ]";
+	if (getgmlevel() >= 40) goto pc_Admin;
+	if ($@pc_Ongoing == 1) {
+	mes @npc$;
+	mes "RFYL Event ainda está em andamento.";
+	close;
+	}
+	mes @npc$;
+	mes "Hello " + strcharinfo(0) + ", este NPC é apenas para eventos de GMs.";
+	close;
+	
+pc_Admin:
+	mes @npc$;
+	mes "OlÃ¡ " + strcharinfo(0) + ", o que você gostaria de fazer?";
+	menu "Começar poring catcher",pc_check,"Leve-me ao mapa",warp_pc,"Nada",endpc;
+	pc_check:
+		next;
+		if ($@RFYL_Ongoing == 1) goto pc_started;
+		mes @npc$;
+		mes "Ok, começar evento.";
+		set $@pc_Ongoing,1;
+		close2;
+		goto startpcevent;
+		donpcevent "DS_HiddenNpc::OnStart";
+	warp_pc:
+		next;
+		mes @npc$;
+		mes "agora eu irei te levar até o RFYL Event map.";
+		warp "izlude",128,109;
+		end;
+	endpc:
+		next;
+		mes @npc$;
+		mes "Ok, foi bom te ver.";
+		close;
+
+pc_started:
+	mes @npc$;
+	mes "O evento ainda está andamento";
+	close;
+
+startpcevent:
+initnpctimer;
+announce "Poring: Olá humanos! Querem alguns tickets evento? Me encontrem em izlude!",0;
+monster "izlude",0,0,"Poring",1002,1,"poringwin::OnMobKilled";
+monster "izlude",0,0,"Pouring",1002,25,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Proing",1002,25,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Poiring",1002,25,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Poing",1002,25,"poringlose::OnMobKilled";
+monster "izlude",0,0,"I am not Poring",1002,20,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Gniriop",1002,10,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Poring",1113,10,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Poring",1062,10,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Poriiing",1002,25,"poringlose::OnMobKilled";
+monster "izlude",0,0,"PoriNg",1002,25,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Porong",1002,25,"poringlose::OnMobKilled";
+monster "izlude",0,0,"P0ring",1002,25,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Por1ng",1002,5,"poringlose::OnMobKilled";
+monster "izlude",0,0,"Porng",1002,10,"poringlose::OnMobKilled";
+end;
+
+OnTimer1800000:
+stopnpctimer;
+killmonsterall "izlude";
+mapannounce "izlude","Poring Catcher Event: Tempo esgotado! Ninguém encontrou o poring certo.",0;
+set $@pc_Ongoing,0;
+end;
+
+}
+
+izlude,0,0,0	script	poringwin	-1,{
+
+OnStart:
+	atcommand "@skilloff";
+	pvpoff "izlude";
+	end;
+
+OnMobKilled:
+   stopnpctimer;
+   dispbottom "Você encontrou o poring certo!";
+   announce "Poring Catcher: \"" + strcharinfo(0) + "\" matou o poring premiado! Parabéns!",0;
+   getitem 7227,1;
+   killmonsterall "izlude";
+   set $@pc_Ongoing,0;
+   end;
+}
+
+izlude,0,0,0	script	poringlose	-1,{
+OnMobKilled:
+   dispbottom "Você matou o poring errado!";
+   warp "izlude",128,114;
+   end;
+}
+
+izlude	mapflag	nobranch
+izlude	mapflag	noexp
+izlude	mapflag	nomemo
+izlude	mapflag	nopenalty
+izlude	mapflag	pvp	off
+izlude	mapflag	nosave	SavePoint
+izlude	mapflag	noskill
+izlude	mapflag	noteleport
+izlude	mapflag	notrade
+izlude	mapflag	noloot
+izlude	mapflag	nodrop

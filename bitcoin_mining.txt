@@ -1,0 +1,121 @@
+
+// http://wiki.rebirthro.com/wiki/Bitcoin_Mining
+
+-	script	bitcoin_mining	-1,{
+for( .@i = 0; .@i < .pickaxe_list_size; .@i++ )
+	if( countitem( .pickaxe_list[.@i] ) ){
+		.@pickaxe_id = .pickaxe_list[.@i];
+		break;
+	}
+if( !.@pickaxe_id ){
+	message strcharinfo(0),"You dont have any pickaxe.";
+	
+}else{
+	.@rate = rand(100);
+	
+	// 20% fail + break
+	if( .@rate < 20 && .@pickaxe_id == .pickaxe_list[0] ){
+		delitem .@pickaxe_id,1;
+		specialeffect2 EF_REFINEFAIL;
+		message strcharinfo(0),"Your pickaxe has broken!";
+	}
+	// 50% success
+	else if( .@rate < 70 ){
+		message strcharinfo(0),"Mining Success.";
+		specialeffect2 EF_STEAL;
+		.@amount = rand(1,2);
+		getitem .mining_token,.@amount;
+		message strcharinfo(0),"You have successfully excavated this mining point and gained "+.@amount+"x"+getitemname( .mining_token );
+		initnpctimer;
+		hideonnpc strnpcinfo(0);
+		end;
+	}
+	// 30% fail
+	else{
+		message strcharinfo(0),"Mining Failed. Please try again.";
+		specialeffect2 EF_TEMP_FAIL;
+	}
+		
+}
+end;
+
+
+OnInit:
+if( strnpcinfo(2) != "" ) end;
+
+// mining token
+.mining_token = 7539;
+
+// npc prefix name + total duplicate npc you made.
+.npc_prefix$ = "Mine";
+.total_npc_count = 20;
+
+// pickaxe list
+setarray .pickaxe_list,
+	6010,	// normal pickaxe
+	6010;	// premium pickaxe
+	
+.pickaxe_list_size = getarraysize( .pickaxe_list );
+
+// map list that mine will appear.
+setarray .map_list$,
+	"pay_dun00",
+	"pay_dun01",
+	"pay_dun02";
+
+.map_list_size = getarraysize( .map_list$ );
+
+// change map on these time. ( default 6 hours )
+OnClock0300:
+OnClock0900:
+OnClock1500:
+OnClock2100:
+.map = rand( .map_list_size );
+	
+for( .@i = 0; .@i < .total_npc_count; .@i++ )
+	.@total = .@total + callsub( GenerateMine,.npc_prefix$+"#"+.@i );
+debugmes "Generated mine at "+.map_list$[.map]+" - "+.@total+" mine";
+end;
+
+GenerateMine:
+	.@npc_id = getnpcid( 0,getarg(0) );
+	
+	if( .@npc_id ){
+		do{
+			.@x = rand( 1,500 );
+			.@y = rand( 1,500 );
+		}while( !checkcell( .map_list$[.map],.@x,.@y,cell_chkpass ) );
+		unitwarp .@npc_id,.map_list$[.map],.@x,.@y;
+		return 1;
+	}
+	return 0;
+	
+OnTimer6000: // 600 seconds hide.
+	stopnpctimer;
+	.@npc_name$ = strnpcinfo(0);
+	hideoffnpc .@npc_name$;
+	callsub( GenerateMine,.@npc_name$ );
+	end;
+}
+
+// duplicates more if you need.
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#0	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#1	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#2	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#3	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#4	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#5	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#6	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#7	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#8	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#9	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#10	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#11	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#12	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#13	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#14	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#15	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#16	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#17	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#18	1908
+prontera,0,0,4	duplicate(bitcoin_mining)	Mine#19	1908

@@ -1,0 +1,67 @@
+prontera,159,193,3	script	Curandeiro	630,{
+
+//======= Config 
+set .@servername$,"RagnaImpact"; // Nome do Servidor
+set .ZenyN, 0; // Zeny Cobrado
+if( Zeny < .ZenyN ) {
+	mes "[Curandeira]";
+	mes "Oh, você não tem todo o dinheiro necessário.";
+	mes "Desculpe, mas não posso curá-lo.";
+	close;	
+}
+percentheal 100,100;
+// ---- Para Player Normal ----
+if( getgmlevel() < 1 ) {
+	emotion 51; 
+	specialeffect2 12; 
+	skilleffect 34,0; sc_start SC_BLESSING,360000,10;
+	skilleffect 29,0; sc_start SC_INCREASEAGI,360000,10;
+	skilleffect 75,0; sc_start SC_GLORIA,360000,5;
+	skilleffect 74,0; sc_start SC_MAGNIFICAT,360000,5;
+	set Zeny, Zeny-.ZenyN;
+}
+else {
+// ---- Para Vip ----
+	emotion 51; 
+	specialeffect2 12;
+	sc_start 21, 300000, 10; skilleffect 33,0; // Endure 
+	sc_start 32, 300000, 10; skilleffect 29,0; // Increase Agi 
+	sc_start 29, 300000, 10; skilleffect 29,0; // Angelus 
+	sc_start 30, 300000, 10; skilleffect 34,0; // Blessing 
+	sc_start 35, 300000, 5; skilleffect 66,0; // Impositio Manus 
+	sc_start 39, 300000, 10; skilleffect 73,0; // Kyrie Eleison 
+	sc_start 40, 300000, 5; skilleffect 75,0; // Magnificat 
+	sc_start 41, 300000, 5; skilleffect 75,0; // Gloria
+	//sc_start 2515, 300000, 5; skilleffect 2515,0; // Sacra  
+	sc_start SC_ASPDPOTION2,360000,0;
+	skilleffect 2515,0; sc_start SC_SECRAMENT,360000,3;
+	atcommand "@repairall";
+	{ sc_start SC_STRFood, 1200000, 10; percentheal 20,20; }
+	{ sc_start SC_DEXFood, 1200000, 10; percentheal 10,10; }	
+	{ sc_start SC_AGIFood, 1200000, 10; percentheal 15,5; }
+	{ sc_start SC_LUKFood, 1200000, 10; percentheal 14,8; }	
+	{ sc_start SC_VITFood, 1200000, 10; percentheal 25,0; }
+	{ sc_start SC_INTFood, 1200000, 10; percentheal 10,20; }
+	set Zeny, Zeny-.ZenyN;
+}
+end;
+}
+
+morocc,159,96,5	duplicate(Curandeiro)	Curandeira#hG2-2	961
+ayothaya,155,111,5	duplicate(Curandeiro)	Curandeira#hG2-3	961
+geffen,121,61,5	duplicate(Curandeiro)	Curandeira#hG2-4	961
+umbala,94,162,5	duplicate(Curandeiro)	Curandeira#hG2-5	961
+payon,180,105,5	duplicate(Curandeiro)	Curandeira#hG2-6	961
+alberta,185,144,5	duplicate(Curandeiro)	Curandeira#hG2-7	961
+aldebaran,134,123,5	duplicate(Curandeiro)	Curandeira#hG2-8	961
+izlude,125,118,5	duplicate(Curandeiro)	Curandeira#hG2-9	961
+xmas,149,136,5	duplicate(Curandeiro)	Curandeira#hG2-10	961
+comodo,188,162,5	duplicate(Curandeiro)	Curandeira#hG2-11	961
+amatsu,200,80,5	duplicate(Curandeiro)	Curandeira#hG2-12	961
+gonryun,164,130,5	duplicate(Curandeiro)	Curandeira#hG2-13	961
+yuno,152,186,5	duplicate(Curandeiro)	Curandeira#hG2-14	961
+niflheim,188,180,5	duplicate(Curandeiro)	Curandeira#hG2-15	961
+louyang,225,103,5	duplicate(Curandeiro)	Curandeira#hG2-16	961
+rachel,131,117,5	duplicate(Curandeiro)	Curandeira#hG2-17	961
+veins,212,124,5	duplicate(Curandeiro)	Curandeira#hG2-18	961
+moscovia,221,192,5	duplicate(Curandeiro)	Curandeira#hG2-19	961

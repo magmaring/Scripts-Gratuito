@@ -1,0 +1,54 @@
+// -------------------------------------------------------------------------------------------------
+// Script by: Panda - GM Kazehaya
+// - Knights Ragnarok Online -
+// v1.0 - Simple Freebie NPC, gives out bound rewards and and checks weight.
+// - Modification End -
+// -------------------------------------------------------------------------------------------------
+
+
+prontera,164,196,4	script	Pack Iniciante	864,{
+
+if(#claimed == 1){ goto Claimed; }
+	mes "[ Itens Iniciante ]";
+	mes "Obrigado por jogar ^FF0000DevotionRO^000000.";
+	mes "Seja muito Bem-Vindo.";
+	next;
+	
+    .@weight = 100 * Weight / MaxWeight;
+    if (50 <= .@weight) {
+	 mes "[ Newbie Assistance ]";
+     mes "Você está acima do peso permitido.";
+	 mes "Peso atual: "+.@weight;
+	 mes "Por favor, coloque seus itens no @storage.";
+     close;
+    }
+	
+	getitembound 12210,1,1;
+	getitembound 14533,1,1; 
+	getitembound 11503,100,1;
+	getitembound 11504,100,1;
+	getitembound2 2320,1,1,4,0,0,0,0,0,1;
+	getitembound2 2504,1,1,4,0,0,0,0,0,1;
+	getitembound2 2404,1,1,4,0,0,0,0,0,1;
+	getitembound2 2102,1,1,4,0,0,0,0,0,1;
+	getitembound2 1108,1,1,4,0,0,0,0,0,1;
+	getitembound2 1602,1,1,4,0,0,0,0,0,1;
+	getitembound2 1505,1,1,4,0,0,0,0,0,1;
+	getitembound2 1705,1,1,4,0,0,0,0,0,1;
+	getitembound2 1208,1,1,4,0,0,0,0,0,1;
+	getitembound 2607,1,1;
+	emotion e_thx;
+	set #claimed,1;
+	sleep2 1000;
+	close;
+
+Claimed:
+	mes "[ Itens Iniciantes ]";
+	mes "Obrigado por jogar ^FF0000DevotionRO^000000.";
+	mes "Você já pegou seu pack iniciante, se divirta!";
+	emotion e_no1;
+	sleep2 1000;
+	close;
+	end;
+	
+}

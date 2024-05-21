@@ -1,0 +1,40 @@
+//NPC: Zyzz *\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//Por favor não retire os creditos *\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////////////////////
+sec_in01,93,160,3	script	Linker NPC	791,{
+set @npc$,"^0000FF[ Linker ]^000000";
+set @tempo, 300000; // Tempo dos buff's
+mes @npc$;
+mes "Olá "+strcharinfo(0)+"";
+mes "Você deseja Espirito de Soul Linker?";
+switch(select("Sim:Não")) {
+case 1:
+switch ( basejob ) {
+case Job_Alchemist:                             set .@spirit, 445; break;
+case Job_Monk:                                  set .@spirit, 447; break;
+case Job_Star_Gladiator:                set .@spirit, 448; break;
+case Job_Sage:                                  set .@spirit, 449; break;
+case Job_Crusader:                              set .@spirit, 450; break;
+case Job_SuperNovice:                   set .@spirit, 451; break;
+case Job_Knight:                                set .@spirit, 452; break;
+case Job_Wizard:                                set .@spirit, 453; break;
+case Job_Priest:                                set .@spirit, 454; break;
+case Job_Bard: case Job_Dancer: set .@spirit, 455; break;
+case Job_Rogue:                                 set .@spirit, 456; break;
+case Job_Assassin:                              set .@spirit, 457; break;
+case Job_Blacksmith:                    set .@spirit, 458; break;
+case Job_Hunter:                                set .@spirit, 460; break;
+case Job_Soul_Linker:                   set .@spirit, 461; break;
+default:
+set .@spirit, 494;
+        }
+        if ( .@spirit ) {
+sc_start4 sc_spirit, @tempo, 5, .@spirit,0,0;
+skilleffect .@spirit, 5;
+        }
+case 2:
+mes @npc$;
+mes "Ok,Volte quando precisar!";
+close;
+}
+}

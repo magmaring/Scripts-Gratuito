@@ -1,0 +1,156 @@
+
+
+-	shop	cardremover#ero	-1,909:-1
+
+prt_in,41,117,2	script	Card Remover	1_M_02,{
+	doevent "card_remover_leon::OnTalk";
+}
+// crystilia,140,217,5	duplicate(Card Remover)	Card Remover#0	1_M_02
+// arza,178,104,4	duplicate(Card Remover)	Card Remover#1	1_M_02
+// pay_arche,84,48,3	duplicate(Card Remover)	Card Remover#2	1_M_02
+// mellina,124,78,3	duplicate(Card Remover)	Card Remover#3	1_M_02
+
+-	script	card_remover_leon	FAKE_NPC,{
+	function getitemname2;
+
+	OnTalk:
+		cutin "jpn_leon01",2;
+			
+		mes "I can remove card from any equipments.";
+		mes "Select any equipments that you wish to remove card.";
+		mes " ";
+		mes "Dont worry on 'Selling' Equipments, since it will not be sold to me.";
+		close2;
+		deletearray @sold_nameid;
+		npcshopattach .shop_name$;
+		callshop .shop_name$,2;
+		end;
+
+	OnInit:
+		.shop_name$ = "cardremover#ero";
+
+		// zeny cost
+		.zeny = 150000;
+		.zeny_extra = 25000;
+		
+		// card id range
+		setarray .card_id,4000,4700;
+		end;
+
+	function	getitemname2	{
+		.@refine = getarg(0);
+		.@item_id = getarg(1);
+		
+		.@item_name$ = getitemname( .@item_id );
+		.@iteminfo = getiteminfo( .@item_id,2 );
+		if ( .@iteminfo == IT_WEAPON || .@iteminfo == IT_ARMOR )
+			.@item_name$ = .@item_name$ + " ["+getitemslots( .@item_id )+"]";
+		if ( .@refine )
+			.@item_name$ = "+" + .@refine + " " + .@item_name$;
+		return .@item_name$;
+	}
+
+	OnSellItem:
+		disable_items;
+		.@size = getarraysize( @sold_nameid );
+		cutin "jpn_leon01",2;
+		dispbottom "Only select equipments that have Cards inside.";
+		mes "^777777** Item Checking **^000000";
+		for( .@i = 0; .@i < .@size; .@i++ ) {
+			.@fail = .@card_found = 0;
+			.@iteminfo = getiteminfo( @sold_nameid[.@i],2 );
+			if ( .@iteminfo == IT_WEAPON || .@iteminfo == IT_ARMOR ) {
+				for( .@card = 1; .@card <= 4; .@card++ ) {
+					.@card_id = getd( "@sold_card"+.@card+"["+.@i+"]" );
+					if ( .@card_id > .card_id[0] && .@card_id < .card_id[1] )
+						.@card_found++;
+				}
+				if ( !.@card_found )
+					.@fail++;
+				else
+					.@total_card += .@card_found;
+			}
+			else {
+				.@fail++;
+			}
+			
+			if ( .@fail ) {
+				.@total_fail++;
+				mes "^FF0000 ~ "+getitemname2( @sold_refine[.@i],@sold_nameid[.@i] )+"^000000";
+			}
+		}
+		if ( .@total_fail ) {
+			mes " ";
+			mes "Make sure it's equipped with cards.";
+			cutin "jpn_leon05",2;
+		}
+		else {
+			.@total_zeny_1 = ( .zeny * .@size );
+			.@total_zeny_2 = ( .zeny_extra * .@total_card );
+			do{
+				mes "Cost per item : ^777777"+F_InsertComma( .zeny );
+				mes "^0055FF ~ "+F_InsertComma( .@total_zeny_1 )+" Zeny ^777777( "+.@size+" Items)^000000";
+				mes "Cost per Card : ^777777"+F_InsertComma( .zeny_extra );
+				mes "^0055FF ~ "+F_InsertComma( .@total_zeny_2 )+" Zeny ^777777( "+.@total_card+" Cards)^000000";
+				mes " ";
+				.@sub_total = .@total_zeny_1 + .@total_zeny_2;
+				mes "Total : ^FF0000"+F_InsertComma( .@sub_total )+" Zeny^000000";
+				if ( Zeny >= .@sub_total ) {
+					next;
+					.@option = prompt( "Continue","View List","Cancel" );
+					if ( .@option == 2 ) {
+						for( .@i = 0; .@i < .@size; .@i++ ) {
+							mes "^0055FF"+getitemname2( @sold_refine[.@i],@sold_nameid[.@i] )+"^000000";
+							for( .@card = 1; .@card <= 4; .@card++ ) {
+								.@card_id = getd( "@sold_card"+.@card+"["+.@i+"]" );
+								if ( .@card_id > .card_id[0] && .@card_id < .card_id[1] )
+									mes "^777777 ~ "+getitemname2( 0,.@card_id )+"^000000";
+							}
+							mes " ";
+						}
+						next;
+					}
+					else if ( .@option > 2 ) break;
+				}
+			}while( .@option == 2 );
+			if ( .@option == 1 ) {
+				mes "^777777** Removing Card **^000000";
+				
+				for( .@i = 0; .@i < .@size; .@i++ ) {
+					mes "^0055FF"+getitemname2( @sold_refine[.@i],@sold_nameid[.@i] )+"^000000";
+					// progressbar "777777",rand(2,3);
+					progressbar "777777",1;
+					
+					.@sub_total = .zeny;
+					.@card_found = 0;
+					delitem2 @sold_nameid[.@i],@sold_quantity[.@i],@sold_identify[.@i],@sold_refine[.@i],@sold_attribute[.@i],@sold_card1[.@i],@sold_card2[.@i],@sold_card3[.@i],@sold_card4[.@i];
+					for( .@card = 1; .@card <= 4; .@card++ ) {
+						.@card_id = getd( "@sold_card"+.@card+"["+.@i+"]" );
+						if ( .@card_id > .card_id[0] && .@card_id < .card_id[1] ) {
+							setd( "@sold_card"+.@card+"["+.@i+"]" ),0;
+							getitem .@card_id,1;
+							mes "^777777 ~ "+getitemname2( 0,.@card_id )+"^000000";
+							.@card_found++;
+						}
+					}
+					.@sub_total = .@sub_total + ( .zeny_extra * .@card_found );
+					getitem2 @sold_nameid[.@i],@sold_quantity[.@i],@sold_identify[.@i],@sold_refine[.@i],@sold_attribute[.@i],@sold_card1[.@i],@sold_card2[.@i],@sold_card3[.@i],@sold_card4[.@i];
+					Zeny -= .@sub_total;
+				}
+				mes " ";
+				mes "Success to retrieve all items from the equipments.";
+				cutin "jpn_leon02",2;
+			}
+			mes "Thank you for using my service.";
+		}
+		enable_items;
+		close2;
+		cutin "",255;
+		end;
+}
+
+
+
+
+
+

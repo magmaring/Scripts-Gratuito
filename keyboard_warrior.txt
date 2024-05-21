@@ -1,0 +1,154 @@
+
+quiz_02,367,383,3	script	Keyboard Warrior	733,{
+	function string_random;
+
+	mes "Eu organizo o evento Keyboard Warrior.";
+	mes " ";
+	mes "Refer Event Manager for Event Schedule.";
+	if( select( "Read Rules" ) ){
+		next;
+		mes "^0055FF[ ::Rules:: ]^000000";
+		for( .@i = 0; .@i < .rule_size; .@i++ )
+			mes ""+.rules$[.@i];
+	}
+	close;
+
+	OnInit:
+		.winner_format$ = "[ %s ] Congratz, %s. | Time: %d.%03d second ";
+		.max_round = 25;
+		setarray .rules$,
+			"Esse é o evento Keyboard Warrior",
+			"Eu irei mostrar palavras aleatórias.",
+			"Tudo o que voc6e deve fazer é..., digitar o que eu lhe mostrar.",
+			"O primeiro jogador a acertar a palavra ganha o round.",
+			"Se ninguém acertar todos perdem..",
+			"Preparem-se eu irei começar agora...",
+			"Obrigado";
+		.rule_size = getarraysize( .rules$ );
+		.npc_name$ = strnpcinfo(0);
+		getmapxy( .npc_map$,.npc_x,.npc_y,1 );
+
+		.string$ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+		.string_length = getstrlen( .string$ );
+		//hideonnpc .npc_name$;
+		end;
+
+	OnWhisperGlobal:
+		if( getgmlevel() < 99 ) end;
+		detachrid;
+		
+	OnMinute13: // start every hour
+	OnEventStart:
+		if( !.status ){
+			.status = 1;
+			hideoffnpc .npc_name$;
+			// movenpc .npc_name$,168,100;
+			for( .@i = 5; .@i > 0 && .status; .@i--  ){
+				announce "[Keyboard Warrior Event] Irá começar na Sala de jogos em "+.@i+" minutos..",bc_all|bc_blue;
+				sleep 60000;
+			}
+			announce "[Keyboard Warrior Event] Começará agora.",bc_all|bc_blue;
+			for( .@i = 0 ; .@i < .rule_size && .status ; .@i++ ){
+				npctalk .rules$[.@i];
+				sleep 3500;
+			}
+			if( .status ) .@current_round = .max_round;
+			while( .@current_round && .status ){
+				.@current_round--;
+				npctalk ( ( .@size == 1 )?"Last ":"" )+"Round # "+( .max_round - .@current_round );
+				.@index = rand( .@size );
+				sleep 3000;
+				.answer$ = string_random( rand( 11,14 ) );
+				// defpattern 1000, "([^:]+): (\\|\\d{2})?"+.answer$+ ".$", "OnCorrect";
+				// defpattern 1000, "([^:]+):.*\\s+("+.answer$+")$", "OnCorrect";
+				defpattern 1000,"([^:]+):.\\s*"+.answer$+".*", "OnCorrect";
+				activatepset 1000;
+				
+				// debugmes ""+.answer$;
+				// specialeffect EF_M03;
+				// specialeffect EF_SPR_SOULE;
+				sleep 100;
+				// setnpcdisplay( .npc_name$,.@mob_id[.@index] );
+				
+				delwaitingroom;
+				waitingroom ""+.answer$,0;
+					
+				initnpctimer;
+				sleep 65000;
+			}
+			npctalk "Esse foi o útimo round. Obrigado a todos que participaram do evento Keyboard Warrior.";
+			// setnpcdisplay( .npc_name$,607 );
+			delwaitingroom;
+			stopnpctimer;
+			deactivatepset 1000;
+			.status = 0;
+			movenpc .npc_name$,.npc_x,.npc_y;
+			hideonnpc .npc_name$;
+		}
+		end;
+
+	OnEventEnd:
+		.status = 0;
+		awake .npc_name$;
+		end;
+		
+	OnTimer30000:
+		.@time += 10;
+	OnTimer20000:
+		.@time += 10;
+	OnTimer10000:
+		.@time += 10;
+		npctalk .@time+" segundos se passaram.";
+		specialeffect EF_NPC_SLOWCAST;
+		end;
+	OnTimer40000:
+	OnTimer50000:
+		npctalk "O tempo está acabando.";
+		specialeffect EF_NPC_SLOWCAST;
+		end;
+		
+	OnTimer58000:
+		delwaitingroom;
+		stopnpctimer;
+		deactivatepset 1000;
+		npctalk "Time' UP. 60 second passed.";
+		specialeffect EF_NPC_SLOWCAST;
+		sleep 2000;
+		awake .npc_name$;
+		end;
+			
+	OnCorrect:
+		// if( !compare( $@p2$,.answer$ ) ){
+			// dispbottom "[ Keyboard Warrior Event ] Incorreto, tente novamente.";
+		// }
+		// else{
+			delwaitingroom;
+			// setnpcdisplay( .npc_name$,607 );
+			specialeffect2 EF_ABSORBSPIRITS;
+			stopnpctimer;
+			deactivatepset 1000;
+			if( .status ){
+				.@time = getnpctimer(0);
+				npctalk sprintf( .winner_format$,.answer$,strcharinfo(0),( .@time / 1000 ),( .@time % 1000 ) );
+				getitem Event_coin,1;
+				// #CASHPOINTS += 1;
+				// dispbottom "[ Keyboard Warrior Event ] Ganhou 1 cash.";
+				emotion e_grat;
+				sleep2 3000;
+			}
+			else{
+				dispbottom "Desculpe, mas o evento acabou.";
+			}
+			awake .npc_name$;
+		// }
+		end;
+		
+	function	string_random	{
+		.@length = getarg( 0 );
+		while( .@i < .@length ){
+			.@string$ = .@string$ + charat( .string$,rand( .string_length ) );
+			.@i++;
+		}
+		return .@string$;
+	}
+}

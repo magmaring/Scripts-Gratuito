@@ -1,0 +1,80 @@
+prontera,156,195,3	script	Broadcast	790,{
+
+	set .@nombre$, "^00CCFF[ Broadcast ]^000000";
+	if (!.precio) set .precio,50000;
+
+	if (getgmlevel() == 99) {
+		mes .@nombre$;
+		mes "Hola, Administrador/a! ¿Quieres cambiar el precio de los anuncios?";
+		next;
+		switch(select("Por supuesto.:No, Así esta bien.")) {
+		case 1:
+			mes .@nombre$;
+			mes "Ok, pon el precio deseado.";
+			mes "Precio actual: "+ .precio +".";
+			next;
+			input .@n,1,10000000; //Input minimo: 0 - Input maximo: 10.000.000.
+
+			mes .@nombre$;
+			mes "¿Estás seguro de querer cambiar el precio a ^ff0000"+ .@n +"^000000?";
+			next;
+			if (select("Si.:No.") == 2) close;
+
+			mes .@nombre$;
+			mes "¡Muy bien!, el cambio fué efectuado correctamente.";
+			set .precio,.@n;
+			close;
+			
+		case 2:
+			mes .@nombre$;
+			mes "Ok, vuelve cuando desee señor Administrador.";
+			close;
+		}
+	}
+	if (.delay > gettimetick(2)) {
+		mes "Tienes que esperar "+ (.delay - gettimetick(2)) +" segundos antes de poder mandar tu mensaje. Sé paciente.";
+		close;
+	}
+	if (Baselevel < 90) {
+		mes "Tienes que ser al menos nivel 90 para utilizar el Broadcast.";
+		close;
+	}
+	mes .@nombre$;
+	mes "Hola, ^E96D07"+strcharinfo(0)+"^000000.";
+	mes "Yo puedo enviar un anuncio que verá todo el servidor a cambio de un poco de Zeny.";
+	next;
+	mes .@nombre$;
+	mes "El anuncio te costará ^D70202"+ .precio +"^000000.";
+	mes "Elige el mensaje global que más te convenga. Recuerda elegir bien antes de enviar tu mensaje.";
+	next;
+	switch(select("> ^DBA901Compra^000000:> ^DF5702Venta^000000:> ^089562Busqueda^000000:> ^727272Battleground^000000:> ^B20000PVP^000000:> Nada")) {
+	
+	//Seteamos array con el interes y color.
+	case 1: setarray .@r$[0],"COMPRA","0xF3E2A9"; break;
+	case 2: setarray .@r$[0],"VENDE","0xF7BE81"; break;
+	case 3: setarray .@r$[0],"BUSCA","0x00FFA2"; break;
+	case 4: setarray .@r$[0],"BG","0xFFFFFF"; break;
+	case 5: setarray .@r$[0],"PVP","0xFFA4A4"; break;
+	case 6:
+		mes .@nombre$;
+		mes "Ok, vuelve cuando quieras y disfruta de tu estancia en xRO.";
+		close;
+	}
+	mes .@nombre$;
+	if (zeny < .precio) {
+		mes "Lo siento pero no tienes Zeny suficiente. Regresa cuando tengas el zeny necesario para enviar tu mensaje.";
+		close;	
+	}
+	if (.delay > gettimetick(2)) {
+		mes "Tienes que esperar "+ (.delay - gettimetick(2)) +" segundos antes de poder mandar tu mensaje.";
+		close;
+	}
+
+	mes "Ok, escribe el mensaje que deseas enviar. Escríbelo lo mejor posible para que todos puedan leerlo claramente.";
+	next;
+	input .@mens$;
+	set .delay,gettimetick(2) + (60 * 1);
+	announce "[ "+ strcharinfo(0) +" ] [ "+ .@r$[0] +" ]: "+ .@mens$ +".",bc_all,.@r$[1];
+	set zeny,zeny-.precio;
+	close;
+}

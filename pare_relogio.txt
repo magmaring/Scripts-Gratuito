@@ -1,0 +1,203 @@
+quiz_00,25,114,3	script	Parar o relógio#02	925,{
+	mes "[ Stop The Clock ]";
+	mes "Hello "+strcharinfo(0)+",";
+	mes "Você gostaria de ir para o mapa de Parar o relógio?";
+	menu "Sim",warp_stc,"Náo",cancel_stc;
+
+warp_stc:
+	close2;
+	warp "payon",156,219;
+	end;
+
+cancel_stc:
+	mes "[ Stop The Clock ]";
+	mes "Ok, tenha um bom dia";
+	close;
+}
+
+payon,156,222,5	script	Parar o relógio	925,{
+
+if(.game == 1 && getgmlevel() > 0)	{
+	message strcharinfo(0), "GMs náo estáo autorizado a participar deste evento.";
+	end;
+	}
+if(.game == 1)	{
+set .@size,getarraysize($@stoppedstc$);
+for (set .@i,0;.@i<.@size;set .@i,.@i+1) {
+	if ($@stoppedstc$[.@i] == strcharinfo(0)) {
+		message strcharinfo(0), "Você já parou o relógio.";
+		end;
+		}
+	}
+	set @stopped, .i;
+	mapannounce "payon",""+strcharinfo(0)+" Parou o relógio em "+@stopped+".",0;
+	set $@stoppedstc$[.cstc],strcharinfo(0);
+	set .cstc,.cstc+1;
+	if (@stopped >= 1001) {
+		set @stopped,0;
+		end;
+		}
+	if(@stopped == .nearest2) {
+		set .j,.j+1;
+		set .winner$[.j],strcharinfo(0);
+		end;
+		}
+	if (@stopped == 1000) {
+ 		deletearray .winner2$[.j],getarraysize(.winner$);
+		set .j,0;
+		set .lowest,@stopped;
+		set .winner$[.j], strcharinfo(0);
+		set .nearest2,@stopped;
+		end;
+		}
+	if(@stopped == .nearest) {
+		set .wins,.wins+1;
+		set .winner2$[.wins],strcharinfo(0);
+		end;
+		}
+	if(@stopped >= .lowest) {
+    		deletearray .winner2$[.wins],getarraysize(.winner2$);
+		set .nearest,@stopped;
+		set .lowest,@stopped;
+		set .wins,0;
+		set .winner2$[.wins],strcharinfo(0);
+		end;
+		}
+	end;
+	}
+
+set .@name$, "[ Parar o relógio ]";
+set .@menu$, "Informações:Prêmio:Sair";
+
+if(getgmlevel() >= 40) set .@menu$, .@menu$ + ":Iniciar evento Parar o relógio";
+
+mes .@name$;
+mes "Hello "+strcharinfo(0)+", Como posso ajudá-lo?";
+switch(select(.@menu$))	{
+	case 1:
+	next;
+	mes .@name$;
+	mes "Parar o relógio é um jogo onde os jogadores precisam tentar parar o relógio o mais próximo possível de 1000.";
+	mes "A pessoa que parar o relógio mais próximo de 1000 ganha!";
+	close;
+
+	case 2:
+	mes " ";
+	mes "Prize:";
+	mes "^0000FF1 Silver Coin^000000.";
+	mes "Jackpot:";
+	mes "^0000FF1 TCG^000000.";
+	close;
+
+	case 3:
+	close;
+
+	case 4:
+	If (.stc_ongoing == 1) {
+	next;
+	mes .@name$;
+	mes "O evento ainda está em execução!";
+	close;
+	}
+	set .GMName$,strcharinfo(0);
+	mes "O relógio começou!";
+	close2;
+	set .stc_ongoing,1;
+	goto l_start;
+	}
+
+l_start:
+deletearray $@stoppedstc$[0],getarraysize($@stoppedstc$);
+set .cstc,0;
+set .nearest2,2000;
+set .nearest,2000;
+deletearray .winner$[0],getarraysize(.winner$);
+deletearray .winner2$[0],getarraysize(.winner2$);
+set .winner2$[0], "";
+set .lowest, 0;
+set .j,0;
+set .wins,0;
+announce ""+.GMName$+": Pare o relógio em Payon! Começando em 30 segundos!",0;
+initnpctimer;
+end;
+
+OnTimer15000:
+mapannounce "payon",""+.GMName$+": Pare o relógio o mais próximo possível de 1000! Jogadores que pararam o relógio maior que 1000 perdem automaticamente, então aqueles que pararem o relógio em exatamente 1000 receberáo um TCG! Para parar o relógio, basta clicar no npc.",0;
+end;
+
+OnTimer28000:
+announce ""+.GMName$+": Parar o Relógio começa agora!",0;
+stopnpctimer;
+set .game, 1;
+
+for(set .i, 0; .i < 300;set .i, .i + 100)	{
+		mapannounce "payon",":: "+.i+" ::",0;
+		misceffect 377;
+		sleep2 500;
+		}
+
+for(set .i, 300; .i < 500;set .i, .i + 5)	{
+		mapannounce "payon",":: "+.i+" ::",0;
+		misceffect 377;
+		sleep2 200;
+		}
+
+for(set .i, 500; .i < 700;set .i, .i + 3)	{
+		mapannounce "payon",":: "+.i+" ::",0;
+		misceffect 377;
+		sleep2 100;
+		}
+
+for(set .i, 700; .i < 800;set .i, .i + 1)	{
+		mapannounce "payon",":: "+.i+" ::",0;
+		misceffect 377;
+		sleep2 20;
+		}
+
+for(set .i, 800; .i < 900;set .i, .i + 1)	{
+		mapannounce "payon",":: "+.i+" ::",0;
+		misceffect 377;
+		sleep2 15;
+		}
+
+for(set .i, 900; .i < 1051;set .i, .i + 1)	{
+		mapannounce "payon",":: "+.i+" ::",0;
+		misceffect 377;
+		sleep2 10;
+		}
+
+set .game, 0;
+
+if (.lowest == 1000) {
+	set .@size,getarraysize(.winner$);
+	for(set .@i,0;.@i<.@size;set .@i,.@i+1) {
+	getitem 7227,1,getcharid(3,.winner$[.@i]);
+	announce "Jackpot! "+.winner$[.@i]+" Parou o relógio exatamente "+.lowest+"!",0;	
+	sleep2 1;
+	}
+	set .stc_ongoing,0;
+	end;
+} else {
+if(.winner2$[.wins] == "") {
+	announce "Ninguém bateu o relógio no momento certo. Náo há vencedor.",bc_blue;
+	set .stc_ongoing,0;
+	end;
+	}
+	set .@size,getarraysize(.winner2$);	
+	for (set .@i,0;.@i<.@size;set .@i,.@i+1) {
+			getitem 675,1,getcharid(3,.winner2$[.@i]);
+			announce ""+.winner2$[.@i]+" Ganhou! Ele parou o relógio em "+.nearest+", Parabéns!.",0;
+			sleep2 1;
+			}
+		set .stc_ongoing,0;
+	end;
+	}
+
+OnInit:
+	setwall "payon",155,223,3,4,0,"stcwall1";
+	setwall "payon",157,221,2,2,0,"stcwall2";
+	setwall "payon",157,223,2,4,0,"stcwall3";
+	setwall "payon",156,223,2,2,0,"stcwall4";
+	end;
+
+}

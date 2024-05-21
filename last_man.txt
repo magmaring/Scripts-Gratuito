@@ -1,0 +1,226 @@
+-	script	LMS#disable	-1,{
+OnInit:
+end;
+}
+
+quiz_00,17,127,3	script	LMS	512,{
+
+	set @npc$, "[ Evento LMS  ]";
+	if (getgmlevel() >= 40) goto LMS_Admin;
+	if ($@LMS_event == 1) {
+	mes @npc$;
+	mes " O evento LMS ainda está em andamento.";
+	close;
+	}
+	mes @npc$;
+	mes "Hello "+strcharinfo(0)+", Este NPC é apenas para uso de GMs.";
+	close;
+	
+LMS_Admin:
+	mes @npc$;
+	mes "Olá "+strcharinfo(0)+", o que você gostaria de fazer?";
+	menu "Começar Last Man Standing",lms_warper,"Ir para o mapa do evento",warp_LMS,"Nada",endlms;
+	lms_warper:
+		next;
+		if ($@Event_Ongoing == 1) goto event_ongoing;
+		if ($@LMS_event == 1) goto lms_started;
+		mes @npc$;
+		mes "Ok, Início do evento.";
+		close2;
+		goto startLMSevent;
+	warp_LMS:
+		next;
+		mes @npc$;
+		mes "Agora vou te enviar para o mapa do LMS.";
+		warp "guild_vs4",49,49;
+		end;
+	endlms:
+		next;
+		mes @npc$;
+		mes "Ok, bom ver você.";
+		close;
+
+event_ongoing:
+	mes @npc$;
+	mes "Ainda há um evento em andamento, aguarde até que ele termine";
+	close;
+
+
+lms_started:
+		mes @npc$;
+	mes "O evento está em andamento";
+	close;
+
+startLMSevent:
+set $@LMS_event,1;
+set $@Event_Ongoing,1;
+set $@LMS_started,0;
+set $@LMS_startednpc,0;
+set .GMName$,strcharinfo(0);
+donpcevent "guild_vs4lms::OnStart";
+announce ""+.GMName$+": Evento Último Sobrevivente !",0;
+enablenpc "LMS Event Manager";
+enablenpc "Event Warper";
+donpcevent "Event Warper::OnEnable";
+initnpctimer;
+end;
+
+OnTimer10000:
+announce "Evento Last Man Standing : será fechado em 2 minutos.",0;
+end;
+
+OnTimer70000:
+announce "Evento LMS : será fechado em 1 minuto.",0;
+end;
+
+OnTimer100000:
+announce "Evento LMS : será fechado em  30 segundos.",0;
+end;
+
+OnTimer130000:
+stopnpctimer;
+announce "Event LMS : Fechado.",0;
+disablenpc "Event Warper";
+delwaitingroom "Event Warper";
+set $@LMS_event,0;
+set $@Event_Ongoing,0;
+end;
+
+}
+
+guild_vs4,50,49,4	script	guild_vs2lms	-1,{
+
+OnStart:
+	atcommand "@skilloff";
+	pvpoff "guild_vs2";
+	gvgoff "guild_vs2";
+	end;
+
+}
+
+
+guild_vs4,50,49,4	script	LMS Event Manager	512,{
+
+	if (getgmlevel() >= 40) goto LMS_GM;
+	mes "[Evento LMS ]";
+	mes "Hello " + strcharinfo(0) + ", Este NPC é para o uso de GMs.";
+	close;
+
+LMS_GM:
+	if ($@LMS_startednpc == 0) {
+	set .GMName$,strcharinfo(0);
+	mes "[ LMS Event Manager ]";
+	mes "Hello " + strcharinfo(0) + ", o que você gostaria de fazer?";
+	menu "Debuff Players",Debuff_lms,"Reabrir teletransporte",reopen_lms,"Voltar para sala de eventos",warp_lms_back;
+	}
+	if ($@LMS_startednpc == 1) {
+	set .GMName$,strcharinfo(0);
+	mes "[ LMS Event Manager ]";
+	mes "Olá " + strcharinfo(0) + ", o que você gostaria de fazer?";
+	menu "Coemçar",Start_lms,"Voltar para sala de eventos",warp_lms_back;
+	}
+
+reopen_lms:
+if ($@Event_Ongoing == 1) {
+	next;
+	mes @npc$;
+	mes "Ainda há um evento em andamento, aguarde até que ele termine";
+	close;
+}
+	next;
+	mes @npc$;
+	mes "LMS Warper Reaberto";
+	close2;
+	doevent "LMS Event Manager::OnstartLMSevent";
+	end;
+
+OnstartLMSevent:
+set $@LMS_event,1;
+set $@Event_Ongoing,1;
+set $@LMS_started,0;
+set $@LMS_startednpc,0;
+set .GMName$,strcharinfo(0);
+donpcevent "guild_vs2lms::OnStart";
+announce ""+.GMName$+": Evento Último Sobrevivente !",0;
+enablenpc "LMS Event Manager";
+enablenpc "Event Warper";
+donpcevent "Event Warper::OnEnable";
+initnpctimer;
+end;
+
+OnTimer10000:
+announce "Evento LMS: será fechado em 2 minutos.",0;
+end;
+
+OnTimer70000:
+announce "Evento LMS: será fechado em 1 minuto.",0;
+end;
+
+OnTimer100000:
+announce "Evento LMS: será fechado em 30 segundos.",0;
+end;
+
+OnTimer130000:
+stopnpctimer;
+announce "Evento LMS: Fechado.",0;
+disablenpc "Event Warper";
+delwaitingroom "Event Warper";
+set $@LMS_event,0;
+set $@Event_Ongoing,0;
+end;
+
+warp_lms_back:
+	warp "quiz_00",18,119;
+	end;
+
+Debuff_lms:
+	next;
+	mapannounce "guild_vs4",""+.GMName$+": Debuffing",0;
+	close2;
+	sleep2 3000;
+	atcommand "@doommap";
+	atcommand "@raisemap";
+	set $@LMS_startednpc,1;
+	end;
+
+Start_lms:
+close2;
+mapannounce "guild_vs4",""+.GMName$+": O evento LMS está começando, prepare-se!",0;
+sleep2 10000;
+mapannounce "guild_vs4",""+.GMName$+": LMS está começando em 5.",0;
+sleep2 1000;
+mapannounce "guild_vs4",""+.GMName$+": LMS está começando em 4.",0;
+sleep2 1000;
+mapannounce "guild_vs4",""+.GMName$+": LMS está começando em 3.",0;
+sleep2 1000;
+mapannounce "guild_vs4",""+.GMName$+": LMS está começando em 2.",0;
+sleep2 1000;
+mapannounce "guild_vs4",""+.GMName$+": LMS está começando em 1.",0;
+sleep2 100;
+mapannounce "guild_vs4",""+.GMName$+": Evento LMS Iniciado!",0;
+atcommand "@skillon";
+gvgon "guild_vs4";
+pvpon "guild_vs4";
+disablenpc "LMS Event Manager";
+set $@LMS_started,1;
+end;
+	
+OnPCDieEvent:
+	sleep2 1;
+	getmapxy .@map$,.@x,.@y,0;
+	if(.@map$ == "guild_vs4"){
+		if ($@LMS_started == 1) {
+		warp "prontera",116,73;
+		}
+		}
+		end;
+
+}
+guild_vs4	mapflag	nosave	SavePoint
+guild_vs4	mapflag	noteleport
+guild_vs4	mapflag	nomemo
+guild_vs4	mapflag	notrade
+guild_vs4	mapflag	noreturn
+guild_vs4	mapflag	nobranch
+guild_vs4	mapflag	nowarp
+guild_vs4	mapflag	nowarpto

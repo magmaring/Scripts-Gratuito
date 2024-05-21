@@ -1,0 +1,50 @@
+-	script	atc_sorteio	-1,{
+OnInit:
+	unbindatcmd "sorteio";
+	bindatcmd "sorteio",strnpcinfo(3)+"::OnSorteio",99,99;
+	end;
+
+OnSorteio:
+	$@premiar1 = .@atcmd_parameters$[0];
+	$@premiar2 = .@atcmd_parameters$[1];
+	$@premiar3 = .@atcmd_parameters$[2];
+	
+if(!$@premiar1) {
+	message strcharinfo(0),"Para utilizar o comando use:";
+	message strcharinfo(0),"@sorteio <ID do item> <quantidade> <1 = Anunciar Global | 0 = Não Anunciar>";
+	end;
+	}	
+
+if($@premiar1 < 501){
+	message strcharinfo(0),"Este item não existe.";
+	end;
+	}
+	
+if($@premiar2 == 0) {
+	$@premiar2 = 1;
+	}
+
+SORTEIO:
+	query_sql "select account_id from `char` where online = 1 order by rand() limit 0,1",.@aid;
+	if(!.@aid){
+		message strcharinfo(0),"Falha na entrega da premiação.";
+		end;
+	}
+	else if(.@aid <= 2000000){
+		goto SORTEIO;
+		end;
+	}
+	else {
+		message strcharinfo(0),"Premiação Entregue.";
+	}
+	attachrid .@aid;
+	if(checkvending() || checkchatting() || checkidle() >= 300 || ( checkweight($@premiar1,$@premiar2) == 0 )){
+		goto SORTEIO;
+		end;
+	}
+	getitem $@premiar1,$@premiar2;
+	dispbottom "Você ganhou: "+$@premiar2+"x "+getitemname($@premiar1)+".";
+	if($@premiar3)
+		Announce "O Player "+strcharinfo(0)+" ganhou: "+$@premiar2+"x "+getitemname($@premiar1)+" no evento de sorteio.",8;
+		end;	
+}

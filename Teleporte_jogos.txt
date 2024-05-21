@@ -1,0 +1,96 @@
+prontera,165,177,3	script	Sala de Jogos	790,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Deseja ir para a Sala de jogos?";
+	next;
+	switch(select("Sim")){
+		case 1:
+			warp "quiz_02",349,373;
+			end;
+	}
+}
+quiz_02,363,364,1	script	Arena X	790,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Deseja ir para para a arena X?";
+	mes "Lá você encontrará o evento Adivinhe a Palavra, ativados por GMs";
+	next;
+	switch(select("Sim")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "quiz_02",363,356;
+			end;
+	}
+}
+quiz_02,352,357,1	script	Saída Arena X	858,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Deseja sair  da arena X?";
+	next;
+	switch(select("Sim")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "quiz_02",349,371;
+			end;
+	}
+}
+quiz_02,337,364,1	script	Arena O	790,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Deseja ir para para a arena O?";
+	mes "Lá você encontrará mais eventos";
+	next;
+	switch(select("Sim")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "quiz_02",336,357;
+			end;
+	}
+}
+quiz_02,347,357,1	script	Saída Arena O	858,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Deseja sair da arena O?";
+	next;
+	switch(select("Sim")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "quiz_02",350,373;
+			end;
+	}
+}
+quiz_02,353,388,5	script	Saída	858,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Voltar para prontera?";
+	next;
+	switch(select("Sim")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "prontera",155,179;
+			end;
+	}
+}
+quiz_02,335,371,1	script	Sala do Ouro	848,{
+	mes "Olá "+StrCharInfo(0)+"!";
+	mes "Deseja ir para qual mapa abaixo?";
+	mes "NOTA:Os cristais aparecerão em um mapa diferente, dependendo do horário, o ciclo começa as 00:30 na, a duração do ciclo é de 6 horas.";
+	next;
+	switch(select("Caverna de Payon 1:Caverna de Payon 2:Caverna de Payon 3")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "pay_dun00",21,180;
+			end;
+       case 2:
+			mes "Até mais!";
+			close2;
+			warp "pay_dun01",20,33;
+			end;
+	    case 3:
+			mes "Até mais!";
+			close2;
+			warp "pay_dun02",21,63;
+			end;
+			}
+		}
+	

@@ -1,0 +1,45 @@
+quiz_00,25,122,3	script	Soccer Ball	628,{
+
+	set @npc$, "[ Soccer Ball ]";
+	if (getgmlevel() < 40) {
+		mes @npc$;
+		mes "Hello "+strcharinfo(0)+", this NPC is for Event GM's use only.";
+		close;
+	}
+set .GMName$,strcharinfo(0);
+mes @npc$;
+mes "Hello "+.GMName$+",";
+mes "Would you like to summon a Soccer Ball?";
+menu "Summon Soccer Ball [^0000FF"+.sball_left+"/5^000000]",summon_sb,"No",cancel_sb;
+
+summon_sb:
+	if (.sball_left < 1) {
+		next;
+   		mes @npc$;
+		mes "There are no Soccer Balls left to summon.";
+		close;
+	}
+	set .sball_left,.sball_left-1;
+        announce .GMName$+": Soccer Ball in Payon!",0;
+	monster "payon",0,0,"Soccer Ball",1792,1,"Soccer Ball::OnSBKilled";
+	close;
+
+cancel_sb:
+	next;
+	mes @npc$;
+	mes "Ok, nice seeing you.";
+        close;
+
+OnInit:
+	set .sball_left,5;
+	end;
+
+OnMinute00:
+	set .sball_left,5;
+	end;
+
+OnSBKilled:
+        mapannounce "payon","A Soccer Ball died!",0;
+	end;
+
+}

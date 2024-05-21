@@ -1,0 +1,160 @@
+-	script	playerEvent	-1,{
+
+OnAtcommand:
+	if($@CacaBandEnter != 1 && $@ElementalArenaEnter != 1 && $@sortudoEnter != 1 && $@RestaUm != 1 && $@PiqueEscEnter != 1 && $@wotEnter != 1 && $tarot_status != 1 && $@DevilSquareEnter != 1){
+		mes .npc$;
+		mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^008aff"+strcharinfo(0)+"^000000 !";
+		mes "Não há nenhum evento acontecendo no momento.";
+		close;
+	}
+	mes .npc$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^008aff"+strcharinfo(0)+"^000000 !";
+	mes "Por favor escolha qual evento deseja participar";
+	next;
+	switch(select(""+(($@CacaBandEnter != 0)?""+.bcor$+"Caça Bandeira "+.on$+"":""),
+					 (($@ElementalArenaEnter != 0)?""+.bcor$+"Arena Elemental "+.on$+"":""),
+					 (($@sortudoEnter != 0)?""+.bcor$+"Sortudo "+.on$+"":""),
+					 (($@RestaUm != 0)?""+.bcor$+"Resta Um "+.on$+"":""),
+					 (($@PiqueEsconde != 0)?""+.bcor$+"Pique Esconde "+.on$+"":""),
+					 (($@wotEnter != 0)?""+.bcor$+"War Of Treasure "+.on$+"":""),
+					 (($tarot_status != 0)?""+.bcor$+"Evento Tarô "+.on$+"":""),
+					 (($@DevilSquareEnter != 0)?""+.bcor$+"Devil Square "+.on$+"":""),
+					 ""+.rcor$+"Sair")){
+			case 1:
+				callfunc "enter_event",50,175,0,10,"Caça Bandeira","guild_vs2",50,50;
+				end;
+			case 2:
+				callfunc "enter_event",50,175,0,10,"Arena Elemental","guild_vs3",50,50;
+				end;
+			case 3:
+				callfunc "enter_event",10,15,1000,10,"Sortudo","quiz_02",0,0;
+				end;
+			case 4:
+				callfunc "enter_event",10,15,1000,10,"Resta Um","g_room1-1",64,183;
+				end;
+			case 5:
+				callfunc "enter_event",10,15,1000,10,"Pique Esconde","force_1-1",0,0;
+				end;
+			case 6:
+				callfunc "enter_event",10,15,1000,10,"War Of Treasure","prt_are_in",98,31;
+				end;
+			case 7:
+				callfunc "enter_event",10,15,1000,10,"Evento Tarô","poring_w01",102,71;
+				end;
+            case 8:
+				callfunc "enter_event",10,175,0,10,"DevilSquare","guild_vs5",35,48;
+				end;								
+		}
+	OnInit:
+		bindatcmd("evento",strnpcinfo(3)+"::OnAtcommand",0,99);
+		.on$ = "^339966[ Aberto ]^000000";
+		.bcor$ = "^008aff[»]^000000 ";
+		.rcor$ = "^ff0000[»]^000000 ";
+		.npc$ = callfunc ("F_colorir","[ Central de Eventos ]","laranja");
+		end;
+}
+
+-	script	gmEvent	-1,{
+
+OnAtcommand:
+	mes .npc$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^008aff"+strcharinfo(0)+"^000000 !";
+	mes "Qual evento você gostaria de gerenciar?";
+	next;
+	switch(select(.bcor$+"Caça Bandeira:"+.bcor$+"Arena Elemental:"+.bcor$+"Sortudo:"+.bcor$+"Resta Um:"+.bcor$+"Pique Esconde:"+.bcor$+"War Of Treasure:"+.bcor$+"Evento Tarô:"+.bcor$+"Devil Square:")){
+		case 1:
+			mes .npc$;
+			mes "O que você gostaria de fazer?";
+			next;
+			switch(select(.bcor$+"Ligar Evento:"+.rcor$+"Cancelar")){
+				case 1:
+					donpcevent "bandei_contr::OnStartEvent";
+					end;
+				case 2:
+					close;
+			}
+		case 2:
+			mes .npc$;
+			mes "O que você gostaria de fazer?";
+			next;
+			switch(select(.bcor$+"Ligar Evento:"+.rcor$+"Cancelar")){
+				case 1:
+					donpcevent "element_contr::OnStartEvent";
+					end;
+				case 2:
+					close;
+			}
+		case 3:
+			mes .npc$;
+			mes "O que você gostaria de fazer?";
+			next;
+			switch(select(.bcor$+"Ligar Evento:"+.rcor$+"Cancelar")){
+				case 1:
+					donpcevent "sort_controler::OnStartEvent";
+					end;
+				case 2:
+					close;
+			}	
+		case 4:
+			mes .npc$;
+			mes "O que você gostaria de fazer?";
+			next;
+			switch(select(.bcor$+"Ligar Evento:"+.rcor$+"Cancelar")){
+				case 1:
+					donpcevent "restaum_controler::OnStartEvent";
+					end;
+				case 2:
+					close;
+			}
+		case 5:
+			mes .npc$;
+			mes "O que você gostaria de fazer?";
+			next;
+			switch(select(.bcor$+"Ligar Evento:"+.rcor$+"Cancelar")){
+				case 1:
+					donpcevent "pique_contr::OnStartEvent";
+					end;
+				case 2:
+					close;
+			}
+		case 6:
+			mes .npc$;
+			mes "O que você gostaria de fazer?";
+			next;
+			switch(select(.bcor$+"Ligar Evento:"+.rcor$+"Cancelar")){
+				case 1:
+					donpcevent "wot_controller::OnStartEvent";
+					end;
+				case 2:
+					close;
+			}	
+		case 7:
+			mes .npc$;
+			mes "O que você gostaria de fazer?";
+			next;
+			switch(select(.bcor$+"Ligar Evento:"+.rcor$+"Cancelar")){
+				case 1:
+					donpcevent "tarot_controller::OnStartEvent";
+					end;
+				case 2:
+					close;
+			}
+		case 8:
+			mes .npc$;
+			mes "O que você gostaria de fazer?";
+			next;
+			switch(select(.bcor$+"Ligar Evento:"+.rcor$+"Cancelar")){
+				case 1:
+					donpcevent "devil_contr::OnStartEvent";
+					end;
+				case 2:
+					close;
+			}			
+	}	
+	
+OnInit:
+	bindatcmd("gmevent",strnpcinfo(3)+"::OnAtcommand",99,99);					// Comando Administrativo;
+	.bcor$ = "^008aff[»]^000000 ";												// .Var$ Setas menu;
+	.rcor$ = "^ff0000[»]^000000 ";												// .Var$ Setas menu;
+	.npc$ = callfunc ("F_colorir","[ Gerenciador de Eventos ]","laranja");		// Nome do NPC;
+}

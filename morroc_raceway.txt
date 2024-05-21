@@ -1,0 +1,238 @@
+//===== rAthena Script =======================================
+//= Morroc Raceway
+//===== By: ==================================================
+//= acky
+//===== Current Version: =====================================
+//= 1.3
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Lets players race around Morroc (pvp_y_1-5)
+//===== Additional Comments: =================================
+//= If there are more than 3 players, at least 3 people
+//= must finish before a new race can be started.
+//=
+//= If there are less than 3 players, at least 1 person
+//= must finish before a new race can be started.
+//=
+//= Removed permanent global variables
+//= 1.2 Removed Duplicates [Silent]
+//= 1.3 Replaced effect numerics with constants. [Samuray22]
+//============================================================
+
+//Warps you into race way
+quiz_02,354,368,1	script	Race Girl#01	116,{
+	mes "[Race Girl]";
+	mes "Você gostaria de participar da ^0000FFCorrida de Morroc^000000?";
+	next;
+	menu "Sim",L_Warp,"Não",-;
+	mes "[Race Girl]";
+	mes "Tudo bem, fale comigo quando mudar de ideia.";
+	close;
+L_Warp:
+	warp "pvp_y_1-5",152,265;
+	close;
+}
+
+//Warps you out of raceway
+pvp_y_1-5,152,271,5	script	Race Girl#02	116,{
+	mes "[Race Girl]";
+	mes "Bem-Vindo a corrida de Morroc !";
+	next;
+	menu "Informações",-,"Sair",L_Warp,"Cancelar",L_Cancel;
+	mes "[Race Girl]";
+	mes "Alguém deve clicar no NPC Starter,a minha esquerda, para iniciar a corrida.";
+	next;
+	mes "[Race Girl]";
+	mes "Uma vez iniciada, os participantes devem percorrer por toda Morroc no sentido anti horário.";
+	next;
+	mes "[Race Girl]";
+	mes "Você deve passar por todos os check points - Sem trapacear!";
+	close;
+L_Warp:
+	warp "morocc",165,101;
+L_Cancel:
+	mes "[Race Girl]";
+	mes "Volte logo!";
+	close;
+}
+
+//Counts down and starts race
+pvp_y_1-5,145,269,5	script	Starter	733,{
+	if ($@race != 0) goto L_Started;
+	if ($@counting != 0) goto L_Started;
+	if ($@racecount == 1) goto L_Started;
+L_Menu:
+	mes "[Race Starter]";
+	mes "Por favor fiquem atrás das bandeiras.";
+	menu "Começar corrida",L_Count,"Cancelar",-;
+	close;
+L_Count:
+	set $@counting,1;
+	mes "Contagem regressiva...";
+	addtimer 1000, "Starter::OnCount1000";
+	addtimer 2000, "Starter::OnCount2000";
+	addtimer 3000, "Starter::OnCount3000";
+	addtimer 4000, "Starter::OnCount4000";
+	announce strcharinfo(0) + "Começou a contagem regressiva",1;
+	announce "Get ready to race!",1;
+	close;
+
+OnCount1000:
+	announce "[3]",1;
+	end;
+OnCount2000:
+	announce "[2]",1;
+	end;
+OnCount3000:
+	announce "[1]",1;
+	end;
+OnCount4000:
+	emotion e_go;
+	specialeffect EF_CHIMTO;
+	announce "[GO!]",1;
+	set $@race,1;
+	set $@position,0;
+	set $@counting,0;
+	set $@raceid,rand(100000,999999);
+	end;
+
+L_Started:
+	if ((getmapusers("pvp_y_1-5") < 3) && ($@position > 0)) goto L_Menu;
+	if ($@position > 2) goto L_Menu;
+	mes "[Starter]";
+	mes "Corrida em progresso";
+	close;
+
+OnInit:
+	set $@race,0;
+	set $@position,0;
+	set $@racecount,0;
+	end;
+}
+
+//Checkpoint 1
+pvp_y_1-5,144,262,5	script	Check Point 1	111,0,5,{
+	end;
+OnTouch:
+	if (@raceid != $@raceid) goto L_Started;
+	if (@race == 6) goto L_Finished;
+	if ($@race == 1) goto L_Started;
+	mes "A corrida não começou, por favor fiquem atrás da linha de partida.";
+	close;
+L_Started:
+	set @race,1;
+	set @raceid,$@raceid;
+	end;
+L_Finished:
+	mes "Você já completou a corrida.";
+	close;
+}
+
+//Checkpoint 2
+pvp_y_1-5,73,247,5	script	Check Point 2	111,6,6,{
+	end;
+OnTouch:
+	if (@race != 1) goto L_Miss;
+	set @race,2;
+	announce "[" + strcharinfo(0) +"] alcançou o Checkpoint [1]",1;
+	end;
+L_Miss:
+	mes "Você perdeu um Checkpoint. Por favor volte.";
+	close;
+}
+
+//Checkpoint 3
+pvp_y_1-5,77,44,5	script	Check Point 3	111,6,6,{
+	end;
+OnTouch:
+	if (@race != 2) goto L_Miss;
+	set @race,3;
+	announce "[" + strcharinfo(0) +"] alcançou o Checkpoint [2]",1;
+	end;
+L_Miss:
+	mes "Você perdeu um Checkpoint. Por favor volte.";
+	close;
+}
+
+//Checkpoint 3
+pvp_y_1-5,249,60,5	script	Check Point 4	111,6,6,{
+	end;
+OnTouch:
+	if (@race != 3) goto L_Miss;
+	set @race,4;
+	announce "[" + strcharinfo(0) +"] alcançou o Checkpoint [3]",1;
+	end;
+L_Miss:
+	mes "Você perdeu um Checkpoint. Por favor volte.";
+	close;
+}
+
+//Checkpoint 4
+pvp_y_1-5,255,256,5	script	Check Point 5	111,6,6,{
+	end;
+OnTouch:
+	if (@race != 4) goto L_Miss;
+	set @race,5;
+	announce "[" + strcharinfo(0) +"] alcançou o Checkpoint [4]",1;
+	end;
+L_Miss:
+	mes "Você perdeu um Checkpoint. Por favor volte.";
+	close;
+}
+
+//Finish Line
+pvp_y_1-5,174,244,5	script	Finish Line	111,6,6,{
+	end;
+OnTouch:
+	if (@raceid != $@raceid) goto L_WrongRace;
+	if (@race != 5) goto L_Miss;
+	set @race,6;
+	set $@position,$@position+1;
+	announce "[" + strcharinfo(0) +"] chegou a linha de chegada! [Position: " + $@position + "]",1;
+	end;
+L_Miss:
+	mes "Você perdeu um Checkpoint. Por favor volte.";
+	close;
+L_WrongRace:
+	mes "Você não está participando da corrida.";
+	close;
+}
+
+//Check Point Marker Flags
+pvp_y_1-5,144,267,4	script	Check Point 1#01	722,{
+	end;
+}
+pvp_y_1-5,144,257,4	script	Check Point 1#02	722,{
+	end;
+}
+pvp_y_1-5,70,252,3	script	Check Point 2#01	722,{
+	end;
+}
+pvp_y_1-5,77,243,3	script	Check Point 2#02	722,{
+	end;
+}
+pvp_y_1-5,81,48,1	script	Check Point 3#01	722,{
+	end;
+}
+pvp_y_1-5,72,40,1	script	Check Point 3#02	722,{
+	end;
+}
+pvp_y_1-5,244,65,7	script	Check Point 4#01	722,{
+	end;
+}
+pvp_y_1-5,252,57,7	script	Check Point 4#02	722,{
+	end;
+}
+pvp_y_1-5,259,260,5	script	Check Point 5#01	722,{
+	end;
+}
+pvp_y_1-5,251,252,5	script	Check Point 5#02	722,{
+	end;
+}
+pvp_y_1-5,174,249,4	script	Finish Line#01	722,{
+	end;
+}
+pvp_y_1-5,174,238,4	script	Finish Line#02	722,{
+	end;
+}

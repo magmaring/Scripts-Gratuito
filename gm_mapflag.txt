@@ -1,0 +1,23 @@
+//Arena Elemental
+guild_vs3	mapflag	nowarp
+guild_vs3	mapflag	nowarpto
+guild_vs3	mapflag	noteleport
+guild_vs3	mapflag	monster_noteleport
+guild_vs3	mapflag	nosave
+guild_vs3	mapflag	nomemo
+guild_vs3	mapflag	nobranch
+guild_vs3	mapflag	nopenalty
+guild_vs3	mapflag	nomobloot
+guild_vs3	mapflag	nomvploot
+
+//Caça Bandeiras
+guild_vs2	mapflag	nowarp
+guild_vs2	mapflag	nowarpto
+guild_vs2	mapflag	noteleport
+guild_vs2	mapflag	monster_noteleport
+guild_vs2	mapflag	nosave
+guild_vs2	mapflag	nomemo
+guild_vs2	mapflag	nobranch
+guild_vs2	mapflag	nopenalty
+guild_vs2	mapflag	nomobloot
+guild_vs2	mapflag	nomvploot

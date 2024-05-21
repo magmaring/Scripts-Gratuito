@@ -1,0 +1,162 @@
+prontera,174,207,4	script	Central de Doações	94,{
+cutin "kafra_08",2;
+function Add; function Chk; function Slot;
+		mes .npc$;
+		mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^008aff"+strcharinfo(0)+"^000000 !";
+		mes "Aqui você pode comprar todos os itens Rop's encontrados no jogo.";
+		mes "Os itens podem ser adquiridos por ^EEAD2DROP's^4682B4.";
+		next;
+		mes .npc$;
+		mes "A skill de desconto dos mercadores não influência o preço.";
+		mes "^6A5ACD- GM's não irão devolver seu Cash caso compre algo errado.^4682B4";
+		mes "- Boas compras.";
+		next;
+		mes .npc$;
+		mes "Vejo que você possui ^EEAD2D["+F_InsertComma( #CASHPOINTS )+"]^000000 ROP's.";
+		mes "Selecione a loja que deseja visualizar:";
+		next;
+	if(.Shops$ != "") .@i = 1;
+	else {
+		.@menu$ = "";
+		for(.@i = 1; .@i<=getarraysize(.Shops$); .@i++)
+		.@menu$ = .@menu$+.Shops$[.@i]+":";
+		.@i = select(.@menu$);
+	}
+	dispbottom "Selecione um item de cada vez.";
+	callshop "bshop"+.@i,1;
+	npcshopattach "bshop"+.@i;
+	end;
+	
+function Add {
+	if (getitemname(getarg(1))=="null") {
+		debugmes "Item a venda #"+getarg(1)+" inválido (skipped)."; 
+		return; 
+	}
+	for(.@n = 5; .@n<127; .@n += 2) {
+		if (!getarg(.@n,0)) break;
+		if (getitemname(getarg(.@n))=="null") {
+			debugmes "Preço de venda #"+getarg(.@n)+" inválido (skipped)."; 
+			return; 
+		}
+	}
+	for(.@i = 2; .@i<.@n; .@i++)
+		set getd(".q_"+getarg(1)+"["+(.@i-2)+"]"), getarg(.@i);
+	npcshopadditem "bshop"+getarg(0),getarg(1),((.ShowCash)?getarg(4):0);
+	return; 
+}
+
+function Chk {
+	if (getarg(0)<getarg(1)) { 
+		@qe0 = 1; return "^FF0000";
+	}
+	else return "^00FF00"; 
+}
+
+function Slot {
+	.@s$ = getitemname(getarg(0));
+	switch(.ShowSlot){
+		case 1: if (!getitemslots(getarg(0))) return .@s$;
+		case 2: if (getiteminfo(getarg(0),11)>0) return .@s$+" ["+getitemslots(getarg(0))+"]";
+		default: return .@s$; 
+	} 
+}
+
+OnBuyItem:
+	.@q[0] = @bought_nameid;
+	copyarray .@q[1],getd(".q_"+@bought_nameid+"[0]"),getarraysize(getd(".q_"+@bought_nameid+"[0]"));
+	if (!.@q[1]) {
+		message strcharinfo(0),"Ocorreu um erro."; 
+		end;
+	}
+	mes .npc$;
+	mes "Comprando Item: ^0055FF"+((.@q[1]>1)?.@q[1]+"x ":"")+Slot(.@q[0])+"^000000";
+	mes "Valor:";
+		if (.@q[3]) mes " > "+Chk(getd(.Points$[0]),.@q[3])+.@q[3]+" "+.Points$[1]+" ("+getd(.Points$[0])+"/"+.@q[3]+")^000000";
+	next;
+	@qe1 = getiteminfo(.@q[0],5); @qe2 = getiteminfo(.@q[0],11);
+	addtimer 1000, strnpcinfo(1)+"::OnEnd";
+	while(1){
+		switch(select(.bcor$+"Comprar ^0055FF"+getitemname(.@q[0])+"^000000:"+((((@qe1&1) || (@qe1&256) || (@qe1&512)) && @qe2>0 && !@qe6)?""+.bcor$+"Experimentar Item.":"")+":"+.rcor$+"Cancel.")) {
+			case 1:
+				if (@qe0) { 
+					mes .npc$;
+					mes "Você não possui a quantidade de ROP's necessário.";
+					close; 
+				}
+				if (!checkweight(.@q[0],.@q[1])) {
+					mes .npc$;
+					mes "^FF0000Você precisa "+(((.@q[1]*getiteminfo(.@q[0],6))+Weight-MaxWeight)/10)+" capacidade adicional de peso para completar esta compra.^000000";
+					close; 
+				}
+				if (.@q[3]) setd .Points$[0], getd(.Points$[0])-.@q[3];
+				getitem .@q[0],.@q[1];
+				specialeffect2 699;
+				dispbottom "Você ficou com ^EEAD2D["+F_InsertComma( #CASHPOINTS )+"]^000000 ROP's.";
+				close;
+			case 2:
+				@qe3 = getlook(3); @qe4 = getlook(4); @qe5 = getlook(5);
+				if (@qe1&1) atcommand "@changelook 3 "+@qe2;
+				if (@qe1&256) atcommand "@changelook 1 "+@qe2;
+				if (@qe1&512) atcommand "@changelook 2 "+@qe2;
+				set @qe6,1;
+				break;
+			case 3:
+				close; 
+		} 
+	}
+
+OnEnd:
+	if (@qe6) { 
+		atcommand "@changelook 3 "+@qe3;
+		atcommand "@changelook 1 "+@qe4;
+		atcommand "@changelook 2 "+@qe5; 
+	}
+	for(.@i = 0; .@i<7; .@i++) setd "@qe"+.@i,0;
+	end;
+
+OnPCLoadMapEvent:
+	if( strcharinfo(3) == strnpcinfo(4) )
+		showevent 1,0;
+	end;
+
+// Configurações	
+OnInit:
+freeloop(1);
+	setarray .Points$[0],"#CASHPOINTS","ROP'S";											// Variável CASHPOINTS
+	.ShowSlot = 1;																		// Mostrar slot dos itens? ( 1: Se a quantidade > 0 / 0: Nunca)
+	.ShowCash = 1;																		// Mostrar quantidade de Cash? (1: sim / 0: não)	
+	.npc$ = callfunc ("F_colorir","[ Central de Doações ]","laranja");					// Nome do NPC;
+	.bcor$ = "^008aff[»]^000000 ";														// Simbolo do botão de opções;
+	.rcor$ = "^ff0000[»]^000000 ";														// Simbolo do botão de Cancelar;
+	waitingroom "Central de Doações",0;														// Balão encima do NPC;
+	
+	setarray .Shops$[1],.bcor$+"Hat's [^008000Top^000000].";							// Menu Hat's Topo;
+	setarray .Shops$[2],.bcor$+"Hat's [^008000Mid^000000].";							// Menu Hat's Meio;
+	setarray .Shops$[3],.bcor$+"Hat's [^008000Low^000000].";							// Menu Hat's Baixo;
+	setarray .Shops$[4],.bcor$+"Itens [^ff0000Visuais^000000].";						// Menu Equipamentos Visuais;
+	setarray .Shops$[5],.bcor$+"Itens [^ff0000Consumiveis^000000].";					// Menu Itens Consumiveis;
+	
+	//Add(<Número de Shop>,<ID do Item>,<Quantidade>,<Preço em Zeny>,<Preço em Rops>);
+	// Loja Topo;
+		Add(1,5518,1,0,18000);
+	// Loja Meio;
+		Add(2,5800,1,0,15000);
+	// Loja Baixo;
+		Add(3,5377,1,0,12000);
+	// Equipamentos Visuais;
+		Add(4,5170,1,0,12000);
+	// Itens Consumiveis;
+		Add(5,607,1,0,10);		
+	
+freeloop(0);
+
+	for(.@i = 1; .@i<=getarraysize(.Shops$); .@i++)
+		npcshopdelitem "bshop"+.@i,909;
+		end;	
+}
+
+-	shop	bshop1	-1,909:-1
+-	shop	bshop2	-1,909:-1
+-	shop	bshop3	-1,909:-1
+-	shop	bshop4	-1,909:-1
+-	shop	bshop5	-1,909:-1

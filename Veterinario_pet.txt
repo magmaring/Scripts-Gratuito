@@ -1,0 +1,366 @@
+/*
+Autor: Dark Eyes
+
+Função do NPC: Suporte para Pets e Homunculus (Pega OvO, Choca OvO, Aumenta lealdade, tira fome... [etc]
+
+Versão: 1.1
+
+------------Atualizações------------------
+v1.0 - Iniciado o script
+v1.1 - Add: Shop Pet + Criar Homunculus + Configurar Level UP Homunculus
+*/
+
+//SHOP PET
+-	shop	acessoriospet	-1,10015:1500,10013:1500,10005:1500,10004:1500,10003:1500,10017:1500,10007:1500,10018:1500,10019:1500,10012:1500,10002:1500,10010:1500,10009:1500,10008:1500,10014:2000,10006:15000,10001:15000,10011:15000,10016:15000,10020:15000
+
+sec_in01,93,175,3	script	Veterinário	402,{
+
+/*---------Menu-de-configuração-----------*/
+set .npc$,"^0000FFVeterinário^000000";
+set .vip,0; //Nível min GM para acessar o NPC
+set .lvlhom,150; //Level que NPC upa o homunculus, o NPC não vai dar mais level que o configurado aqui.
+/*----------------------------------------*/
+
+mes .npc$;
+if(getgmlevel()<.vip){mes "Você não é um membro VIP!";	close;}
+mes "Olá "+strcharinfo(0)+", o que deseja?";
+switch(select("Menu Pet","Menu Homunculus")){ 
+
+case 1:
+//PET SWITCH
+
+mes "Opções para Pet:";
+switch(select("Pegar OvO","Chocar OvO","Aumentar Nível de Intimidade","Tirar Fome","Shop Pet","Renomear")){
+	if(gethominfo(0)!=0) { 
+		mes "Sinto muito, mas você já tem um Pet."; 
+		close;
+	}
+case 1:
+	switch(select("Poring","ChonChon","Esporo","PecoPeco","Guerreiro Orc","Munak","Isis","Poporing","Mosca Caçadora","ChonChon de Aço","Picky","Rocker","Fumacento","Yoyo","Lunático",
+		"Esporo Venenoso","Bafomé Jr.","Deviruchi","Filhote de Lobo do Deserto","Dokebi","Drops","Petite","Bebê Selvagem","Sohee","Bongun","Jirtas","Alice","Bolinho de Arroz","Goblin Natalino",
+		"Goblin","Goblin","Goblin","Andarilho","Deletério","Diabolik","Chung E","Marionete","Medusa","Sussurro","Líder Goblin","Succubus","Incubus","-Pesadelo Sombrio",
+		"Boneco de Miyabi","Ninfa Pervesa","Dullahan","Lori Ruri","Mao Guai","Gato de Folha","Fire Imp")){
+	case 1:
+		makepet 1002;//Poring
+		close;
+	case 2:
+		makepet 1011;//ChonChon
+		close;
+	case 3:
+		makepet 1014;//Esporo
+		close;
+	case 4:
+		makepet 1019;//PecoPeco
+		close;
+	case 5:
+		makepet 1023;//Guerreiro Orc
+		close;
+	case 6:
+		makepet 1026;//Munak
+		close;
+	case 7:
+		makepet 1029;//Isis
+		close;
+	case 8:
+		makepet 1031;//Poporing
+		close;
+	case 9:
+		makepet 1035;//Mosca Caçadora
+		close;
+	case 10:
+		makepet 1042;//ChonChon de Aço
+		close;
+	case 11:
+		makepet 1049;//Picky
+		close;
+	case 12:
+		makepet 1052;//Rocker
+		close;
+	case 13:
+		makepet 1056;//Fumacento
+		close;
+	case 14:
+		makepet 1057;//Yoyo
+		close;
+	case 15:
+		makepet 1063;//Lunático
+		close;
+	case 16:
+		makepet 1077;//Esporo Venenoso
+		close;
+	case 17:
+		makepet 1101;//Bafomé Jr.
+		close;
+	case 18:
+		makepet 1109;//Deviruchi
+		close;
+	case 19:
+		makepet 1107;//Filhote de Lobo do Deserto
+		close;
+	case 20:
+		makepet 1110;//Dokebi
+		close;
+	case 21:
+		makepet 1113;//Drops
+		close;
+	case 22:
+		makepet 1155;//makepetite
+		close;
+	case 23:
+		makepet 1167;//Bebê Selvagem
+		close;
+	case 24:
+		makepet 1170;//Sohee
+		close;
+	case 25:
+		makepet 1188;//Bongun
+		close;
+	case 26:
+		makepet 1200;//Jirtas
+		close;
+	case 27:
+		makepet 1275;//Alice
+		close;
+	case 28:
+		makepet 1815;//Bolinho de Arroz
+		close;
+	case 29:
+		makepet 1245;//Goblin Natalino
+		close;
+	case 30:
+		makepet 1122;//Goblin
+		close;
+	case 31:
+		makepet 1123;//Goblin
+		close;
+	case 32:
+		makepet 1125;//Goblin
+		close;
+	case 33:
+		makepet 1208;//Andarilho
+		close;
+	case 34:
+		makepet 1385;//Deletério
+		close;
+	case 35:
+		makepet 1382;//Diabolik
+		close;
+	case 36:
+		makepet 1519;//Chung E
+		close;
+	case 37:
+		makepet 1143;//Marionete
+		close;
+	case 38:
+		makepet 1148;//Medusa
+		close;
+	case 39:
+		makepet 1179;//Sussurro
+		close;
+	case 40:
+		makepet 1299;//Líder Goblin
+		close;
+	case 41:
+		makepet 1370;//Succubus
+		close;
+	case 42:
+		makepet 1374;//Incubus
+		close;
+	case 43:
+		makepet 1379;//Pesadelo Sombrio
+		close;
+	case 44:
+		makepet 1404;//Boneco de Miyabi
+		close;
+	case 45:
+		makepet 1416;//Ninfa Perversa
+		close;
+	case 46:
+		makepet 1504;//Dullahan
+		close;
+	case 47:
+		makepet 1505;//Loli Ruri
+		close;
+	case 48:
+		makepet 1513;//Mao Guai
+		close;
+	case 49:
+		makepet 1586;//Gato de Folha
+		close;
+	case 50:
+		makepet 1837;//Fire Imp
+		close;
+	}
+case 2:
+	if(getpetinfo(0)!=0) { 
+		mes "Sinto muito, mas você já tem um Pet."; 
+		close;
+	}
+	bpet;
+	close;
+
+case 3:
+	if(getpetinfo(0)==0) { 
+		mes "Sinto muito, mas você não tem um Pet."; 
+		close;
+	}
+	if(getpetinfo(3)==1000){
+		mes "Seu Pet já está no nível máximo de intimidade!";
+		close;
+	}
+	atcommand "@petfriendly 1000";
+	mes "Nível de intimidade aumentado!";
+	close;
+case 4:
+	if(getpetinfo(0)==0) { 
+		mes "Sinto muito, mas você não tem um Pet."; 
+		close;
+	}
+	atcommand "@pethungry 100";
+	mes "Fome do Pet retirada!";
+	close;	
+case 5:
+	callshop "acessoriospet",1;
+	close;
+case 6:
+	if(getpetinfo(0)==0) { 
+		mes "Sinto muito, mas você não tem um Pet."; 
+		close;
+	}
+	mes "Agora você pode definir o novo nome ao seu Pet.";
+	atcommand "@petrename";
+	close;
+}
+
+case 2:
+//HOMUNCULUS SWITCH
+
+mes "Opções para Homunculus:";
+switch(select("Criar Homunculus","Aumentar Level","Evoluir","Aumentar Nível de Intimidade","Tirar Fome","Recalcula atributos")){
+case 1:
+	if (BaseJob!=Job_Alchemist){mes "Sua profissão não lhe permite ter um Homunculus.";	close;}
+	switch(select("Lif","Lif 2","Amistr","Amistr 2","Filir","Filir 2","Vanilmirth","Vanilmirth 2","Eira","Sera")){
+	case 1:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6001";
+		close;
+	case 2:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6005";
+		close;
+	case 3:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6002";
+		close;
+	case 4:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6006";
+		close;
+	case 5:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6003";
+		close;
+	case 6:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6007";
+		close;
+	case 7:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6004";
+		close;
+	case 8:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6008";
+		close;
+	case 9:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6048";
+		close;
+	case 10:
+		if(gethominfo(0)!=0) { 
+			mes "Sinto muito, mas você já tem um Homunculus."; 
+			close;
+		}
+		mes "Homunculus criado com sucesso!";
+		atcommand "@makehomun 6050";
+		close;
+	}
+case 2:
+	if(gethominfo(0)==0) { 
+		mes "Sinto muito, mas você não tem um Homunculus."; 
+		close;
+	}
+	if(gethominfo(6)>=.lvlhom) { 
+		mes "Sinto muito, mas seu Homunculus não pode mais ser upado."; 
+		close;
+	}
+	atcommand "@hlvl "+.lvlhom;
+	mes "Homunculos upado com sucesso!";
+	close;
+case 3:
+	if(gethominfo(0)==0) { 
+		mes "Sinto muito, mas você não tem um Homunculus."; 
+		close;
+	}
+	atcommand "@homevolution";
+	close;
+case 4:
+	if(gethominfo(0)==0) { 
+		mes "Sinto muito, mas você não tem um Homunculus."; 
+		close;
+	}
+	mes "Seu Homunculus agora está no nível máximo de intimidade!";
+	atcommand "@homfriendly 999";
+	close;
+case 5:
+	if(gethominfo(0)==0) { 
+		mes "Sinto muito, mas você não tem um Homunculus."; 
+		close;
+	}
+	atcommand "@homhungry 100";
+	close;
+case 6:
+	if(gethominfo(0)==0) { 
+		mes "Sinto muito, mas você não tem um Homunculus."; 
+		close;
+	}
+	atcommand "@homshuffle";
+	mes "Atributos re-calculados!";
+	close;
+}}}

@@ -1,0 +1,232 @@
+quiz_00,14,127,3	script	RFYL	421,{
+	if (getgmlevel() < 40) 	end;
+	set @npc$, "[ RFYL  ]";
+	set .GMName$,strcharinfo(0);
+	mes @npc$;
+	mes "GM Tip: Antes de iniciar evento você deve mudar sua velocidade para 150.";
+	mes "Command: @Speed 150";
+	next;
+	mes @npc$;
+	mes "Hello " + strcharinfo(0) + ", o que você gostaria de fazer?";
+	menu "Start RFYL",rfyl_check,"Entrar para o mapa do evento",warp_RFYL,"Nada",endrfyl;
+	rfyl_check:
+		next;
+		if ($@Event_Ongoing == 1) goto event_ongoing;
+		if ($@RFYL_event == 1) goto rfyl_started;
+		mes @npc$;
+		mes "Ok, Iniciando o evento.";
+		set $@RFYL_event,1;
+		set $@Event_Ongoing,1;
+		close2;
+		doevent "RFYL::OnstartRFYL";
+		end;
+	warp_RFYL:
+		next;
+		mes @npc$;
+		mes "Vou agora te mandar para o mapa do evento.";
+		warp "quiz_01",230,368;
+		end;
+	endrfyl:
+		next;
+		mes @npc$;
+		mes "Ok, Bom ver você.";
+		close;
+
+event_ongoing:
+	mes @npc$;
+	mes "Ainda há um evento em andamento. Aguarde até terminar";
+	close;
+
+rfyl_started:
+	mes @npc$;
+	mes "Há um evento em andamento.";
+	close;
+
+OnstartRFYL:
+set $@cloneevent,0;
+announce ""+.GMName$+": Evento corram por suas vidas !",0;
+enablenpc "Event Warper";
+donpcevent "Event Warper::OnEnable";
+initnpctimer;
+end;
+
+OnTimer10000:
+announce "Evento corram por suas vidas: Será fechado em 2 minutos.",0;
+end;
+
+OnTimer70000:
+announce "Evento corram por suas vidas: Será fechado em 1 minuto.",0;
+end;
+
+OnTimer100000:
+announce "Evento corram por suas vidas: Será fechado em 30 Segundos.",0;
+end;
+
+
+OnTimer130000:
+stopnpctimer;
+announce "Evento corram por suas vidas: Fechado.",0;
+disablenpc "Event Warper";
+delwaitingroom "Event Warper";
+set $@RFYL_event,0;
+set $@Event_Ongoing,0;
+end;
+
+}
+
+// ----------------------------------- RFYL Event ----------------------------------- [ RFYL Event ]
+// -------------------------------------------------------------------------------------------------
+quiz_01,230,375,4	script	Combo	497,{
+
+set .GMName$,strcharinfo(0);
+set @npc$, "[ Combo ]";
+if (getgmlevel() >= 40) goto Main_Menu;
+end;
+
+
+Main_Menu:
+	if ($@cloneevent == 0) {
+	mes @npc$;
+	mes "Olá " + strcharinfo(0) + ", o que você gostaria de fazer?";
+	menu "Iniciar evento",Start_Clone,"Debuff",Debuff_Clone,"Reabrir",reopen_rfyl,"Voltar para Sala de Eventos",warp_rfyl_back;
+	}
+	if ($@cloneevent == 1) {
+	mes @npc$;
+	mes "Hello " + strcharinfo(0) + ", o que você gostaria de fazer?";
+	menu "Convocar Clone",More_Clone,"Matar Clones",Reset_Clone,"Fim do Evento",end_event_rfyl;
+	}
+
+
+reopen_rfyl:	
+	next;
+	mes @npc$;
+	mes "Corram por suas vidas Warper Reabrir";
+	close2;
+	doevent "Combo::OnstartRFYL2";
+	end;
+
+OnstartRFYL2:
+set $@cloneevent,0;
+set $@RFYL_event,1;
+set $@Event_Ongoing,1;
+set .GMName$,strcharinfo(0);
+announce ""+.GMName$+": Evento corram por suas vidas !",0;
+enablenpc "Event Warper";
+donpcevent "Event Warper::OnEnable";
+initnpctimer;
+end;
+
+OnTimer10000:
+announce "Evento corram por suas vidas: será fechado em 2 minutos.",0;
+end;
+
+OnTimer70000:
+announce "Evento corram por suas vidas: Warp será fechado em 1 minuto.",0;
+end;
+
+OnTimer100000:
+announce "Evento corram por suas vidas: será fechado em 30 Segundos.",0;
+end;
+
+
+OnTimer130000:
+stopnpctimer;
+announce "Evento corram por suas vidas: Fechado.",0;
+disablenpc "Event Warper";
+delwaitingroom "Event Warper";
+set $@RFYL_event,0;
+set $@Event_Ongoing,0;
+end;
+
+
+Reset_Clone:
+	next;
+	mes @npc$;
+	mes "Todos os clones estão mortos";
+	atcommand "@killmonster";
+	close;
+end_event_rfyl:
+	set $@cloneevent,0;
+	next;
+	mes @npc$;
+	mes "Event Finish.";
+	atcommand "@killmonster";
+	close;
+
+warp_rfyl_back:
+	warp "quiz_00",18,119;
+	end;
+
+reset_event_rfyl:
+	set $@cloneevent,0;
+	mes "Event Reseted";
+	close;
+
+More_Clone:
+	if (.clonesummoning) {
+		mes "Please wait.";
+		close;
+	}
+	close2;
+	set .clonesummoning,1;
+	mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 5",0;
+	sleep2 1000;
+	mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 4",0;
+	sleep2 1000;
+	mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 3",0;
+	sleep2 1000;
+	mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 2",0;
+	sleep2 1000;
+	mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 1",0;
+	sleep2 500;
+	clone "quiz_01",230,368,"",$@master,0;
+	mapannounce "quiz_01",""+.GMName$+" Convocou outro clone!",0;
+	emotion e_gg;
+	set .clonesummoning,0;
+	end;
+
+Debuff_Clone:
+	close2;
+	mapannounce "quiz_01",""+.GMName$+": Debuffing...",0;
+	sleep2 3000;
+	atcommand "@doommap";
+	atcommand "@raisemap";
+	end;
+
+Start_Clone:
+set .GMName$,strcharinfo(0);
+set $@master,getcharid(0);
+set $@cloneevent,1;
+close2;
+sleep2 1;
+mapannounce "quiz_01",""+.GMName$+": Evento corram por suas vidas Está comeÃ§ando, prepare-se!!",0;
+sleep2 4000;
+mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 5",0;
+sleep2 1000;
+mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 4",0;
+sleep2 1000;
+mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 3",0;
+sleep2 1000;
+mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 2",0;
+sleep2 1000;
+mapannounce "quiz_01",""+.GMName$+": Sumonando clone mal em 1",0;
+sleep2 500;
+mapannounce "quiz_01",""+.GMName$+": Evento corram por suas vidas iniciado!",0;
+set .clonesummoning,0;
+sleep2 100;
+clone "quiz_01",230,368,"",$@master,0;
+npctalk "RUN FOR YOUR LIFE!";
+emotion e_gg;
+sleep2 5000;
+end;
+
+}
+
+quiz_01	mapflag	noskill
+quiz_01	mapflag	nosave	SavePoint
+quiz_01	mapflag	noteleport
+quiz_01	mapflag	nomemo
+quiz_01	mapflag	notrade
+quiz_01	mapflag	noreturn
+quiz_01	mapflag	nodrop
+quiz_01	mapflag	nowarp

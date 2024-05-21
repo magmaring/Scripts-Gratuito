@@ -1,0 +1,16 @@
+function	script	F_colorir	{
+	if(getarg(1) == "null")
+			return "";
+	setarray .@cores$[0], "amarelo", "^FFFF00", "azul", "^0000FF",
+						"branco", "^EEE9E9", "dourado", "^DAA520",
+						"cinza", "^696969", "laranja", "^FF7F00",
+						"marrom","^8B4726", "preto", "^000000",
+						"roxo", "^4527A0", "vermelho", "^FF0000", 
+						"verde", "^1B5E20";
+						 
+	.@cor$ = strtolower(getarg(1));
+	for(.@i = 0; .@i < getarraysize(.@cores$); set .@i, .@i + 2)
+		if(.@cores$[.@i] == getarg(1))
+			return .@cores$[.@i + 1]  + getarg(0) + "^000000";
+	return getarg(1) + getarg(0) + "^000000";
+}
